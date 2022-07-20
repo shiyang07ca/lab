@@ -1,0 +1,6 @@
+[submodule "algo/Python"]
+	path = algo/Python
+	url = https://github.com/TheAlgorithms/Python.git
+[submodule "algo/algorithms"]
+	path = algo/algorithms
+	url = https://github.com/keon/algorithms.git
