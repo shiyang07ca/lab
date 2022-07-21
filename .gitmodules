@@ -4,3 +4,6 @@
 [submodule "algo/algorithms"]
 	path = algo/algorithms
 	url = https://github.com/keon/algorithms.git
+[submodule "anime/manim"]
+	path = anime/manim
+	url = https://github.com/3b1b/manim.git
