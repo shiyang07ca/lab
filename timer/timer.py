@@ -23,7 +23,6 @@ class Timer(metaclass=ABCMeta):
         """Pass."""
 
     @abstractmethod
-    @property
     def entrys(self):
         """Pass."""
 
@@ -49,7 +48,7 @@ class TestSched(unittest.TestCase):
 
 def main():
     import time
-    from timer.scheduler import scheduler
+    from scheduler import scheduler
 
     s = scheduler(time.time, time.sleep)
 

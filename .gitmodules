@@ -4,3 +4,6 @@
 [submodule "algo/algorithms"]
 	path = algo/algorithms
 	url = https://github.com/keon/algorithms.git
+[submodule "tool/python-telegram-bot"]
+	path = tool/python-telegram-bot
+	url = https://github.com/python-telegram-bot/python-telegram-bot
