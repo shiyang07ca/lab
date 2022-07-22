@@ -32,16 +32,42 @@ class TimeWheel(Timer):
     pass
 
 
+import unittest
+
+
+class TestSched(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_add_entry(self):
+        pass
+
+    def test_get_all_entry(self):
+        pass
+
+
 def main():
-    pass
+    import time
+    from timer.scheduler import scheduler
 
+    s = scheduler(time.time, time.sleep)
 
-def test_add_entry():
-    pass
+    def print_time(a='default'):
+        print("From print_time", time.time(), a)
 
+    def print_some_times():
+        print(time.time())
+        s.enter(10, 1, print_time)
+        s.enter(5, 2, print_time, argument=('positional', ))
+        s.enter(5, 1, print_time, kwargs={'a': 'keyword'})
+        s.run()
+        print(time.time())
 
-def test_get_all_entry():
-    pass
+    import ipdb
+    ipdb.set_trace()
+
+    print_some_times()
 
 
 if __name__ == '__main__':
