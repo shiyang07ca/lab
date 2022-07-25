@@ -7,6 +7,3 @@
 [submodule "tool/python-telegram-bot"]
 	path = tool/python-telegram-bot
 	url = https://github.com/python-telegram-bot/python-telegram-bot
-[submodule "others/TexasSolver"]
-	path = others/TexasSolver
-	url = https://github.com/bupticybee/TexasSolver.git
