@@ -1,11 +1,11 @@
 [submodule "algo/Python"]
-	path = algo/Python
+	path = others/Python
 	url = https://github.com/TheAlgorithms/Python.git
 [submodule "algo/algorithms"]
-	path = algo/algorithms
+	path = others/algorithms
 	url = https://github.com/keon/algorithms.git
 [submodule "tool/python-telegram-bot"]
-	path = tool/python-telegram-bot
+	path = others/python-telegram-bot
 	url = https://github.com/python-telegram-bot/python-telegram-bot
 [submodule "others/TexasSolver"]
 	path = others/TexasSolver
