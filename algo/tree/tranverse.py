@@ -144,6 +144,23 @@ def pos_order_iter2(root):
     return ans
 
 
+def bfs(root):
+    if root is None:
+        return
+
+    queue = [root]
+    ans = []
+    while queue:
+        cur = queue.pop(0)
+        ans.append(cur.value)
+        if cur.left:
+            queue.append(cur.left)
+        if cur.right:
+            queue.append(cur.right)
+
+    return ans
+
+
 r"""
          a
       /      \
@@ -226,6 +243,11 @@ class TestIter(unittest.TestCase):
         self.assertEqual(
             ["d", "e", "b", "f", "g", "c", "a"],
             pos_order_iter2(a),
+        )
+
+        self.assertEqual(
+            ["a", "b", "c", "d", "e", "f", "g"],
+            bfs(a),
         )
 
 
