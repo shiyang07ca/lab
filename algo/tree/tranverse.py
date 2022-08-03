@@ -144,6 +144,7 @@ def pos_order_iter2(root):
     return ans
 
 
+# 广度优先遍历
 def bfs(root):
     if root is None:
         return
