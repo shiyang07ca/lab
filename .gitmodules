@@ -1,0 +1,3 @@
+[submodule "500lines"]
+	path = others/--cached
+	url = https://github.com/aosabook/500lines.git
