@@ -1,0 +1,12 @@
+[submodule "500lines"]
+	path = others/500lines
+	url = https://github.com/aosabook/500lines.git
+[submodule "TexasSolver"]
+	path = others/TexasSolver
+	url = https://github.com/bupticybee/TexasSolver.git
+[submodule "algorithms"]
+	path = others/algorithms
+	url = https://github.com/keon/algorithms.git
+[submodule "Python"]
+	path = others/Python
+	url = https://github.com/TheAlgorithms/Python.git
