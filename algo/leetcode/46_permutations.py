@@ -32,6 +32,7 @@ from typing import List
 
 from copy import deepcopy
 
+
 class Solution:
     def process(self, nums, i, ans):
         if i == len(nums):
