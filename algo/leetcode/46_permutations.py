@@ -37,6 +37,8 @@ class Solution:
         if i == len(nums):
             ans.append(deepcopy(nums))
 
+        # nums[..i] 是已经排好的范围
+        # nums[i+1...] 是需要继续排列的范围
         for j in range(i, len(nums)):
             nums[i], nums[j] = nums[j], nums[i]
             self.process(nums, i + 1, ans)
