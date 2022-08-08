@@ -10,3 +10,6 @@
 [submodule "Python"]
 	path = others/Python
 	url = https://github.com/TheAlgorithms/Python.git
+[submodule "algorithmbasic2020"]
+	path = others/algorithmbasic2020
+	url = https://github.com/algorithmzuo/algorithmbasic2020.git
