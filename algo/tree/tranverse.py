@@ -27,6 +27,10 @@ class Node:
         self.left = left
         self.right = right
 
+    def __repr__(self):
+        return f"<{self.value}>"
+
+
 
 import unittest
 
@@ -91,6 +95,7 @@ def in_order_iter(root):
     stack = []
     ans = []
     while root or stack:
+        print(stack)
         if root:
             stack.append(root)
             root = root.left
