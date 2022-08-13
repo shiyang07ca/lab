@@ -3,6 +3,8 @@
 import sys
 import logging
 import shutil
+import subprocess
+
 from pathlib import Path
 
 
@@ -16,8 +18,8 @@ BASE_DIR = Path.cwd()
 TEMPLATES = Path.cwd().joinpath("templates")
 
 
-def create_algo(pnum):
-    pnum = f"{pnum:05d}"
+def create_algo(num):
+    pnum = f"{num:05d}"
 
     dirc = BASE_DIR / "algo" / pnum
     readme_f = BASE_DIR / "algo" / pnum / "README.md"
@@ -31,7 +33,23 @@ def create_algo(pnum):
         readme_f.touch()
         logger.info(f"创建文件: {sl_f.as_posix()}")
         sl_f.touch()
-        shutil.copyfile(tmpl_f, BASE_DIR / "algo" / pnum / "sl.py")
+        shutil.copyfile(tmpl_f, sl_f)
+
+        # Download problem detail
+        # https://github.com/clearloop/leetcode-cli
+        p = subprocess.Popen(f"leetcode pick {num}", stdout=subprocess.PIPE, shell=True)
+        desc = p.communicate()[0].decode()
+        desc = desc.strip().replace(' is on the run...', '')
+        print(desc)
+        with sl_f.open('r+') as f:
+            content = f.read()
+            f.seek(0)
+            f.write(f"""\"""
+
+{desc}
+
+\"""
+\n""" + content)
     except Exception as e:
         logger.error(f"创建失败: {e}")
     else:
