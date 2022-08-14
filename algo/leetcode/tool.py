@@ -18,7 +18,11 @@ BASE_DIR = Path.cwd()
 TEMPLATES = Path.cwd().joinpath("templates")
 
 
-def create_algo(num):
+def create_algo_tmpl(title):
+    pass
+
+
+def create_lc_algo_tmpl(num):
     pnum = f"{num:05d}"
 
     dirc = BASE_DIR / "algo" / pnum
@@ -40,7 +44,7 @@ def create_algo(num):
         p = subprocess.Popen(f"leetcode pick {num}", stdout=subprocess.PIPE, shell=True)
         desc = p.communicate()[0].decode()
         desc = desc.strip().replace(' is on the run...', '')
-        print(desc)
+        # print(desc)
         with sl_f.open('r+') as f:
             content = f.read()
             f.seek(0)
@@ -61,10 +65,14 @@ def main():
 
     parser = argparse.ArgumentParser(description="Leetcode 助手")
     parser.add_argument("-p", "--p", type=int, help="创建题号")
-
+    parser.add_argument("-a", "--a", type=int, help="创建解题模版")
     args = parser.parse_args()
     if args.p:
-        create_algo(args.p)
+        create_lc_algo_tmpl(args.p)
+
+    if args.a:
+        create_algo_tmpl(args.a)
+
 
 
 if __name__ == "__main__":
