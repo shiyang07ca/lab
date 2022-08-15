@@ -22,7 +22,28 @@ class MetaCommandResult(Enum):
 class PrepareResult(Enum):
 
     PREPARE_SUCCESS = auto()
+    PREPARE_SYNTAX_ERROR = auto()
     PREPARE_UNRECOGNIZED_STATEMENT = auto()
+
+
+@unique
+class ExecuteResult(Enum):
+
+    ECXCUTE_SUCCESS = auto()
+    EXECUTE_TABLE_FULL = auto()
+
+
+@unique
+class StatementType(Enum):
+
+    STATEMENT_INSERT = auto()
+    STATEMENT_SELECT = auto()
+
+
+class Statement:
+
+    def __init__(self, statement_type=None):
+        self.statement_type = statement_type
 
 
 # def usage():
@@ -51,24 +72,31 @@ def do_meta_cmd(line):
     if line == '.exit':
         # return MetaCommandResult.META_COMMAND_SUCCESS
         print('exit.')
-        import ipdb
-        ipdb.set_trace()
         exit(EXIT_SUCCESS)
 
     return MetaCommandResult.META_COMMAND_UNRECOGNIZED_COMMAND
 
 
-def prepare_statement(line):
+def prepare_statement(line, statement):
     if 'insert' in line:
+        statement.statement_type = StatementType.STATEMENT_INSERT
         return PrepareResult.PREPARE_SUCCESS
     elif 'select' in line:
+        statement.statement_type = StatementType.STATEMENT_SELECT
         return PrepareResult.PREPARE_SUCCESS
 
     return PrepareResult.PREPARE_UNRECOGNIZED_STATEMENT
 
 
 def exec_statement(statement):
-    print('Executed.')
+    if statement.statement_type == StatementType.STATEMENT_INSERT:
+        print('This is where we would do an insert.')
+        return ExecuteResult.ECXCUTE_SUCCESS
+    elif statement.statement_type == StatementType.STATEMENT_SELECT:
+        print("This is where we would do a select.")
+        return ExecuteResult.ECXCUTE_SUCCESS
+    # else:
+    #     return ExecuteResult.
 
 
 def main(argv):
@@ -85,6 +113,19 @@ def main(argv):
             elif ans == MetaCommandResult.META_COMMAND_UNRECOGNIZED_COMMAND:
                 print(f"Unrecognized command '{line}'")
                 continue
+
+        statement = Statement()
+        prepare_res = prepare_statement(line, statement)
+        if prepare_res == PrepareResult.PREPARE_SUCCESS:
+            pass
+        elif prepare_res == PrepareResult.PREPARE_SYNTAX_ERROR:
+            print("prepare systax error")
+        elif prepare_res == PrepareResult.PREPARE_UNRECOGNIZED_STATEMENT:
+            print(f"prepare unrecognized keyword error: {line}")
+
+        exec_res = exec_statement(statement)
+        if exec_res == ExecuteResult.ECXCUTE_SUCCESS:
+            print('Executed.')
 
 
 if __name__ == "__main__":
