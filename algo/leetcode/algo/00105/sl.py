@@ -94,7 +94,8 @@ class Solution:
         # 根节点在 inorder 中的位置
         root_index = self.inorder_val_index[root_val]
         root = TreeNode(root_val)
-        # left_size = root_index - il == ineorder 中左树的长度
+        # 注意：
+        # left_size = root_index - il 等于 ineorder 中左树的 *长度*
         left_size = root_index - il
         # preoder
         #    root          left                                right
