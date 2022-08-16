@@ -46,6 +46,9 @@ class Statement:
         self.statement_type = statement_type
 
 
+COLUMN_USERNAME_SIZE = 32
+COLUMN_EMAIL_SIZE = 255
+
 # def usage():
 #     print("Usage:", file=sys.stderr)
 #     print("\tpython -m rodan.tool DBNAME get KEY", file=sys.stderr)
@@ -61,9 +64,9 @@ def read_input():
     line = input()
     print(f"echo => {line}, len: {len(line)}")
 
-    if len(line) <= 0:
+    if len(line) < 0:
         print("Error reading input")
-        exit(BAD_INPUT.value)
+        exit(BAD_INPUT)
 
     return line
 
@@ -106,7 +109,7 @@ def main(argv):
         print_prompt()
         line = read_input()
 
-        if line[0] == '.':
+        if line and line[0] == '.':
             ans = do_meta_cmd(line)
             if ans == MetaCommandResult.META_COMMAND_SUCCESS:
                 continue
