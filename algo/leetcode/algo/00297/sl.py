@@ -88,8 +88,6 @@ Constraints:
 # from algo.tree.builder import TreeNode
 
 
-
-
 import sys
 import inspect
 import os
@@ -111,8 +109,20 @@ from typing import *
 
 
 class Codec:
-    SEP = ','
-    NONE = '#'
+    SEP = ","
+    NONE = "#"
+
+    def format_pos(self, root):
+        if root is None:
+            return "#"
+
+        left = self.format_pos(root.left)
+        right = self.format_pos(root.right)
+
+        # 后序
+        sub_tree = f"{left}{self.SEP}{right}{self.SEP}{root.val}"
+        # print('s ', sub_tree)
+        return sub_tree
 
     def format(self, root):
         if root is None:
@@ -133,9 +143,27 @@ class Codec:
         :rtype: str
         """
 
-        self.s = ''
-        self.format(root)
-        return self.s
+        # self.s = ''
+        # self.format(root)
+        # return self.s
+
+        return self.format_pos(root)
+
+    def build_pos(self, nodes):
+        if not nodes:
+            return None
+
+        # 后序遍历，最后一个元素就是根节点
+        last = nodes.pop()
+        if last == self.NONE:
+            return None
+        root = TreeNode(last)
+        # NOTE
+        # 后序遍历必须先右，在左！！！！
+        root.right = self.build_pos(nodes)
+        root.left = self.build_pos(nodes)
+
+        return root
 
     def build(self, nodes):
         if not nodes:
@@ -158,7 +186,9 @@ class Codec:
         :rtype: TreeNode
         """
         nodes = data.split(self.SEP)
-        return self.build(nodes)
+
+        # return self.build(nodes)
+        return self.build_pos(nodes)
 
 
 import unittest
