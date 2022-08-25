@@ -31,7 +31,6 @@ class Node:
         return f"<{self.value}>"
 
 
-
 import unittest
 
 
@@ -149,6 +148,7 @@ def pos_order_iter2(root):
     return ans
 
 
+# 层序遍历
 # 广度优先遍历
 def bfs(root):
     if root is None:
@@ -163,6 +163,24 @@ def bfs(root):
             queue.append(cur.left)
         if cur.right:
             queue.append(cur.right)
+
+    return ans
+
+
+def bfs2(root):
+    if root is None:
+        return
+
+    queue = [root]
+    ans = []
+    while queue:
+        for _ in range(len(queue)):
+            cur = queue.pop(0)
+            ans.append(cur.value)
+            if cur.left:
+                queue.append(cur.left)
+            if cur.right:
+                queue.append(cur.right)
 
     return ans
 
@@ -255,6 +273,12 @@ class TestIter(unittest.TestCase):
             ["a", "b", "c", "d", "e", "f", "g"],
             bfs(a),
         )
+        self.assertEqual(
+            ["a", "b", "c", "d", "e", "f", "g"],
+            bfs2(a),
+        )
+
+        print(bfs2(a))
 
 
 if __name__ == "__main__":
