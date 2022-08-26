@@ -90,11 +90,7 @@ class Solution:
         if root is None:
             return
 
-        if pre:
-            pre = f"{pre}->{root.val}"
-        else:
-            pre = f"{root.val}"
-
+        pre = f"{pre}->{root.val}" if pre else f"{root.val}"
         if root.left is None and root.right is None:
             self.ans.append(pre)
 
