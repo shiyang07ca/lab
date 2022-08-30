@@ -124,9 +124,9 @@ class TestSolution(unittest.TestCase):
 
     def test_sl(self):
         """
-              3
-          1       4
-            2
+            3
+        1       4
+          2
 
         """
         n1 = TreeNode(3)
@@ -167,7 +167,6 @@ class TestSolution(unittest.TestCase):
             self.sl.kthSmallest(root, 3),
             3,
         )
-
 
 
 if __name__ == "__main__":

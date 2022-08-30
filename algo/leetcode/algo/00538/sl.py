@@ -159,7 +159,6 @@ class Solution:
 
                 root = node.left
 
-
     def convertBST(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         self.traverse_iter(root)
 
@@ -178,18 +177,18 @@ class TestSolution(unittest.TestCase):
     def test_sl(self):
         """
 
-                 4
-             1       6
-           0   2   5   7
-                3       8
+              4
+          1       6
+        0   2   5   7
+             3       8
 
-                 |
-                 v
+              |
+              v
 
-                   30
-             36         21
-           36   35    26    15
-                  33          8
+                30
+          36         21
+        36   35    26    15
+               33          8
 
         """
         n1 = TreeNode(4)
@@ -211,9 +210,6 @@ class TestSolution(unittest.TestCase):
 
         root = self.sl.convertBST(n1)
         root.log()
-
-
-
 
 
 if __name__ == "__main__":
