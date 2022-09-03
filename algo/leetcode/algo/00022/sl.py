@@ -67,19 +67,24 @@ from algo.tree.builder import *
 
 
 class Solution:
+    # pre 表示当前生成的字符串，leftCount 表示左边还未能匹配的左括号数，
+    # n 表示当前还剩下多少括号对数需要生成
     def process(self, pre, leftCount, n):
-
+        # base case，找到结果
         if n == 0:
             self.ans.append(pre)
             return
 
+        # 左括号达到当前的限制，只能选择右括号
         if leftCount == n:
             self.process(pre + ")", leftCount - 1, n - 1)
             return
+        # 左括号已经用完了，还未达到目标，只能选择右括号
         elif leftCount == 0:
             self.process(pre + "(", leftCount + 1, n)
             return
 
+        # 左右括号都选择
         self.process(pre + ")", leftCount - 1, n - 1)
         self.process(pre + "(", leftCount + 1, n)
 
