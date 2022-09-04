@@ -36,6 +36,7 @@ num 由数字（0 - 9）组成
 
 """
 
+
 class Solution:
     def largestPalindromic(self, num: str) -> str:
         nmap = {}
@@ -47,22 +48,22 @@ class Solution:
                 nmap[n] = 1
 
         nmap = dict(sorted(nmap.items(), reverse=True))
-#         print(nmap)
-#         print(nums)
+        #         print(nmap)
+        #         print(nums)
 
-        pre = ''
-        mid = ''
+        pre = ""
+        mid = ""
         for n in nums:
-#             print('pre: ', pre)
-            if (n != '0' or len(pre) != 0) and n in nmap and nmap[n] >= 2 :
+            #             print('pre: ', pre)
+            if (n != "0" or len(pre) != 0) and n in nmap and nmap[n] >= 2:
                 pre += str(n)
                 nmap[n] -= 2
-#         print(pre)
+        #         print(pre)
         for n, count in nmap.items():
             if nmap[n] >= 1:
-                mid =  str(n)
+                mid = str(n)
                 break
 
-#         print(pre + mid + pre[::-1])
+        #         print(pre + mid + pre[::-1])
 
         return pre + mid + pre[::-1]

@@ -39,7 +39,6 @@ from typing import List
 
 
 class Solution:
-
     def two_pointer(self, people, limit):
         people.sort(reverse=True)
         left = 0

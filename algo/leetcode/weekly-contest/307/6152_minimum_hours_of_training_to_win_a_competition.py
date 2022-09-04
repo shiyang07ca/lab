@@ -55,7 +55,7 @@ class Solution:
         ans = 0
 
         for e in energy:
-#             print('en: ', init_en, e, ans)
+            #             print('en: ', init_en, e, ans)
             if init_en <= e:
                 ans += e - init_en + 1
                 init_en = e + 1
@@ -74,10 +74,15 @@ class Solution:
 
         return ans
 
-
-    def minNumberOfHours(self, initialEnergy: int, initialExperience: int, energy: List[int], experience: List[int]) -> int:
+    def minNumberOfHours(
+        self,
+        initialEnergy: int,
+        initialExperience: int,
+        energy: List[int],
+        experience: List[int],
+    ) -> int:
         h_en = self.c_en(initialEnergy, energy)
         h_ex = self.c_ex(initialExperience, experience)
-#         print(h_en, h_ex)
+        #         print(h_en, h_ex)
 
         return h_en + h_ex

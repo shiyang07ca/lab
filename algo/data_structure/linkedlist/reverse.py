@@ -1,3 +1,10 @@
+"""
+
+翻转链表
+
+"""
+
+
 def reverse_iter(head):
     if not head or not head.next:
         return head
@@ -5,9 +12,9 @@ def reverse_iter(head):
     pre = None
     while head:
         cur = head
-        head = head.next
         cur.next = pre
         pre = cur
+        head = head.next
 
     return pre
 

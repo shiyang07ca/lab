@@ -43,17 +43,20 @@ def create_lc_algo_tmpl(num):
         # https://github.com/clearloop/leetcode-cli
         p = subprocess.Popen(f"leetcode pick {num}", stdout=subprocess.PIPE, shell=True)
         desc = p.communicate()[0].decode()
-        desc = desc.strip().replace(' is on the run...', '')
+        desc = desc.strip().replace(" is on the run...", "")
         # print(desc)
-        with sl_f.open('r+') as f:
+        with sl_f.open("r+") as f:
             content = f.read()
             f.seek(0)
-            f.write(f"""\"""
+            f.write(
+                f"""\"""
 
 {desc}
 
 \"""
-\n""" + content)
+\n"""
+                + content
+            )
     except Exception as e:
         logger.error(f"创建失败: {e}")
     else:
@@ -72,7 +75,6 @@ def main():
 
     if args.a:
         create_algo_tmpl(args.a)
-
 
 
 if __name__ == "__main__":
