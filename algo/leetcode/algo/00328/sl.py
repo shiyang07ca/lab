@@ -128,7 +128,7 @@ class TestSolution(unittest.TestCase):
         print(head)
         res = self.sl.oddEvenList(head)
         print(res)
-        print('################')
+        print("################")
 
     def test_sl2(self):
         arr = [1, 2, 3, 4]
@@ -136,7 +136,7 @@ class TestSolution(unittest.TestCase):
         print(head)
         res = self.sl.oddEvenList(head)
         print(res)
-        print('################')
+        print("################")
 
     def test_sl3(self):
         arr = [2, 1, 3, 5, 6, 4, 7]
@@ -144,7 +144,7 @@ class TestSolution(unittest.TestCase):
         print(head)
         res = self.sl.oddEvenList(head)
         print(res)
-        print('################')
+        print("################")
 
 
 if __name__ == "__main__":
