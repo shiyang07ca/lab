@@ -70,16 +70,14 @@ class BinaryHeap(AbstractHeap):
         while i // 2 > 0:
             # 如果子节点比父节点小，则交换
             if self.heap[i] < self.heap[i // 2]:
-                self.heap[i], self.heap[i // 2] = self.heap[i //
-                                                            2], self.heap[i]
+                self.heap[i], self.heap[i // 2] = self.heap[i // 2], self.heap[i]
             i = i // 2
 
     def swim_down(self, i):
         while 2 * i < self.current_size:
             min_index = self.min_child_index(i)
             if self.heap[min_index] < self.heap[i]:
-                self.heap[min_index], self.heap[i] = self.heap[i], self.heap[
-                    min_index]
+                self.heap[min_index], self.heap[i] = self.heap[i], self.heap[min_index]
 
             i = min_index
 
@@ -112,7 +110,6 @@ import unittest
 
 
 class TestBinaryHeap(unittest.TestCase):
-
     def setUp(self):
         self.min_heap = BinaryHeap()
         self.min_heap.insert(4)
@@ -140,6 +137,6 @@ class TestBinaryHeap(unittest.TestCase):
         self.assertEqual(5, self.min_heap.current_size)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # unittest.main()
     pass

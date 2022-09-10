@@ -55,17 +55,16 @@ def get_max_window(arr, w):
     return ans
 
 
-
 import unittest
+
 
 class Test(unittest.TestCase):
     def test(self):
-        print('aaa')
+        print("aaa")
         self.assertEqual(
-            [5, 5, 5, 4, 6, 7],
-            get_max_window([4, 3, 5, 4, 3, 3, 6, 7], 3)
+            [5, 5, 5, 4, 6, 7], get_max_window([4, 3, 5, 4, 3, 3, 6, 7], 3)
         )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
