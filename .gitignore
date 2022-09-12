@@ -105,3 +105,6 @@ Untitled*.ipynb
 
 # manim
 anime/media/
+
+# algo
+*.o
