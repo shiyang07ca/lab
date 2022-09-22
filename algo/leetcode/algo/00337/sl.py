@@ -131,6 +131,22 @@ class Solution:
         )
 
 
+class Solution:
+    def rob(self, root: TreeNode) -> int:
+        def _rob(root):
+            if not root:
+                return 0, 0
+
+            # ls表示偷左子树能带来的最大收益，
+            # ln表示不偷左子树能带来的最大收益，rs、rn同理
+            ls, ln = _rob(root.left)
+            rs, rn = _rob(root.right)
+
+            return root.val + ln + rn, max(ls, ln) + max(rs, rn)
+
+        return max(_rob(root))
+
+
 class TestSolution(unittest.TestCase):
     def setUp(self):
         self.sl = Solution()
