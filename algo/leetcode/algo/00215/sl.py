@@ -31,6 +31,9 @@ Constraints:
 
 ################################################################
 
+# TODO
+# tag: heap, PriorityQueue
+
 215. 数组中的第K个最大元素
 给定整数数组 nums 和整数 k，请返回数组中第 k 个最大的元素。
 
@@ -85,6 +88,7 @@ import math
 from functools import total_ordering
 
 
+# 构造大根堆方法
 @total_ordering
 class Wrapper:
     def __init__(self, val):
@@ -98,7 +102,7 @@ class Wrapper:
 
 
 class Solution:
-    def findKthLargest(self, nums: List[int], k: int) -> int:
+    def findKthLargest2(self, nums: List[int], k: int) -> int:
         wrapper_heap = list(map(lambda item: Wrapper(item), nums))
         heapify(wrapper_heap)
         ans = Wrapper(math.inf)
@@ -110,6 +114,33 @@ class Solution:
                 ans = n
 
         return ans.val
+
+    def findKthLargest3(self, nums: List[int], k: int) -> int:
+        """
+        由于找第 K 大元素，其实就是整个数组排序以后后半部分最小的那个元素。
+        因此，可以维护含有 k 个元素的小根堆, 前 k 个元素先建堆，然后从 k 到 结尾遍历 nums
+        遍历时，只有当前的数大于堆顶，才是我们需要的元素，直接 heapreplace 替换堆顶。
+        最后返回堆顶即可
+        """
+        heap = nums[:k]
+        heapify(heap)
+
+        for n in nums[k:]:
+            if n > heap[0]:
+                heapreplace(heap, n)
+
+        return heap[0]
+
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        heap = []
+        for i, n in enumerate(nums):
+            if i < k or n > heap[0]:
+                heappush(heap, n)
+
+            if len(heap) > k:
+                heappop(heap)
+
+        return heap[0]
 
 
 class TestSolution(unittest.TestCase):
