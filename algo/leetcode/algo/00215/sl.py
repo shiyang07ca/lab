@@ -89,6 +89,11 @@ from functools import total_ordering
 
 # https://www.geeksforgeeks.org/max-heap-in-python/
 # 构造大根堆方法
+import math
+from functools import total_ordering
+
+
+# 构造大根堆方法
 @total_ordering
 class Wrapper:
     def __init__(self, val):
@@ -101,8 +106,36 @@ class Wrapper:
         return self.val == other.val
 
 
+import random
+
+
+def partition(arr, lo, hi):
+    pivot = arr[lo]
+    # [lo, i) <= pivot; (j, hi] > pivot
+    i, j = lo + 1, hi
+    while i <= j:
+        # while 结束时 arr[i] > pivot
+        while i < hi and arr[i] <= pivot:
+            i += 1
+        # while 结束时 arr[j] <= pivot
+        while j > lo and arr[j] > pivot:
+            j -= 1
+
+        if i >= j:
+            break
+
+        # 此时 [lo, i) <= pivot and (j, hi] > pivot
+        # 交换 arr[i], arr[i]
+        # 此时 [lo, i] <= pivot and [j, hi] > pivot
+        arr[j], arr[i] = arr[i], arr[j]
+
+    arr[lo], arr[j] = arr[j], arr[lo]
+
+    return j
+
+
 class Solution:
-    def findKthLargest2(self, nums: List[int], k: int) -> int:
+    def findKthLargest1(self, nums: List[int], k: int) -> int:
         wrapper_heap = list(map(lambda item: Wrapper(item), nums))
         heapify(wrapper_heap)
         ans = Wrapper(math.inf)
@@ -115,7 +148,7 @@ class Solution:
 
         return ans.val
 
-    def findKthLargest3(self, nums: List[int], k: int) -> int:
+    def findKthLargest2(self, nums: List[int], k: int) -> int:
         """
         由于找第 K 大元素，其实就是整个数组排序以后后半部分最小的那个元素。
         因此，可以维护含有 k 个元素的小根堆, 前 k 个元素先建堆，然后从 k 到 结尾遍历 nums
@@ -125,13 +158,14 @@ class Solution:
         heap = nums[:k]
         heapify(heap)
 
+        # k ...
         for n in nums[k:]:
             if n > heap[0]:
                 heapreplace(heap, n)
 
         return heap[0]
 
-    def findKthLargest(self, nums: List[int], k: int) -> int:
+    def findKthLargest3(self, nums: List[int], k: int) -> int:
         heap = []
         for i, n in enumerate(nums):
             if i < k or n > heap[0]:
@@ -141,6 +175,19 @@ class Solution:
                 heappop(heap)
 
         return heap[0]
+
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        random.shuffle(nums)
+        lo, hi = 0, len(nums) - 1
+        k = len(nums) - k
+        while lo <= hi:
+            p = partition(nums, lo, hi)
+            if p < k:
+                lo = p + 1
+            elif p > k:
+                hi = p - 1
+            else:
+                return nums[p]
 
 
 class TestSolution(unittest.TestCase):
