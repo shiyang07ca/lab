@@ -101,11 +101,9 @@ class TestSolution(unittest.TestCase):
 
     def test1(self):
         self.assertEqual(self.s([0, 5, 3, 2, 2]), [0, 2, 2, 3, 5])
-
         print("################################################################")
 
         self.assertEqual(self.s([-2, 5, 0, -45]), [-45, -2, 0, 5])
-
         print("################################################################")
 
         self.assertEqual(self.s([]), [])
