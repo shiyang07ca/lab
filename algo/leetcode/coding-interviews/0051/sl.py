@@ -107,7 +107,7 @@ class Solution:
         tmp = sorted(nums)
         for i in range(n):
             nums[i] = bisect.bisect_left(tmp, nums[i]) + 1
-        # print(f"nums: {nums}")
+        print(f"nums: {nums}")
         # 树状数组统计逆序对
         bit = BIT(n)
         ans = 0
@@ -117,17 +117,47 @@ class Solution:
         return ans
 
 
+# 315 计算右侧小于当前元素的个数
+class Solution2:
+    def reversePairs(self, nums: List[int]) -> int:
+        n = len(nums)
+        # 离散化
+        tmp = sorted(nums)
+        for i in range(n):
+            nums[i] = bisect.bisect_left(tmp, nums[i]) + 1
+        # print(f"nums: {nums}")
+        # 树状数组统计逆序对
+        bit = BIT(n)
+        ans = []
+        for i in range(n - 1, -1, -1):
+            ans.insert(0, bit.query(nums[i] - 1))
+            bit.update(nums[i])
+        return ans
+
+
 import unittest
 
 
 class TestSolution(unittest.TestCase):
     def setUp(self):
-        self.sl = Solution()
+        # self.sl = Solution()
+
+        self.sl2 = Solution2()
 
     def test_sl(self):
         n = [7, 5, 6, 4]
         # print(n)
-        self.assertEqual(self.sl.reversePairs(n), 5)
+        # self.assertEqual(self.sl.reversePairs(n), 5)
+
+    def test_sl(self):
+        n = [5, 2, 6, 1]
+        self.assertEqual(self.sl2.reversePairs(n), [2, 1, 1, 0])
+
+        n = [-1]
+        self.assertEqual(self.sl2.reversePairs(n), [0])
+
+        n = [-1, -1]
+        self.assertEqual(self.sl2.reversePairs(n), [0, 0])
 
 
 if __name__ == "__main__":
