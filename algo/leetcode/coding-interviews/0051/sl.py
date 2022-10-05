@@ -146,8 +146,9 @@ class Solution1a:
                 #     f"count: {self.count}, left: {left}, right: {right}, mid:{mid}, l:{l}, {mid-l+1}"
                 # )
                 # 右数组元素放入排序数组时，统计逆序数
-                # len(left) - 1 - l + 1 为当前 l 指向元素的逆序数
-                self.count += len(left) - 1 - l + 1
+                # len(left) - 1 - l + 1 = len(left) - l 为当前 r 指向的元素的逆序数，
+                # 也就是大于 left[l] 且在 r 左边的元素个数
+                self.count += len(left) - l
                 merged[l + r] = right[r]
                 r += 1
 
@@ -159,7 +160,7 @@ class Solution1a:
 
 # lc 315 计算右侧小于当前元素的个数
 class Solution2:
-    def reversePairs(self, nums: List[int]) -> int:
+    def countSmaller(self, nums: List[int]) -> int:
         n = len(nums)
         # 离散化
         tmp = sorted(nums)
@@ -175,16 +176,56 @@ class Solution2:
         return ans
 
 
+class Solution2a:
+    def countSmaller(self, nums: List[int]) -> int:
+        self.ans = [0] * len(nums)
+
+        self.merge_count(nums, 0)
+
+        return self.ans
+
+    def merge_count(self, a, base_index):
+        N = len(a)
+        if N <= 1:
+            return a
+        mid = N // 2
+        left, right = self.merge_count(a[:mid], base_index), self.merge_count(
+            a[mid:], base_index + mid
+        )
+        self.merge(left, right, a, base_index)
+
+        return a
+
+    def merge(self, left, right, merged, base_index):
+        l, r = 0, 0
+        while l < len(left) and r < len(right):
+            if left[l] <= right[r]:
+                merged[l + r] = left[l]
+                l += 1
+            else:
+                # 右数组元素放入排序数组时，统计逆序数
+                for i in range(l, len(left)):
+                    # print(l, r, i, left, right)
+                    self.ans[base_index + i] += 1
+                merged[l + r] = right[r]
+                r += 1
+
+        for l in range(l, len(left)):
+            merged[l + r] = left[l]
+        for r in range(r, len(right)):
+            merged[l + r] = right[r]
+
+
 import unittest
 
 
 class TestSolution(unittest.TestCase):
     def setUp(self):
         self.sl = Solution1()
-
         self.sl1a = Solution1a()
 
         self.sl2 = Solution2()
+        self.sl2a = Solution2a()
 
     def test_sl(self):
         n = [7, 5, 6, 4]
@@ -193,27 +234,35 @@ class TestSolution(unittest.TestCase):
 
     def test_sl1a(self):
         n = [7, 5, 6, 4]
-        print(f"pre: {n}")
+        # print(f"pre: {n}")
         ans = self.sl1a.reversePairs(n)
-        print(f"after: {n}")
+        # print(f"after: {n}")
         self.assertEqual(ans, 5)
 
-        n = [1,3,2,3,1]
-        print(f"pre: {n}")
+        n = [1, 3, 2, 3, 1]
+        # print(f"pre: {n}")
         ans = self.sl1a.reversePairs(n)
-        print(f"after: {n}")
+        # print(f"after: {n}")
         self.assertEqual(ans, 4)
-
 
     def test_sl2(self):
         n = [5, 2, 6, 1]
-        self.assertEqual(self.sl2.reversePairs(n), [2, 1, 1, 0])
+        self.assertEqual(self.sl2.countSmaller(n), [2, 1, 1, 0])
 
         n = [-1]
-        self.assertEqual(self.sl2.reversePairs(n), [0])
+        self.assertEqual(self.sl2.countSmaller(n), [0])
 
         n = [-1, -1]
-        self.assertEqual(self.sl2.reversePairs(n), [0, 0])
+        self.assertEqual(self.sl2.countSmaller(n), [0, 0])
+
+        n = [5, 2, 6, 1]
+        self.assertEqual(self.sl2a.countSmaller(n), [2, 1, 1, 0])
+
+        n = [-1]
+        self.assertEqual(self.sl2a.countSmaller(n), [0])
+
+        n = [-1, -1]
+        self.assertEqual(self.sl2a.countSmaller(n), [0, 0])
 
 
 if __name__ == "__main__":
