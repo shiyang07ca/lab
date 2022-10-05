@@ -6,9 +6,6 @@
 """
 
 
-
-
-
 # 朴素指针做法
 def merge_sort(a, l, r):
     if l >= r:
@@ -42,18 +39,31 @@ def merge_sort(a, l, r):
 
 
 def merge_sort2(a):
+    def _merge(left, right, merged):
+        l, r = 0, 0
+        while l < len(left) and r < len(right):
+            if left[l] <= right[r]:
+                merged[l + r] = left[l]
+                l += 1
+            else:
+                merged[l + r] = right[r]
+                r += 1
+        for l in range(l, len(left)):
+            merged[l + r] = left[l]
+        for r in range(r, len(right)):
+            merged[l + r] = right[r]
+
+        return merged
+
     N = len(a)
     if N <= 1:
-        return
+        return a
 
     mid = N // 2
-    merge_sort2(a[:mid])
-    merge_sort2(a[mid:])
+    left, right = merge_sort2(a[:mid]), merge_sort2(a[mid:])
 
-    # merge
-    # l, r = 0, 0
-    # while l <= mid and r
-
+    _merge(left, right, a)
+    return a
 
 
 def is_sorted(array):
@@ -87,10 +97,12 @@ class TestSolution(unittest.TestCase):
         print(nums2)
         self.assertTrue(is_sorted(nums2))
 
-    # def test_s2(self):
-    #     nums = [1, 3, 2, 5, 65, 23, 57, 1232]
-    #     merge_sort(nums)
-    #     self.assertTrue(is_sorted(nums))
+    def test_s2(self):
+        nums = [1, 3, 2, 5, 65, 23, 57, 1232]
+        nums2 = merge_sort2(nums)
+        print(nums)
+        self.assertTrue(is_sorted(nums))
+        self.assertTrue(is_sorted(nums2))
 
 
 if __name__ == "__main__":

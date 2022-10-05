@@ -100,14 +100,14 @@ class BIT:
             x += BIT.lowbit(x)
 
 
-class Solution:
+class Solution1:
     def reversePairs(self, nums: List[int]) -> int:
         n = len(nums)
         # 离散化
         tmp = sorted(nums)
         for i in range(n):
             nums[i] = bisect.bisect_left(tmp, nums[i]) + 1
-        print(f"nums: {nums}")
+        # print(f"nums: {nums}")
         # 树状数组统计逆序对
         bit = BIT(n)
         ans = 0
@@ -117,7 +117,45 @@ class Solution:
         return ans
 
 
-# 315 计算右侧小于当前元素的个数
+class Solution1a:
+    def reversePairs(self, nums: List[int]) -> int:
+        self.count = 0
+
+        self.merge_count(nums)
+
+        return self.count
+
+    def merge_count(self, a):
+        N = len(a)
+        if N <= 1:
+            return a
+        mid = N // 2
+        left, right = self.merge_count(a[:mid]), self.merge_count(a[mid:])
+        self.merge(left, right, a)
+
+        return a
+
+    def merge(self, left, right, merged):
+        l, r = 0, 0
+        while l < len(left) and r < len(right):
+            if left[l] <= right[r]:
+                merged[l + r] = left[l]
+                l += 1
+            else:
+                # print(
+                #     f"count: {self.count}, left: {left}, right: {right}, mid:{mid}, l:{l}, {mid-l+1}"
+                # )
+                self.count += len(left) - 1 - l + 1
+                merged[l + r] = right[r]
+                r += 1
+
+        for l in range(l, len(left)):
+            merged[l + r] = left[l]
+        for r in range(r, len(right)):
+            merged[l + r] = right[r]
+
+
+# lc 315 计算右侧小于当前元素的个数
 class Solution2:
     def reversePairs(self, nums: List[int]) -> int:
         n = len(nums)
@@ -140,16 +178,32 @@ import unittest
 
 class TestSolution(unittest.TestCase):
     def setUp(self):
-        # self.sl = Solution()
+        self.sl = Solution1()
+
+        self.sl1a = Solution1a()
 
         self.sl2 = Solution2()
 
     def test_sl(self):
         n = [7, 5, 6, 4]
         # print(n)
-        # self.assertEqual(self.sl.reversePairs(n), 5)
+        self.assertEqual(self.sl.reversePairs(n), 5)
 
-    def test_sl(self):
+    def test_sl1a(self):
+        n = [7, 5, 6, 4]
+        print(f"pre: {n}")
+        ans = self.sl1a.reversePairs(n)
+        print(f"after: {n}")
+        self.assertEqual(ans, 5)
+
+        n = [1,3,2,3,1]
+        print(f"pre: {n}")
+        ans = self.sl1a.reversePairs(n)
+        print(f"after: {n}")
+        self.assertEqual(ans, 4)
+
+
+    def test_sl2(self):
         n = [5, 2, 6, 1]
         self.assertEqual(self.sl2.reversePairs(n), [2, 1, 1, 0])
 
