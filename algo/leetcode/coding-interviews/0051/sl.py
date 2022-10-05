@@ -145,6 +145,8 @@ class Solution1a:
                 # print(
                 #     f"count: {self.count}, left: {left}, right: {right}, mid:{mid}, l:{l}, {mid-l+1}"
                 # )
+                # 右数组元素放入排序数组时，统计逆序数
+                # len(left) - 1 - l + 1 为当前 l 指向元素的逆序数
                 self.count += len(left) - 1 - l + 1
                 merged[l + r] = right[r]
                 r += 1
