@@ -265,11 +265,37 @@ from sortedcontainers import SortedList
 class Solution2c:
     def countSmaller(self, nums: List[int]) -> int:
         N = len(nums)
-        sl = SortedList()
+        sl = SortedList()  # 有序数组
         res = [0] * N
-        for i in range(N - 1, -1, -1):
-            res[i] = sl.bisect_left(nums[i])
-            sl.add(nums[i])
+        for i in range(N - 1, -1, -1):  # 反向遍历
+            res[i] = sl.bisect_left(nums[i])  # 找到右边比当前值小的元素的个数，更新结果
+            sl.add(nums[i])  # 将当前值加入到有序数组中
+
+        return res
+
+
+# 手动维护有序集合，实现二分查找
+class Solution2d:
+    def countSmaller(self, nums: List[int]) -> int:
+        N = len(nums)
+        sl = []  # 有序数组
+        res = [0] * N
+
+        def bisect_left(arr, target):
+            l, r = 0, len(arr) - 1
+            while l <= r:
+                mid = (l + r) // 2
+                if arr[mid] < target:
+                    l = mid + 1
+                else:
+                    r = mid - 1
+
+            return l
+
+        for i in range(N - 1, -1, -1):      # 反向遍历
+            pos = bisect_left(sl, nums[i])  # 找到右边比当前值小的元素个数
+            res[i] = pos                    # 更新结果
+            sl.insert(pos, nums[i])         # 将当前值加入到有序数组中
 
         return res
 
@@ -285,7 +311,8 @@ class TestSolution(unittest.TestCase):
         self.sl2 = Solution2()
         # self.sl2a = Solution2a()
         # self.sl2a = Solution2b()
-        self.sl2a = Solution2c()
+        # self.sl2a = Solution2c()
+        self.sl2a = Solution2d()
 
     def test_sl(self):
         n = [7, 5, 6, 4]
