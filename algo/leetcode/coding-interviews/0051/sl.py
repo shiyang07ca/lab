@@ -176,37 +176,39 @@ class Solution2:
         return ans
 
 
+# TLE
+# 归并排序
 class Solution2a:
     def countSmaller(self, nums: List[int]) -> int:
         self.ans = [0] * len(nums)
+        nums = [(num, idx) for idx, num in enumerate(nums)]
 
-        self.merge_count(nums, 0)
+        self.merge_count(nums)
 
         return self.ans
 
-    def merge_count(self, a, base_index):
+    def merge_count(self, a):
         N = len(a)
         if N <= 1:
             return a
         mid = N // 2
-        left, right = self.merge_count(a[:mid], base_index), self.merge_count(
-            a[mid:], base_index + mid
-        )
-        self.merge(left, right, a, base_index)
+        left, right = self.merge_count(a[:mid]), self.merge_count(a[mid:])
+        self.merge(left, right, a)
 
         return a
 
-    def merge(self, left, right, merged, base_index):
+    def merge(self, left, right, merged):
         l, r = 0, 0
         while l < len(left) and r < len(right):
-            if left[l] <= right[r]:
+            if left[l][0] <= right[r][0]:
                 merged[l + r] = left[l]
                 l += 1
             else:
                 # 右数组元素放入排序数组时，统计逆序数
-                for i in range(l, len(left)):
-                    # print(l, r, i, left, right)
-                    self.ans[base_index + i] += 1
+                for i in range(0, len(left) - l):
+                    # print(base_index+i,self.ans[base_index+i], left, right)
+                    # print(base_index)
+                    self.ans[left[l + i][1]] += 1
                 merged[l + r] = right[r]
                 r += 1
 
@@ -214,6 +216,62 @@ class Solution2a:
             merged[l + r] = left[l]
         for r in range(r, len(right)):
             merged[l + r] = right[r]
+
+
+# 归并排序
+class Solution2b:
+    def countSmaller(self, nums: List[int]) -> int:
+        self.ans = [0] * len(nums)
+        nums = [(num, idx) for idx, num in enumerate(nums)]
+
+        self.merge_count(nums)
+
+        return self.ans
+
+    def merge_count(self, a):
+        N = len(a)
+        if N <= 1:
+            return a
+        mid = N // 2
+        left, right = self.merge_count(a[:mid]), self.merge_count(a[mid:])
+        self.merge(left, right, a)
+
+        return a
+
+    def merge(self, left, right, merged):
+        l, r = 0, 0
+        while l < len(left) and r < len(right):
+            if left[l][0] <= right[r][0]:
+                # 放第一个区间的数时，更新结果数组
+                self.ans[left[l][1]] += r
+                merged[l + r] = left[l]
+                l += 1
+            else:
+                merged[l + r] = right[r]
+                r += 1
+
+        for l in range(l, len(left)):
+            # 放第一个区间的数时，更新结果数组
+            self.ans[left[l][1]] += r
+            merged[l + r] = left[l]
+        for r in range(r, len(right)):
+            merged[l + r] = right[r]
+
+
+# 有序集合 - SortedList + 二分查找
+from sortedcontainers import SortedList
+
+
+class Solution2c:
+    def countSmaller(self, nums: List[int]) -> int:
+        N = len(nums)
+        sl = SortedList()
+        res = [0] * N
+        for i in range(N - 1, -1, -1):
+            res[i] = sl.bisect_left(nums[i])
+            sl.add(nums[i])
+
+        return res
 
 
 import unittest
@@ -225,7 +283,9 @@ class TestSolution(unittest.TestCase):
         self.sl1a = Solution1a()
 
         self.sl2 = Solution2()
-        self.sl2a = Solution2a()
+        # self.sl2a = Solution2a()
+        # self.sl2a = Solution2b()
+        self.sl2a = Solution2c()
 
     def test_sl(self):
         n = [7, 5, 6, 4]
@@ -245,6 +305,11 @@ class TestSolution(unittest.TestCase):
         # print(f"after: {n}")
         self.assertEqual(ans, 4)
 
+        n = [2, 3, 5, 5, 1, -1, -1, 4]
+        ans = self.sl1a.reversePairs(n)
+        # print(f"after: {n}")
+        self.assertEqual(ans, 16)
+
     def test_sl2(self):
         n = [5, 2, 6, 1]
         self.assertEqual(self.sl2.countSmaller(n), [2, 1, 1, 0])
@@ -263,6 +328,109 @@ class TestSolution(unittest.TestCase):
 
         n = [-1, -1]
         self.assertEqual(self.sl2a.countSmaller(n), [0, 0])
+
+        n = [2, 3, 5, 1, 4]
+        self.assertEqual(self.sl2a.countSmaller(n), [1, 1, 2, 0, 0])
+
+        n = [2, 3, 5, 5, 1, 4]
+        self.assertEqual(self.sl2a.countSmaller(n), [1, 1, 2, 2, 0, 0])
+
+        print("################################################################")
+        n = [2, 3, 5, 5, 1, -1, -1, 4]
+        print(n)
+        ans = self.sl2a.countSmaller(n)
+        print(n)
+        self.assertEqual(ans, [3, 3, 4, 4, 2, 0, 0, 0])
+
+        n = [
+            26,
+            78,
+            27,
+            100,
+            33,
+            67,
+            90,
+            23,
+            66,
+            5,
+            38,
+            7,
+            35,
+            23,
+            52,
+            22,
+            83,
+            51,
+            98,
+            69,
+            81,
+            32,
+            78,
+            28,
+            94,
+            13,
+            2,
+            97,
+            3,
+            76,
+            99,
+            51,
+            9,
+            21,
+            84,
+            66,
+            65,
+            36,
+            100,
+            41,
+        ]
+        # print(self.sl2.countSmaller(n))
+        res = self.sl2a.countSmaller(n)
+        # print(res, sum(res))
+        ans = [
+            10,
+            27,
+            10,
+            35,
+            12,
+            22,
+            28,
+            8,
+            19,
+            2,
+            12,
+            2,
+            9,
+            6,
+            12,
+            5,
+            17,
+            9,
+            19,
+            12,
+            14,
+            6,
+            12,
+            5,
+            12,
+            3,
+            0,
+            10,
+            0,
+            7,
+            8,
+            4,
+            0,
+            0,
+            4,
+            3,
+            2,
+            0,
+            1,
+            0,
+        ]
+        # print(ans, sum(ans))
+        self.assertEqual(res, ans)
 
 
 if __name__ == "__main__":
