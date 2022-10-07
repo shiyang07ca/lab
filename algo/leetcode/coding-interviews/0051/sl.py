@@ -292,10 +292,10 @@ class Solution2d:
 
             return l
 
-        for i in range(N - 1, -1, -1):      # 反向遍历
+        for i in range(N - 1, -1, -1):  # 反向遍历
             pos = bisect_left(sl, nums[i])  # 找到右边比当前值小的元素个数
-            res[i] = pos                    # 更新结果
-            sl.insert(pos, nums[i])         # 将当前值加入到有序数组中
+            res[i] = pos  # 更新结果
+            sl.insert(pos, nums[i])  # 将当前值加入到有序数组中
 
         return res
 
