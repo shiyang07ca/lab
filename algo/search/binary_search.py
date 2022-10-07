@@ -127,6 +127,7 @@ class TestSuite(unittest.TestCase):
 
         #      0  1  2  3  4  5  6  7  8
         arr = [0, 1, 2, 3, 3, 3, 4, 5, 6]
+        # arr = [0, 1, 2, 3, 4, 5, 6]
         print(bs3(arr, 3))
         print(bs4(arr, 3))
 
