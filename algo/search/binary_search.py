@@ -58,6 +58,7 @@ target = 3
 
 """
 
+# 查找左边界
 # 区间[l, r]被划分成[l, mid]和[mid + 1, r]时使用：
 def bs3(arr, target):
     l, r = 0, len(arr) - 1
@@ -71,6 +72,7 @@ def bs3(arr, target):
     return l
 
 
+# 查找右边界
 # 区间[l, r]被划分成[l, mid - 1]和[mid, r]时使用：
 def bs4(arr, target):
     l, r = 0, len(arr) - 1
