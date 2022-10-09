@@ -61,7 +61,7 @@ target = 3
 # 查找左边界
 # 区间[l, r]被划分成[l, mid]和[mid + 1, r]时使用：
 def bs3(arr, target):
-    l, r = 0, len(arr)
+    l, r = 0, len(arr) - 1
     while l < r:
         mid = (l + r) >> 1
         if arr[mid] >= target:
@@ -75,7 +75,7 @@ def bs3(arr, target):
 # 查找右边界
 # 区间[l, r]被划分成[l, mid - 1]和[mid, r]时使用：
 def bs4(arr, target):
-    l, r = 0, len(arr)
+    l, r = 0, len(arr) - 1
     while l < r:
         mid = (l + r + 1) >> 1
         if arr[mid] <= target:
@@ -132,8 +132,11 @@ class TestSuite(unittest.TestCase):
         self.assertEqual(3, bs3(arr, 3))
         self.assertEqual(5, bs4(arr, 3))
         # arr = [0, 1, 2, 3, 4, 5, 6]
-        print(bs3(arr, 7))
-        print(bs4(arr, -1))
+        print(bs3(arr, 7))  # 8
+        print(bs3(arr, -1)) # 0
+
+        print(bs4(arr, 7))  # 8
+        print(bs4(arr, -1)) # 0
 
 
 if __name__ == "__main__":
