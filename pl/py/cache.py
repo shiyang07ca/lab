@@ -1,3 +1,4 @@
+from threading import RLock
 from collections import namedtuple
 
 ################################################################################
@@ -285,10 +286,10 @@ def _lru_cache_wrapper(user_function, maxsize, typed, _CacheInfo):
     return wrapper
 
 
-try:
-    from _functools import _lru_cache_wrapper
-except ImportError:
-    pass
+# try:
+#     from _functools import _lru_cache_wrapper
+# except ImportError:
+#     pass
 
 
 def fib(n):
