@@ -132,8 +132,8 @@ class TestSuite(unittest.TestCase):
         self.assertEqual(3, bs3(arr, 3))
         self.assertEqual(5, bs4(arr, 3))
         # arr = [0, 1, 2, 3, 4, 5, 6]
-        print(bs3(arr, 3))
-        print(bs4(arr, 3))
+        print(bs3(arr, 7))
+        print(bs4(arr, -1))
 
 
 if __name__ == "__main__":
