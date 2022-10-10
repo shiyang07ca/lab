@@ -58,10 +58,12 @@ target = 3
 
 """
 
+
 # 查找左边界
 # 区间[l, r]被划分成[l, mid]和[mid + 1, r]时使用：
 def bs3(arr, target):
     l, r = 0, len(arr) - 1
+    # l, r = 0, len(arr)
     while l < r:
         mid = (l + r) >> 1
         if arr[mid] >= target:
@@ -76,6 +78,7 @@ def bs3(arr, target):
 # 区间[l, r]被划分成[l, mid - 1]和[mid, r]时使用：
 def bs4(arr, target):
     l, r = 0, len(arr) - 1
+    # l, r = 0, len(arr)
     while l < r:
         mid = (l + r + 1) >> 1
         if arr[mid] <= target:
@@ -104,6 +107,7 @@ def binary_search_recur(array, low, high, val):
 
 
 class TestSuite(unittest.TestCase):
+
     def test_binary_search(self):
         array = [1, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 6]
         self.assertEqual(10, binary_search(array, 5))
@@ -123,6 +127,8 @@ class TestSuite(unittest.TestCase):
         self.assertEqual(-1, binary_search_recur(array, 0, 11, -1))
 
     def test_2(self):
+        from bisect import bisect_left, bisect_right
+
         array = [1, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 6]
         # self.assertEqual(10, bs3(array, 5))
         # self.assertEqual(11, bs3(array, 6))
@@ -130,13 +136,31 @@ class TestSuite(unittest.TestCase):
         #      0  1  2  3  4  5  6  7  8
         arr = [0, 1, 2, 3, 3, 3, 4, 5, 6]
         self.assertEqual(3, bs3(arr, 3))
+        self.assertEqual(bisect_left(arr, 3), bs3(arr, 3))
         self.assertEqual(5, bs4(arr, 3))
         # arr = [0, 1, 2, 3, 4, 5, 6]
-        print(bs3(arr, 7))  # 8
-        print(bs3(arr, -1)) # 0
 
-        print(bs4(arr, 7))  # 8
-        print(bs4(arr, -1)) # 0
+        print(bs3(arr, 7))  # 8
+        print(bisect_left(arr, 7))
+
+        print(bs3(arr, -1))  # 0
+        print(bisect_left(arr, -1))
+
+        # print(bs4(arr, 7))  # 8
+        # print(bs4(arr, -1))  # 0
+
+        print(
+            '################################################################')
+
+        arr = [0]
+        print(bs3(arr, 5))
+        print(bisect_left(arr, 5))
+
+        print(bs3(arr, -1))
+        print(bisect_left(arr, -1))
+
+        print(bs4(arr, 5))
+        print(bs4(arr, -1))
 
 
 if __name__ == "__main__":
