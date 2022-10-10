@@ -274,8 +274,43 @@ class Solution2c:
         return res
 
 
-# 手动维护有序集合，实现二分查找
+from sortedcontainers import SortedList
+
+# 手动实现二分查找
 class Solution2d:
+    def countSmaller(self, nums: List[int]) -> int:
+        N = len(nums)
+        sl = []  # 有序数组
+        res = [0] * N
+
+        def bisect_left(arr, target):
+            if not arr:
+                return 0
+
+            l, r = 0, len(arr) - 1
+            while l < r:
+                mid = (l + r) // 2
+                if arr[mid] >= target:
+                    r = mid
+                else:
+                    l = mid + 1
+
+            # 没找到且最后一个元素比 target 小
+            if arr[l] < target:
+                return l + 1
+            else:
+                return l
+
+        for i in range(N - 1, -1, -1):  # 反向遍历
+            pos = bisect_left(sl, nums[i])  # 找到右边比当前值小的元素个数
+            res[i] = pos  # 更新结果
+            sl.insert(pos, nums[i])  # 将当前值加入到有序数组中
+
+        return res
+
+
+# 手动维护有序集合，实现二分查找
+class Solution2e:
     def countSmaller(self, nums: List[int]) -> int:
         N = len(nums)
         sl = []  # 有序数组
@@ -308,11 +343,13 @@ class TestSolution(unittest.TestCase):
         self.sl = Solution1()
         self.sl1a = Solution1a()
 
-        self.sl2 = Solution2()
-        # self.sl2a = Solution2a()
-        # self.sl2a = Solution2b()
-        # self.sl2a = Solution2c()
-        self.sl2a = Solution2d()
+        sl2 = Solution2()
+        sl2a = Solution2a()
+        sl2b = Solution2b()
+        sl2c = Solution2c()
+        sl2d = Solution2d()
+        sl2e = Solution2e()
+        self.sl2s = [sl2, sl2a, sl2b, sl2c, sl2d, sl2e]
 
     def test_sl(self):
         n = [7, 5, 6, 4]
@@ -338,126 +375,127 @@ class TestSolution(unittest.TestCase):
         self.assertEqual(ans, 16)
 
     def test_sl2(self):
-        n = [5, 2, 6, 1]
-        self.assertEqual(self.sl2.countSmaller(n), [2, 1, 1, 0])
+        for sl in self.sl2s:
+            n = [5, 2, 6, 1]
+            self.assertEqual(sl.countSmaller(n), [2, 1, 1, 0])
 
-        n = [-1]
-        self.assertEqual(self.sl2.countSmaller(n), [0])
+            n = [-1]
+            self.assertEqual(sl.countSmaller(n), [0])
 
-        n = [-1, -1]
-        self.assertEqual(self.sl2.countSmaller(n), [0, 0])
+            n = [-1, -1]
+            self.assertEqual(sl.countSmaller(n), [0, 0])
 
-        n = [5, 2, 6, 1]
-        self.assertEqual(self.sl2a.countSmaller(n), [2, 1, 1, 0])
+            n = [5, 2, 6, 1]
+            self.assertEqual(sl.countSmaller(n), [2, 1, 1, 0])
 
-        n = [-1]
-        self.assertEqual(self.sl2a.countSmaller(n), [0])
+            n = [-1]
+            self.assertEqual(sl.countSmaller(n), [0])
 
-        n = [-1, -1]
-        self.assertEqual(self.sl2a.countSmaller(n), [0, 0])
+            n = [-1, -1]
+            self.assertEqual(sl.countSmaller(n), [0, 0])
 
-        n = [2, 3, 5, 1, 4]
-        self.assertEqual(self.sl2a.countSmaller(n), [1, 1, 2, 0, 0])
+            n = [2, 3, 5, 1, 4]
+            self.assertEqual(sl.countSmaller(n), [1, 1, 2, 0, 0])
 
-        n = [2, 3, 5, 5, 1, 4]
-        self.assertEqual(self.sl2a.countSmaller(n), [1, 1, 2, 2, 0, 0])
+            n = [2, 3, 5, 5, 1, 4]
+            self.assertEqual(sl.countSmaller(n), [1, 1, 2, 2, 0, 0])
 
-        print("################################################################")
-        n = [2, 3, 5, 5, 1, -1, -1, 4]
-        print(n)
-        ans = self.sl2a.countSmaller(n)
-        print(n)
-        self.assertEqual(ans, [3, 3, 4, 4, 2, 0, 0, 0])
+            # print("################################################################")
+            n = [2, 3, 5, 5, 1, -1, -1, 4]
+            # print(n)
+            ans = sl.countSmaller(n)
+            # print(n)
+            self.assertEqual(ans, [3, 3, 4, 4, 2, 0, 0, 0])
 
-        n = [
-            26,
-            78,
-            27,
-            100,
-            33,
-            67,
-            90,
-            23,
-            66,
-            5,
-            38,
-            7,
-            35,
-            23,
-            52,
-            22,
-            83,
-            51,
-            98,
-            69,
-            81,
-            32,
-            78,
-            28,
-            94,
-            13,
-            2,
-            97,
-            3,
-            76,
-            99,
-            51,
-            9,
-            21,
-            84,
-            66,
-            65,
-            36,
-            100,
-            41,
-        ]
-        # print(self.sl2.countSmaller(n))
-        res = self.sl2a.countSmaller(n)
-        # print(res, sum(res))
-        ans = [
-            10,
-            27,
-            10,
-            35,
-            12,
-            22,
-            28,
-            8,
-            19,
-            2,
-            12,
-            2,
-            9,
-            6,
-            12,
-            5,
-            17,
-            9,
-            19,
-            12,
-            14,
-            6,
-            12,
-            5,
-            12,
-            3,
-            0,
-            10,
-            0,
-            7,
-            8,
-            4,
-            0,
-            0,
-            4,
-            3,
-            2,
-            0,
-            1,
-            0,
-        ]
-        # print(ans, sum(ans))
-        self.assertEqual(res, ans)
+            n = [
+                26,
+                78,
+                27,
+                100,
+                33,
+                67,
+                90,
+                23,
+                66,
+                5,
+                38,
+                7,
+                35,
+                23,
+                52,
+                22,
+                83,
+                51,
+                98,
+                69,
+                81,
+                32,
+                78,
+                28,
+                94,
+                13,
+                2,
+                97,
+                3,
+                76,
+                99,
+                51,
+                9,
+                21,
+                84,
+                66,
+                65,
+                36,
+                100,
+                41,
+            ]
+            # print(sl.countSmaller(n))
+            res = sl.countSmaller(n)
+            # print(res, sum(res))
+            ans = [
+                10,
+                27,
+                10,
+                35,
+                12,
+                22,
+                28,
+                8,
+                19,
+                2,
+                12,
+                2,
+                9,
+                6,
+                12,
+                5,
+                17,
+                9,
+                19,
+                12,
+                14,
+                6,
+                12,
+                5,
+                12,
+                3,
+                0,
+                10,
+                0,
+                7,
+                8,
+                4,
+                0,
+                0,
+                4,
+                3,
+                2,
+                0,
+                1,
+                0,
+            ]
+            # print(ans, sum(ans))
+            self.assertEqual(res, ans)
 
 
 if __name__ == "__main__":
