@@ -108,3 +108,7 @@ anime/media/
 
 # algo
 *.o
+
+.ccls-cache
+
+nohup.out
