@@ -10,7 +10,6 @@
 
 
 class SomeClass:
-
     def __new__(cls, *args, **kwargs):
         # It’s important to note that object.__new__() itself only accepts
         # a single argument, the class to instantiate. If you call
@@ -49,10 +48,12 @@ def named_tuple_factory(type_name, *fields):
             if len(args) != num_fields:
                 raise TypeError(
                     f"{type_name} expected exactly {num_fields} arguments,"
-                    f" got {len(args)}")
+                    f" got {len(args)}"
+                )
             cls.__name__ = type_name
             for index, field in enumerate(fields):
                 import ipdb
+
                 ipdb.set_trace()
                 setattr(cls, field, property(itemgetter(index)))
             return super().__new__(cls, args)
@@ -63,7 +64,7 @@ def named_tuple_factory(type_name, *fields):
     return NamedTuple
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sc = SomeClass(22)
     # print(sc)
 

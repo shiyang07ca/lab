@@ -8,27 +8,31 @@ from collections import namedtuple
 # update_wrapper() and wraps() are tools to help write
 # wrapper functions that can handle naive introspection
 
-WRAPPER_ASSIGNMENTS = ('__module__', '__name__', '__qualname__', '__doc__',
-                       '__annotations__')
-WRAPPER_UPDATES = ('__dict__', )
+WRAPPER_ASSIGNMENTS = (
+    "__module__",
+    "__name__",
+    "__qualname__",
+    "__doc__",
+    "__annotations__",
+)
+WRAPPER_UPDATES = ("__dict__",)
 
 from functools import partial
 
 
-def update_wrapper(wrapper,
-                   wrapped,
-                   assigned=WRAPPER_ASSIGNMENTS,
-                   updated=WRAPPER_UPDATES):
+def update_wrapper(
+    wrapper, wrapped, assigned=WRAPPER_ASSIGNMENTS, updated=WRAPPER_UPDATES
+):
     """Update a wrapper function to look like the wrapped function
 
-       wrapper is the function to be updated
-       wrapped is the original function
-       assigned is a tuple naming the attributes assigned directly
-       from the wrapped function to the wrapper function (defaults to
-       functools.WRAPPER_ASSIGNMENTS)
-       updated is a tuple naming the attributes of the wrapper that
-       are updated with the corresponding attribute from the wrapped
-       function (defaults to functools.WRAPPER_UPDATES)
+    wrapper is the function to be updated
+    wrapped is the original function
+    assigned is a tuple naming the attributes assigned directly
+    from the wrapped function to the wrapper function (defaults to
+    functools.WRAPPER_ASSIGNMENTS)
+    updated is a tuple naming the attributes of the wrapper that
+    are updated with the corresponding attribute from the wrapped
+    function (defaults to functools.WRAPPER_UPDATES)
     """
     for attr in assigned:
         try:
@@ -49,16 +53,13 @@ def update_wrapper(wrapper,
 def wraps(wrapped, assigned=WRAPPER_ASSIGNMENTS, updated=WRAPPER_UPDATES):
     """Decorator factory to apply update_wrapper() to a wrapper function
 
-       Returns a decorator that invokes update_wrapper() with the decorated
-       function as the wrapper argument and the arguments to wraps() as the
-       remaining arguments. Default arguments are as for update_wrapper().
-       This is a convenience function to simplify applying partial() to
-       update_wrapper().
+    Returns a decorator that invokes update_wrapper() with the decorated
+    function as the wrapper argument and the arguments to wraps() as the
+    remaining arguments. Default arguments are as for update_wrapper().
+    This is a convenience function to simplify applying partial() to
+    update_wrapper().
     """
-    return partial(update_wrapper,
-                   wrapped=wrapped,
-                   assigned=assigned,
-                   updated=updated)
+    return partial(update_wrapper, wrapped=wrapped, assigned=assigned, updated=updated)
 
 
 ################################################################################
@@ -70,13 +71,13 @@ _CacheInfo = namedtuple("CacheInfo", ["hits", "misses", "maxsize", "currsize"])
 
 
 class _HashedSeq(list):
-    """ This class guarantees that hash() will be called no more than once
-        per element.  This is important because the lru_cache() will hash
-        the key multiple times on a cache miss.
+    """This class guarantees that hash() will be called no more than once
+    per element.  This is important because the lru_cache() will hash
+    the key multiple times on a cache miss.
 
     """
 
-    __slots__ = 'hashvalue'
+    __slots__ = "hashvalue"
 
     def __init__(self, tup, hash=hash):
         self[:] = tup
@@ -86,14 +87,16 @@ class _HashedSeq(list):
         return self.hashvalue
 
 
-def _make_key(args,
-              kwds,
-              typed,
-              kwd_mark=(object(), ),
-              fasttypes={int, str},
-              tuple=tuple,
-              type=type,
-              len=len):
+def _make_key(
+    args,
+    kwds,
+    typed,
+    kwd_mark=(object(),),
+    fasttypes={int, str},
+    tuple=tuple,
+    type=type,
+    len=len,
+):
     """Make a cache key from optionally typed positional and keyword arguments
 
     The key is constructed in a way that is flat as possible rather than
@@ -155,15 +158,14 @@ def lru_cache(maxsize=128, typed=False):
         # The user_function was passed in directly via the maxsize argument
         user_function, maxsize = maxsize, 128
         wrapper = _lru_cache_wrapper(user_function, maxsize, typed, _CacheInfo)
-        wrapper.cache_parameters = lambda: {'maxsize': maxsize, 'typed': typed}
+        wrapper.cache_parameters = lambda: {"maxsize": maxsize, "typed": typed}
         return update_wrapper(wrapper, user_function)
     elif maxsize is not None:
-        raise TypeError(
-            'Expected first argument to be an integer, a callable, or None')
+        raise TypeError("Expected first argument to be an integer, a callable, or None")
 
     def decorating_function(user_function):
         wrapper = _lru_cache_wrapper(user_function, maxsize, typed, _CacheInfo)
-        wrapper.cache_parameters = lambda: {'maxsize': maxsize, 'typed': typed}
+        wrapper.cache_parameters = lambda: {"maxsize": maxsize, "typed": typed}
         return update_wrapper(wrapper, user_function)
 
     return decorating_function
@@ -264,7 +266,7 @@ def _lru_cache_wrapper(user_function, maxsize, typed, _CacheInfo):
                     last[NEXT] = root[PREV] = cache[key] = link
                     # Use the cache_len bound method instead of the len() function
                     # which could potentially be wrapped in an lru_cache itself.
-                    full = (cache_len() >= maxsize)
+                    full = cache_len() >= maxsize
             return result
 
     def cache_info():
@@ -312,5 +314,5 @@ def main():
     print(fib2(35))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
