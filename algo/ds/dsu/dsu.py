@@ -33,6 +33,7 @@ size = [1] * N
 
 def find(x):
     if p[x] != x:
+        # 路径压缩
         p[x] = find(p[x])
     return p[x]
 
