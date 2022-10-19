@@ -40,8 +40,8 @@ def find(x):
 
 def union(a, b):
     pa, pb = find(a), find(b)
-    if pa == pb:
-        return
+    # if pa == pb:
+    #     return
     p[pa] = pb
     size[pb] += size[pa]
 
