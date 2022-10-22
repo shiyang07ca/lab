@@ -131,7 +131,7 @@ class Solution:
         ends = [i[0] for i in inv]
         dp = [0] * (len(inv) + 1)
         for i, (end, start, p) in enumerate(inv, 1):
-            j = bisect_right(ends, start, hi=i)
+            j = bisect_right(ends, start, hi=i - 1)
             # dp[i] 表示 当前 i 位置的最大利润，有两种选择，
             # 选 i 位置 + dp[j]，或者选择 i - 1 位置的最大利润，两者取最大值。
             # j 表示大于 target(start) 的下界, 因此应该将j - 1，又因为是从1

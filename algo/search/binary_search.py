@@ -55,6 +55,14 @@ target = 3
     C++: lower_bound   C++: upper_bound
     Python:bisect_left Python: bisect_right
 
+>= bisect_left :  在有序数组中查询大于或等于某个数的最小数
+>  bisect_right:  在有序数组中查询大于某个数的最小数
+
+<=             :  在有序数组中查询小于或等于某个数的最小数
+   bisect_right - 1
+
+<              :  在有序数组中查询大于某个数的最小数
+   bisect_left - 1
 
 """
 
