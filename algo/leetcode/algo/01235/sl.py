@@ -55,6 +55,20 @@ Constraints:
 # TODO
 # tag: dp, binary search
 
+
+相似题目：
+
+1235. 规划兼职工作
+https://leetcode.cn/problems/maximum-profit-in-job-scheduling/
+
+2008. 出租车的最大盈利
+https://leetcode.cn/problems/maximum-earnings-from-taxi/
+
+1751. 最多可以参加的会议数目 II
+https://leetcode.cn/problems/maximum-number-of-events-that-can-be-attended-ii/
+
+
+
 1235. 规划兼职工作
 你打算利用空闲时间来做兼职工作赚些零花钱。
 
