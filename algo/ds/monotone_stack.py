@@ -1,7 +1,52 @@
-r"""
+"""
 
 单调栈 Monotone Stack
 
+
+https://oi-wiki.org/ds/monotonous-stack/
+https://cp-algorithms.com/data_structures/stack_queue_modification.html
+https://algo.itcharge.cn/03.Stack/02.Monotone-Stack/01.Monotone-Stack/
+
+模板题
+https://www.luogu.com.cn/problem/P5788
+https://www.luogu.com.cn/problem/P2866 http://poj.org/problem?id=3250
+
+
+单调栈可以在时间复杂度为 O(n) 的情况下，求解出某个元素左边或者右边第一个比它大或者小的元素。
+
+所以单调栈一般用于解决一下几种问题：
+
+- 寻找左侧第一个比当前元素大的元素。
+- 寻找左侧第一个比当前元素小的元素。
+- 寻找右侧第一个比当前元素大的元素。
+- 寻找右侧第一个比当前元素小的元素。
+
+练习
+LC496. 下一个更大元素 I https://leetcode.cn/problems/next-greater-element-i/
+LC503. 下一个更大元素 II  https://leetcode.cn/problems/next-greater-element-ii/
+LC739. 每日温度  https://leetcode.cn/problems/daily-temperatures/
+LC901. 股票价格跨度  https://leetcode.cn/problems/online-stock-span/
+LC316. 去除重复字母  https://leetcode.cn/problems/remove-duplicate-letters/
+LC1081. 不同字符的最小子序列  https://leetcode.cn/problems/smallest-subsequence-of-distinct-characters/
+
+
+LC42. 接雨水  https://leetcode.cn/problems/trapping-rain-water/
+LC84. 柱状图中最大的矩形
+LC85. 最大矩形  https://leetcode.cn/problems/maximal-rectangle/
+
+"""
+
+
+def monotne_stack(nums):
+    st = []
+    for n in nums:
+        # while st and st[-1] >= num: # 单调递减栈
+        while st and st[-1] <= num:  # 单调递增栈，不断弹出 <= num 的，循环结束后栈顶就是 > num 的
+            st.pop()
+        st.append(n)
+
+
+"""
 
 * 描述
   给定一个不含有重复值的数组arr，找到每一个i位置左边和右边离i位置最近
