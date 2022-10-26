@@ -4,7 +4,7 @@ import os
 import unittest
 from os.path import abspath, join, dirname
 from itertools import *
-from collections import deque
+from collections import *
 
 from typing import *
 
@@ -19,7 +19,6 @@ sys.path.insert(0, parentdir)
 
 
 from algo.tree.builder import *
-
 
 
 class TestSolution(unittest.TestCase):
