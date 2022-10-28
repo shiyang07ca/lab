@@ -26,6 +26,7 @@ LC496. 下一个更大元素 I https://leetcode.cn/problems/next-greater-element
 LC503. 下一个更大元素 II  https://leetcode.cn/problems/next-greater-element-ii/
 LC739. 每日温度  https://leetcode.cn/problems/daily-temperatures/
 LC901. 股票价格跨度  https://leetcode.cn/problems/online-stock-span/
+LC907. 子数组的最小值之和 https://leetcode.cn/problems/sum-of-subarray-minimums/
 LC316. 去除重复字母  https://leetcode.cn/problems/remove-duplicate-letters/
 LC1081. 不同字符的最小子序列  https://leetcode.cn/problems/smallest-subsequence-of-distinct-characters/
 
