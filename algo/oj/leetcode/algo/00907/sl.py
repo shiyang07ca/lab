@@ -90,6 +90,14 @@ from algo.tree.builder import *
 
 """
 
+https://leetcode.cn/problems/sum-of-subarray-minimums/solution/gong-xian-fa-dan-diao-zhan-san-chong-shi-gxa5/
+
+思路
+
+找到以每个元素为最小值的子树组个数，也就是找到比当前元素的小的左右边界，
+计算子树组个数，乘以当前元素，就是对总和的贡献
+
+
 i      0       1        2        3    4
 a    [ 3       1        2        4 ]
 
@@ -108,7 +116,7 @@ class Solution:
         N = len(arr)
 
         for i, n in enumerate(arr):
-            while st and arr[st[-1]] > n:
+            while st and arr[st[-1]] >= n:
                 index = st.pop()
                 left = st[-1] if st else -1
                 pos[index] = [left, i]
@@ -119,7 +127,8 @@ class Solution:
             left = st[-1] if st else -1
             pos[index] = [left, N]
 
-        # print(pos)
+        print(f"pos: {pos}")
+
         ans = 0
         for i, (l, r) in enumerate(pos):
             ans += (i - l) * (r - i) * arr[i]
@@ -143,6 +152,9 @@ class TestSolution(unittest.TestCase):
             self.sl.sumSubarrayMins(arr),
             444,
         )
+
+        arr = [1, 2, 4, 2, 3, 1]
+        self.sl.sumSubarrayMins(arr)
 
 
 if __name__ == "__main__":
