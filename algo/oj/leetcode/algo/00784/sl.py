@@ -34,6 +34,7 @@ Constraints:
 # template
 # TODO
 # tag: dfs
+# LC46
 
 784. 字母大小写全排列
 
