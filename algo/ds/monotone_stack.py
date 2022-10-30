@@ -21,12 +21,14 @@ https://www.luogu.com.cn/problem/P2866 http://poj.org/problem?id=3250
 - 寻找右侧第一个比当前元素大的元素。
 - 寻找右侧第一个比当前元素小的元素。
 
-练习
+
+模板题
 LC496. 下一个更大元素 I https://leetcode.cn/problems/next-greater-element-i/
 LC503. 下一个更大元素 II  https://leetcode.cn/problems/next-greater-element-ii/
+
+练习
 LC739. 每日温度  https://leetcode.cn/problems/daily-temperatures/
 LC901. 股票价格跨度  https://leetcode.cn/problems/online-stock-span/
-LC907. 子数组的最小值之和 https://leetcode.cn/problems/sum-of-subarray-minimums/
 LC316. 去除重复字母  https://leetcode.cn/problems/remove-duplicate-letters/
 LC1081. 不同字符的最小子序列  https://leetcode.cn/problems/smallest-subsequence-of-distinct-characters/
 
@@ -34,6 +36,10 @@ LC1081. 不同字符的最小子序列  https://leetcode.cn/problems/smallest-su
 LC42. 接雨水  https://leetcode.cn/problems/trapping-rain-water/
 LC84. 柱状图中最大的矩形
 LC85. 最大矩形  https://leetcode.cn/problems/maximal-rectangle/
+
+
+计算贡献
+LC907. 子数组的最小值之和 https://leetcode.cn/problems/sum-of-subarray-minimums/
 
 """
 
