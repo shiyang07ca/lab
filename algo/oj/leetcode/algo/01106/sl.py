@@ -136,11 +136,10 @@ https://leetcode.cn/problems/parsing-a-boolean-expression/solution/by-lcbin-ys8t
 
 class Solution:
     def parseBoolExpr(self, expression: str) -> bool:
-        s = "!&|tf"
         st = []
         for c in expression:
             # print(st)
-            if c in s:
+            if c in "!&|tf":
                 st.append(c)
             elif c == ")":
                 t = f = 0
