@@ -54,12 +54,36 @@ class Solution:
         return sorted(ans)
 
 
+class Solution1:
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        ans = []
+        N = len(nums)
+        used = [0] * N
+        tmp = [""] * N
+
+        def dfs(i):
+            # print(i, tmp, used)
+            if i == N:
+                ans.append(tmp[:])
+
+            for j in range(N):
+                if not used[j]:
+                    used[j] = 1
+                    tmp[i] = nums[j]
+                    dfs(i + 1)
+                    used[j] = 0
+
+        dfs(0)
+        return sorted(ans)
+
+
 import unittest
 
 
 class TestSolution(unittest.TestCase):
     def setUp(self):
-        self.sl = Solution()
+        # self.sl = Solution()
+        self.sl = Solution1()
 
     def test_sl(self):
         nums = [1, 2, 3]
