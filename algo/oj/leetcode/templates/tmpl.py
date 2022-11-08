@@ -5,7 +5,7 @@ import unittest
 from os.path import abspath, join, dirname
 from itertools import *
 from collections import *
-
+from copy import *
 from typing import *
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
