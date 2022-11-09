@@ -100,7 +100,46 @@ from algo.tree.builder import *
 
 class Solution:
     def orderOfLargestPlusSign(self, n: int, mines: List[List[int]]) -> int:
-        pass
+        zpos = set()
+        for x, y in mines:
+            zpos.add((x, y))
+
+        # [ [l, r], [u, d] ]
+        ans = 0
+        seg = [[[] for _ in range(n)] for _ in range(n)]
+        for x in range(n):
+            for y in range(n):
+                if (x, y) in zpos:
+                    continue
+                r = l = 0
+                if y > 0 and (x, y - 1) not in zpos:
+                    l = seg[x][y - 1][0][0]
+                    r = seg[x][y - 1][0][1]
+                else:
+                    l = y
+                    for i in range(y, n):
+                        if (x, i) not in zpos:
+                            r = i
+                        else:
+                            break
+                seg[x][y].append([l, r])
+
+                u = d = 0
+                if x > 0 and (x - 1, y) not in zpos:
+                    u = seg[x - 1][y][1][0]
+                    d = seg[x - 1][y][1][1]
+                else:
+                    u = x
+                    for i in range(x, n):
+                        if (i, y) not in zpos:
+                            d = i
+                        else:
+                            break
+                seg[x][y].append([u, d])
+
+                t = min(min(y - l, r - y), min(x - u, d - x)) + 1
+                ans = max(ans, t)
+        return ans
 
 
 class TestSolution(unittest.TestCase):
@@ -114,12 +153,31 @@ class TestSolution(unittest.TestCase):
             self.sl.orderOfLargestPlusSign(n, mines),
             2,
         )
+        n = 5
+        mines = [[4, 2], [2, 2]]
+        self.assertEqual(
+            self.sl.orderOfLargestPlusSign(n, mines),
+            2,
+        )
+        n = 5
+        mines = [[0, 0]]
+        self.assertEqual(
+            self.sl.orderOfLargestPlusSign(n, mines),
+            3,
+        )
 
         n = 1
         mines = [[0, 0]]
         self.assertEqual(
             self.sl.orderOfLargestPlusSign(n, mines),
             0,
+        )
+
+        n = 2
+        mines = [[0, 0], [0, 1], [1, 0]]
+        self.assertEqual(
+            self.sl.orderOfLargestPlusSign(n, mines),
+            1,
         )
 
 
