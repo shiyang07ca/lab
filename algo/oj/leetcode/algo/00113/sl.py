@@ -153,12 +153,14 @@ class Node:
         self.neighbors = neighbors if neighbors is not None else []
 """
 
+
 class Solution:
-    def cloneGraph(self, node: 'Node') -> 'Node':
+    def cloneGraph(self, node: "Node") -> "Node":
         if not node:
             return node
 
         used = {}
+
         def dfs(node):
             if node in used:
                 return used[node]
@@ -170,7 +172,6 @@ class Solution:
             return new
 
         return dfs(node)
-
 
 
 class TestSolution(unittest.TestCase):
