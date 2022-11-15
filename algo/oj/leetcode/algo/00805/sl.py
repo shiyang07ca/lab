@@ -38,6 +38,7 @@ Constraints:
 
 ################################################################
 
+# TODO
 
 805. 数组的均值分割
 给定你一个整数数组 nums
@@ -92,10 +93,82 @@ sys.path.insert(0, parentdir)
 
 from algo.tree.builder import *
 
+"""
+
+作者：lcbin
+链接：https://leetcode.cn/problems/split-array-with-same-average/solution/by-lcbin-1dm3/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+"""
+
 
 class Solution:
     def splitArraySameAverage(self, nums: List[int]) -> bool:
-        pass
+        n = len(nums)
+        if n == 1:
+            return False
+        s = sum(nums)
+        for i, v in enumerate(nums):
+            nums[i] = v * n - s
+        m = n >> 1
+        vis = set()
+        for i in range(1, 1 << m):
+            t = sum(v for j, v in enumerate(nums[:m]) if i >> j & 1)
+            if t == 0:
+                return True
+            vis.add(t)
+        for i in range(1, 1 << (n - m)):
+            t = sum(v for j, v in enumerate(nums[m:]) if i >> j & 1)
+            if t == 0 or (i != (1 << (n - m)) - 1 and -t in vis):
+                return True
+        return False
+
+
+# https://leetcode.cn/problems/split-array-with-same-average/solution/gong-shui-san-xie-by-ac_oier-flsd/
+
+
+class Solution1:
+    def splitArraySameAverage(self, nums: List[int]) -> bool:
+        N = len(nums)
+        m = N // 2
+        S = sum(nums)
+        vis = set()
+
+        for i in range(1 << m):
+            tot = cnt = 0
+            for j in range(m):
+                if i >> j & 1:
+                    tot += nums[j]
+                    cnt += 1
+            vis.add((tot, cnt))
+        # print(vis)
+        for i in range(1 << (N - m)):
+            tot = cnt = 0
+            for j in range(N - m):
+                if i >> j & 1:
+                    tot += nums[j + m]
+                    cnt += 1
+
+
+            # 其中一个子数组最少要有一个数，所以 k 最少为 1
+            # k 即为一个子数组中的元素个数，t 为子数组元素总和
+            # 如果前半部分能找到一个tot',cnt'
+            # 使得 (tot' + tot) / (cnt' + cnt) = S / n
+            # 那么便找到了一个等于原数组平均数的子数组，拿掉这个子数组
+            # 另一半是同样符合该平均数的子数组
+            # 根据上式，可以得到 t = k * S / n
+            # 那么就有 tot' = t - tot, cnt' = k - cnt
+
+            for k in range(max(1, cnt), N):
+                if k * S % N:
+                    continue
+                t = k * S // N
+                # print((tot, cnt))
+                if (t - tot, k - cnt) in vis:
+                    return True
+
+        return False
 
 
 class TestSolution(unittest.TestCase):
