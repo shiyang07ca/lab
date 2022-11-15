@@ -105,12 +105,24 @@ All the values of the tree are unique.
 
 """
 
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
+
+from typing import *
+import sys
+import inspect
+import os
+from os.path import abspath, join, dirname
+
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+parentdir = os.path.dirname(parentdir)  # algo
+parentdir = os.path.dirname(parentdir)  # leetcode
+parentdir = os.path.dirname(parentdir)  # algo
+sys.path.insert(0, parentdir)
+# print(sys.path)
+
+
+from algo.tree.builder import TreeNode
 
 # https://www.geeksforgeeks.org/minimum-number-swaps-required-sort-array/
 
@@ -163,7 +175,7 @@ class Solution:
 """
 
 
-class Solution:
+class Solution1:
     def minimumOperations(self, root: Optional[TreeNode]) -> int:
         ans, q = 0, [root]
         while q:
@@ -191,3 +203,19 @@ class Solution:
                 t += 1
             ans += len(a) - t
         return ans
+
+
+class TestSolution(unittest.TestCase):
+    def setUp(self):
+        self.sl = Solution()
+
+    def test_sl(self):
+        root = [1, 4, 3, 7, 6, 8, 5, None, None, None, None, 9, None, 10]
+        self.assertEqual(
+            self.sl.minimumOperations(root),
+            3,
+        )
+
+
+if __name__ == "__main__":
+    unittest.main()

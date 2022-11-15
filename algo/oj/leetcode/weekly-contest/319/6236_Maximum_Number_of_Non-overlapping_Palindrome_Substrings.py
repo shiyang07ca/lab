@@ -68,3 +68,40 @@ s 仅由小写英文字母组成
 
 
 """
+
+
+"""
+作者：endlesscheng
+链接：https://leetcode.cn/problems/maximum-number-of-non-overlapping-palindrome-substrings/solution/zhong-xin-kuo-zhan-dppythonjavacgo-by-en-1yt1/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+计算每个子串是否回文，可以用中心扩展法，思路参考 647. 回文子串 的 官方题解，下面只讲解 DP 部分。
+
+定义 f[i] 表示 s[0..i-1] 中的不重叠回文子串的最大数目
+特别地，定义 f[0] = 0 , 方便我们表示空字符串
+如果 s[i] 不准回文子串中，那么有 f[i+1] = f[i]
+采用中心扩展法，如果 s[l..r] 是回文子串，且 r-l+1>=k，那么有状态转移方程
+            f[r + 1] = max(f[r+1], f[l] + 1)
+
+最后答案为 f[n], 这里 n 为 s 的长度
+代码实现时，由于长度为 x 的回文子串一定包含长为 x−2 的回文子串，所以回文子串的长
+度达到 k 就可以退出循环了。
+
+"""
+
+
+class Solution:
+    def maxPalindromes(self, s: str, k: int) -> int:
+        n = len(s)
+        f = [0] * (n + 1)
+        for i in range(2 * n - 1):
+            l, r = i // 2, i // 2 + i % 2  # 中心扩展法
+            f[l + 1] = max(f[l + 1], f[l])
+            while l >= 0 and r < n and s[l] == s[r]:
+                if r - l + 1 >= k:
+                    f[r + 1] = max(f[r + 1], f[l] + 1)
+                    break
+                l -= 1
+                r += 1
+        return f[n]
