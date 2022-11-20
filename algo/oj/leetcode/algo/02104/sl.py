@@ -180,9 +180,74 @@ class Solution:
         return ans
 
 
+# TODO
+# tag: monotonic stack
+
+"""
+
+作者：endlesscheng
+链接：https://leetcode.cn/problems/sum-of-subarray-ranges/solution/cong-on2-dao-ondan-diao-zhan-ji-suan-mei-o1op/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+我们可以考虑每个元素作为最大值出现在了多少子数组中，以及作为最小值出现在了多少子数组中。
+
+以最大值为例。我们可以求出 nums[i] 左侧严格大于它的最近元素位置 left[i]，以及右
+侧大于等于它的最近元素位置 right[i]。注意 nums 中可能有重复元素，所以这里右侧取
+大于等于，这样可以避免在有重复元素的情况下，重复统计相同的子数组。
+
+
+设以 nums[i] 为最大值的子数组为 nums[l..r]，则有
+
+- left[i] < l ≤ i
+- i ≤ r < right[i]
+
+所以 nums[i] 可以作为最大值出现在
+
+           (i−left[i])⋅(right[i]−i)
+
+个子数组中，这对答案产生的贡献是
+
+           (i−left[i])⋅(right[i]−i)⋅nums[i]
+
+最小值的做法同理（贡献为负数）。
+
+累加所有贡献即为答案。
+
+"""
+
+
+class Solution1:
+    def subArrayRanges(self, nums: List[int]) -> int:
+        def solve(nums):
+            N = len(nums)
+            left = [-1] * N  # left[i] 为左侧严格大于 num[i] 的最近元素位置（不存在时为 -1）
+            right = [N] * N  # right[i] 为右侧大于等于 num[i] 的最近元素位置（不存在时为 N）
+            st = []
+            for i, n in enumerate(nums):
+                while st and nums[st[-1]] <= n:
+                    popi = st.pop()
+                    right[popi] = i
+
+                left[i] = st[-1] if st else -1
+                st.append(i)
+
+            ans = 0
+            for i, n in enumerate(nums):
+                ans += (i - left[i]) * (right[i] - i) * n
+
+            return ans
+
+        ans = solve(nums)
+        nums = [-n for n in nums]  # 小技巧：所有元素取反后算的就是最小值的贡献
+        return ans + solve(nums)
+
+
 class TestSolution(unittest.TestCase):
     def setUp(self):
-        self.sl = Solution()
+        # self.sl = Solution()
+        self.sl = Solution1()
 
     def test_sl(self):
         nums = [1, 2, 3]

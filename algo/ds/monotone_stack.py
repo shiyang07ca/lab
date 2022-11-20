@@ -56,6 +56,8 @@ LC85. 最大矩形  https://leetcode.cn/problems/maximal-rectangle/
 
 计算贡献
 LC907. 子数组的最小值之和 https://leetcode.cn/problems/sum-of-subarray-minimums/
+LC2104. 子数组范围和 https://leetcode.cn/problems/sum-of-subarray-minimums/
+
 
 """
 
