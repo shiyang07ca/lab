@@ -104,6 +104,28 @@ from algo.tree.builder import *
 答：利用最小公倍数与最大公约数的关系 lcm(a,b)=  a⋅b / gcd(a,b)。计算 gcd(a,b) 可
 以用辗转相除法。
 
+# 相似题目
+LC 1201. 丑数 III https://leetcode.cn/problems/ugly-number-iii/
+
+
+
+"""
+
+"""
+作者：lcbin
+链接：https://leetcode.cn/problems/nth-magical-number/solution/by-lcbin-kw6q/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+
+题目要我们找到第 n 个神奇数字，也即是说，要找到一个最小的正整数 x，使得以下式子
+成立：
+
+       ceil(x / a) + ceil(x / b) - ceil(x / c) >= n
+
+随着 x 的增大，神奇数字的个数也会增大，因此我们可以使用二分查找的方法，找到最小
+的正整数 x，使得上述式子成立。
 
 """
 
@@ -112,7 +134,7 @@ class Solution:
     def nthMagicalNumber(self, n: int, a: int, b: int) -> int:
         MOD = 10**9 + 7
         m = lcm(a, b)
-        l, r = min(a, b), min(a, b) * n
+        l, r = min(a, b), min(a, b) * n  # [l, r] 均为闭区间
         while l < r:
             mid = (l + r) >> 1
             if (mid // a + mid // b - mid // m) >= n:
