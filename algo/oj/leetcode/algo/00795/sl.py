@@ -160,8 +160,8 @@ class Solution1:
 
 class TestSolution(unittest.TestCase):
     def setUp(self):
-        # self.sl = Solution()
-        self.sl = Solution1()
+        self.sl = Solution()
+        # self.sl = Solution1()
 
     def test_sl(self):
         nums = [2, 1, 4, 3]

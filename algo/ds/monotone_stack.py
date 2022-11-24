@@ -126,6 +126,21 @@ def get_near_less_no_repeat1(arr):
     return ans
 
 
+def get_near_less3(nums):
+    N = len(nums)
+    left = [-1] * N  # left[i] 为左侧严格小于等于 nums[i] 的最近元素位置（不存在时为-1）
+    right = [-1] * N  # left[i] 为右侧严格小于 nums[i] 的最近元素位置（不存在时为 -1）
+    st = []
+    for i, n in enumerate(nums):
+        while st and nums[st[-1]] > n:
+            popi = st.pop()
+            right[popi] = i
+        left[i] = st[-1] if st else -1
+        st.append(i)
+
+    return [[l, r] for l, r in zip(left, right)]
+
+
 def get_near_less_no_repeat2(arr):
     ans = [[]] * len(arr)
     stack = []
@@ -220,6 +235,26 @@ class TestMonotonicStack(unittest.TestCase):
                 [5, -1],
             ],
             get_near_less_no_repeat2([3, 4, 1, 5, 6, 2, 7]),
+        )
+
+        print("aaa")
+        self.assertEqual(
+            [
+                [-1, -1],
+            ],
+            get_near_less3([3]),
+        )
+        self.assertEqual(
+            [
+                [-1, 2],
+                [0, 2],
+                [-1, -1],
+                [2, 5],
+                [3, 5],
+                [2, -1],
+                [5, -1],
+            ],
+            get_near_less3([3, 4, 1, 5, 6, 2, 7]),
         )
 
     def test_monotonic_stack3(self):
