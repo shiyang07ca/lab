@@ -135,9 +135,61 @@ class Solution:
         return dfs(0, 0)
 
 
+"""
+
+https://algo.itcharge.cn/Solutions/0400-0499/target-sum/
+
+动态规划
+
+假设数组中所有元素和为 sum，数组中所有符号为 + 的元素为 sum_x，符号为 - 的元素和
+为 sum_y。则 target = sum_x - sum_y。
+
+而 sum_x + sum_y = sum。根据两个式子可以求出 2 * sum_x = target + sum ，即 sum_x
+= (target + sum) / 2。
+
+那么这道题就变成了，如何在数组中找到一个集合，使集合中元素和为 (target + sum) /
+2。这就变为了求容量为 (target + sum) / 2 的 01 背包问题。
+
+
+1. 定义状态
+定义状态 dp[i] 表示为：填满容量为 i 的背包，有 dp[i] 种方法。
+
+2. 状态转移方程
+填满容量为 i 的背包的方法数来源于：
+
+* 不使用当前 num：只使用之前元素填满容量为 i 的背包的方法数。
+* 使用当前 num：填满容量 i - num 的包的方法数，再填入 num 的方法数。则动态规划的
+状态转移方程为：dp[i] = dp[i] + dp[i - num]。
+
+3. 初始化
+初始状态下，默认填满容量为 0 的背包有 1 种办法。即 dp[i] = 1。
+
+4. 最终结果
+根据状态定义，最后输出 dp[sise]（即填满容量为 size 的背包，有 dp[size] 种方法）
+即可，其中 size 为数组 nums 的长度。
+
+
+"""
+
+
+class Solution1:
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        s = sum(nums)
+        if abs(target) > abs(s) or (target + s) % 2 == 1:
+            return 0
+        size = (target + s) // 2
+        dp = [0 for _ in range(size + 1)]
+        dp[0] = 1
+        for num in nums:
+            for i in range(size, num - 1, -1):
+                dp[i] = dp[i] + dp[i - num]
+        return dp[size]
+
+
 class TestSolution(unittest.TestCase):
     def setUp(self):
-        self.sl = Solution()
+        # self.sl = Solution()
+        self.sl = Solution1()
 
     def test_sl(self):
         nums = [1, 1, 1, 1, 1]
