@@ -33,7 +33,7 @@ Constraints:
 
 # template
 # TODO
-# tag: dfs
+# tag: DFS
 # LC46
 
 784. 字母大小写全排列

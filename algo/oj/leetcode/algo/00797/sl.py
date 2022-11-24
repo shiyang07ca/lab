@@ -38,7 +38,7 @@ Constraints:
 
 # TODO
 # template
-# tag: dfs, backtracking
+# tag: DFS, backtracking
 
 797. 所有可能的路径
 给你一个有 n 个节点的 有向无环图（DAG），请你找出所有从节点 0 到节点 n-1 的路径并输出（不要求按特定顺序）
