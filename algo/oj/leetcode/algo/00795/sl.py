@@ -117,9 +117,51 @@ class Solution:
         return ans
 
 
+"""
+作者：lcbin
+链接：https://leetcode.cn/problems/number-of-subarrays-with-bounded-maximum/solution/by-lcbin-0l6h/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+区间计数
+
+题目要我们统计数组 nums 中，最大值在区间 [left, right] 范围内的子数组个数。
+
+对于区间 [left,..right] 问题，我们可以考虑将其转换为 [0,..right] 然后再减去
+[0,..left−1] 的问题。也就是说，所有最大元素不超过 right 的子数组个数，减去所有最
+大元素不超过 left-1 的子数组个数，剩下的就是最大元素在区间 [left,..right] 范围内
+的子数组个数，即题目要求的结果。
+
+对于本题，我们只需要设计一个函数 f(x)，表示数组 nums 中，最大值不超过 x 的子数组
+个数。那么答案为 f(right) - f(left-1)。函数 f(x) 的执行逻辑如下：
+
+* 用变量 cnt 记录最大值不超过 x 的子数组的个数，用 t 记录当前子数组的长度。
+
+* 遍历数组 nums，对于每个元素 nums[i]，如果 nums[i]≤x，则当前子数组的长度加一，即
+t=t+1，否则当前子数组的长度重置为 0，即 t=0。然后将当前子数组的长度加到 cnt 中，
+即 cnt = cnt + t
+
+* 遍历结束，将 cnt 返回即可。
+
+"""
+
+
+class Solution1:
+    def numSubarrayBoundedMax(self, nums: List[int], left: int, right: int) -> int:
+        def f(x):
+            cnt = t = 0
+            for v in nums:
+                t = 0 if v > x else t + 1
+                cnt += t
+            return cnt
+
+        return f(right) - f(left - 1)
+
+
 class TestSolution(unittest.TestCase):
     def setUp(self):
-        self.sl = Solution()
+        # self.sl = Solution()
+        self.sl = Solution1()
 
     def test_sl(self):
         nums = [2, 1, 4, 3]
