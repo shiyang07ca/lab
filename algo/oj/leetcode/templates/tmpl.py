@@ -2,11 +2,14 @@ import sys
 import inspect
 import os
 import unittest
-from os.path import abspath, join, dirname
+
 from itertools import *
 from collections import *
 from copy import *
 from typing import *
+from math import *
+
+from os.path import abspath, join, dirname
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
