@@ -93,6 +93,7 @@ sys.path.insert(0, parentdir)
 
 from algo.tree.builder import *
 
+# 考虑每个元素的贡献
 
 """
 
