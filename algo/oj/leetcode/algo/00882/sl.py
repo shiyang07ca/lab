@@ -53,6 +53,7 @@ Constraints:
 ################################################################
 
 # TODO
+# tag: Graph, Shortest Path
 
 882. 细分图中的可到达节点
 
@@ -127,9 +128,50 @@ sys.path.insert(0, parentdir)
 
 from algo.tree.builder import *
 
+"""
+
+TODO
+
+作者：endlesscheng
+链接：https://leetcode.cn/problems/reachable-nodes-in-subdivided-graph/solution/tu-jie-zhuan-huan-cheng-dan-yuan-zui-dua-6l8o/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+"""
+
+
 class Solution:
     def reachableNodes(self, edges: List[List[int]], maxMoves: int, n: int) -> int:
-        pass
+        g = [[] for _ in range(n)]
+        for u, v, cnt in edges:
+            g[u].append((v, cnt + 1))
+            g[v].append((u, cnt + 1))  # 建图
+
+        dist = self.dijkstra(g, 0)  # 从 0 出发的最短路
+
+        ans = sum(d <= maxMoves for d in dist)  # 可以在 maxMoves 步内到达的点的个数
+        for u, v, cnt in edges:
+            a = max(maxMoves - dist[u], 0)
+            b = max(maxMoves - dist[v], 0)
+            ans += min(a + b, cnt)  # 这条边上可以到达的节点数
+        return ans
+
+    # Dijkstra 算法模板
+    # 返回从 start 到每个点的最短路
+    def dijkstra(self, g: List[List[Tuple[int]]], start: int) -> List[int]:
+        dist = [inf] * len(g)
+        dist[start] = 0
+        h = [(0, start)]
+        while h:
+            d, x = heappop(h)
+            if d > dist[x]:
+                continue
+            for y, wt in g[x]:
+                new_d = dist[x] + wt
+                if new_d < dist[y]:
+                    dist[y] = new_d
+                    heappush(h, (new_d, y))
+        return dist
 
 
 class TestSolution(unittest.TestCase):
