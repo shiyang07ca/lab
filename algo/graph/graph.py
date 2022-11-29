@@ -343,5 +343,19 @@ def bfs(G, s):
                 Q.append(v)
 
 
+"""
+
+单源最短路 Dijkstra
+
+适用于稀疏图 O(mlogm)
+
+
+模板题
+
+LC743.网络延迟时间 https://leetcode-cn.com/problems/network-delay-time/
+
+"""
+
+
 if __name__ == "__main__":
     unittest.main()
