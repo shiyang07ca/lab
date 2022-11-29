@@ -136,6 +136,10 @@ x 对答案的贡献为 (2^i - 2^(n-1-i)) * x
 也就对应着 n−1−i 个子序列。
 
 
+# 相似题目
+LC2104. 子数组范围和: https://leetcode.cn/problems/sum-of-subarray-ranges/
+
+
 """
 
 
