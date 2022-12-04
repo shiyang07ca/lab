@@ -46,6 +46,24 @@ def union(a, b):
     size[pb] += size[pa]
 
 
+# https://leetcode.cn/circle/discuss/T0eOvC/view/CXzRey/
+# TODO
+class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+
+    def find(self, a):
+        acopy = a
+        while a != self.parent[a]:
+            a = self.parent[a]
+        while acopy != a:
+            self.parent[acopy], acopy = a, self.parent[acopy]
+        return a
+
+    def merge(self, a, b):
+        self.parent[self.find(b)] = self.find(a)
+
+
 import unittest
 
 
