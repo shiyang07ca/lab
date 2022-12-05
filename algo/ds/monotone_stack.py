@@ -129,7 +129,7 @@ def get_near_less_no_repeat1(arr):
 def get_near_less3(nums):
     N = len(nums)
     left = [-1] * N  # left[i] 为左侧严格小于等于 nums[i] 的最近元素位置（不存在时为-1）
-    right = [-1] * N  # left[i] 为右侧严格小于 nums[i] 的最近元素位置（不存在时为 -1）
+    right = [-1] * N  # right[i] 为右侧严格小于 nums[i] 的最近元素位置（不存在时为 -1）
     st = []
     for i, n in enumerate(nums):
         while st and nums[st[-1]] > n:
