@@ -134,6 +134,7 @@ class Solution:
 
 """
 
+
 class Solution1:
     def lengthOfLIS(self, nums: List[int]) -> int:
         N = len(nums)
