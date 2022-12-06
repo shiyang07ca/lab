@@ -39,7 +39,8 @@ Constraints:
 ################################################################
 
 # TODO
-# tag: combination
+# tag: combination, backtracking, DFS
+# template
 
 77. 组合
 
@@ -92,12 +93,23 @@ sys.path.insert(0, parentdir)
 # print(sys.path)
 
 
-from algo.tree.builder import *
-
-
 class Solution:
     def combine(self, n: int, k: int) -> List[List[int]]:
-        pass
+        ans = []
+
+        def dfs(i, cur):
+            if len(cur) == k:
+                ans.append(cur[:])
+                return
+            elif (len(cur) + n - i + 1) < k or i == n + 1:  # 剪枝
+                return
+            dfs(i + 1, cur)
+            cur.append(i)
+            dfs(i + 1, cur)
+            cur.pop()
+
+        dfs(1, [])
+        return ans
 
 
 class TestSolution(unittest.TestCase):
