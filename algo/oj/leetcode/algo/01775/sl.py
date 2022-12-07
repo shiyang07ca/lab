@@ -105,6 +105,27 @@ from algo.tree.builder import *
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
+
+不妨设nums1 的元素和小于 nums2 的元素和（如果不是则交换这两数组），元素和的差为
+d。
+
+那么 nums1 的元素需要变大，nums2  的元素需要变小。
+
+计算每个元素的 *最大变化量*：
+  *  nums1[i] 最大能变成 6，最大变化量为 6 - nums1[i]
+  *  nums2[i] 最小能变成 1，最大变化量为 nums2[i] - 1
+
+统计这些变化量的个数，记到一个哈希表或长为 5 的数组 cnt 中，每个 i 最多可以使 d
+减少 i*cnt[i]。
+
+那么从大到小枚举 i=5,4,3,2,1：
+
+  * 如果 d > i⋅cnt[i]，那么应该把这 cnt[i] 个数的变化量拉满，并更新 d 为
+d−i⋅cnt[i]；
+  * 否则，可以通过修改其中的 ceil⌈i / d ⌉ 个数，使 d 恰好为 0，退出循环。
+
+累加需要修改的数的个数，即为答案。如果无法使 d=0，返回 -1。
+
 """
 
 
@@ -131,14 +152,14 @@ class TestSolution(unittest.TestCase):
         self.sl = Solution()
 
     def test_sl(self):
-        nums1 = [1,2,3,4,5,6]
-        nums2 = [1,1,2,2,2,2]
+        nums1 = [1, 2, 3, 4, 5, 6]
+        nums2 = [1, 1, 2, 2, 2, 2]
         self.assertEqual(
             self.sl.minOperations(nums1, nums2),
             3,
         )
 
-        nums1 = [1,1,1,1,1,1,1]
+        nums1 = [1, 1, 1, 1, 1, 1, 1]
         nums2 = [6]
         self.assertEqual(
             self.sl.minOperations(nums1, nums2),
