@@ -46,8 +46,7 @@ import unittest
 from os.path import abspath, join, dirname
 from typing import *
 
-currentdir = os.path.dirname(
-    os.path.abspath(inspect.getfile(inspect.currentframe())))
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 parentdir = os.path.dirname(parentdir)  # algo
 parentdir = os.path.dirname(parentdir)  # leetcode
@@ -55,45 +54,52 @@ parentdir = os.path.dirname(parentdir)  # algo
 sys.path.insert(0, parentdir)
 # print(sys.path)
 
-from algo.tree.builder import *
-
 from functools import lru_cache as cache
+
+"""
+作者：endlesscheng
+链接：https://leetcode.cn/problems/distinct-subsequences-ii/solution/xi-fen-wen-ti-fu-za-du-you-hua-pythonjav-1ihu/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+定义 f[i][j] 表示用 s 的前 i 个字符组成以 j 结尾的不同非空子序列的个数，根据上述
+思路，得
+    f[i][s[i]] = 1 + f[i-1][j]   (j = [0, 25])
+初始值f[0][s[0]] = 1, 答案为 f[n-1][j] (j = [0, 25])
+"""
 
 
 class Solution:
-
     def distinctSubseqII(self, s: str) -> int:
-        t = set()
-        # t = []
+        MOD = 10**9 + 7
+        f = [[0] * 26 for _ in range(len(s) + 1)]
+        for i, c in enumerate(s, 1):
+            c = ord(c) - ord("a")
+            f[i] = f[i - 1][:]
+            f[i][c] = (1 + sum(f[i - 1])) % MOD
 
-        @cache(maxsize=1000000000)
-        def search(i, last_i, last):
-            if i == last_i:
-                t.add(last)
-                return
+        return sum(f[-1]) % MOD
 
-            cur = s[i] + last
-            # print(f"{pre}, {s[i]}")
-            # if cur not in t:
-            #     t.add(cur)
-            #     search(i + 1, cur)
-            # t.remove(cur)
 
-            t.add(cur)
-            search(i + 1, last_i, cur)
-            search(i + 1, last_i, last)
+"""
+由于状态转移只发生在 i 和 i−1 之间，因此可以只用一个长为 26 的数组表示上述状态转
+移过程。由于除了 f[s[i]] 以外，其余值都不变，因此只需要更新 f[s[i]] 的值。
+"""
 
-        for i in range(len(s)):
-            search(0, i, s[i])
 
-        # print(t)
-        return len(t) % (10**9 + 7)
+class Solution1:
+    def distinctSubseqII(self, s: str) -> int:
+        MOD = 10**9 + 7
+        f = [0] * 26
+        for c in s:
+            f[ord(c) - ord("a")] = (1 + sum(f)) % MOD
+        return sum(f) % MOD
 
 
 class TestSolution(unittest.TestCase):
-
     def setUp(self):
-        self.sl = Solution()
+        # self.sl = Solution()
+        self.sl = Solution1()
 
     def test_sl(self):
         s = "abc"
