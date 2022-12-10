@@ -150,6 +150,11 @@ from algo.tree.builder import *
 
 答案为 max(f)
 
+
+相似题目
+LC300. 最长递增子序列 https://leetcode.cn/problems/longest-increasing-subsequence/
+LC354. 俄罗斯套娃信封问题 https://leetcode.cn/problems/russian-doll-envelopes/
+
 """
 
 
