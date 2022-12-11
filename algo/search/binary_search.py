@@ -147,18 +147,18 @@ class TestSuite(unittest.TestCase):
         self.assertEqual(bisect_left(arr, 3), bs3(arr, 3))
         self.assertEqual(5, bs4(arr, 3))
 
-        print(bs3(arr, 7), bisect_left(arr, 7))    # 8  9
+        print(bs3(arr, 7), bisect_left(arr, 7))  # 8  9
         print(bs3(arr, -1), bisect_left(arr, -1))  # 0  0
 
         print("################################################################")
 
         # arr = [0, 1, 2, 3, 4, 5, 6]
         arr = [0]
-        print(bs3(arr, 5), bisect_left(arr, 5))    # 0  1
+        print(bs3(arr, 5), bisect_left(arr, 5))  # 0  1
         print(bs3(arr, -1), bisect_left(arr, -1))  # 0  0
 
-        print(bs4(arr, 5), bisect_right(arr, 5))   # 0  1
-        print(bs4(arr, -1), bisect_right(arr, -1)) # 0  0
+        print(bs4(arr, 5), bisect_right(arr, 5))  # 0  1
+        print(bs4(arr, -1), bisect_right(arr, -1))  # 0  0
 
 
 if __name__ == "__main__":
