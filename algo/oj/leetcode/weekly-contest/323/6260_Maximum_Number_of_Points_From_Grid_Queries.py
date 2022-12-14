@@ -96,6 +96,9 @@ k == queries.length
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 
+
+
+
 方法一：离线询问 + 并查集
 
 把矩阵的元素值从小到大排序，询问也从小到大排序。
@@ -106,6 +109,9 @@ k == queries.length
 用并查集可以实现相连的过程，同时维护每个连通块的大小。
 
 答案就是左上角的连通块的大小（前提是左上角小于询问值）。
+
+相似题目
+LC1697. 检查边长度限制的路径是否存在  https://leetcode.cn/problems/checking-existence-of-edge-length-limited-paths/
 
 
 方法二：离线询问 + 最小堆
