@@ -124,7 +124,6 @@ def partition(arr, lo, hi):
         if i >= j:
             break
 
-        # 此时 [lo, i) <= pivot and (j, hi] > pivot
         # 交换 arr[i], arr[i]
         # 此时 [lo, i] <= pivot and [j, hi] > pivot
         arr[j], arr[i] = arr[i], arr[j]
