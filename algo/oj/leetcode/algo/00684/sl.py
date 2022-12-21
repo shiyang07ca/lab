@@ -113,6 +113,20 @@ sys.path.insert(0, parentdir)
 
 from algo.tree.builder import *
 
+"""
+https://algo.itcharge.cn/Solutions/0600-0699/redundant-connection/
+
+树可以看做是无环的图，这道题就是要找出那条添加边之后成环的边。可以考虑用并查集来
+做。
+
+- 从前向后遍历每一条边。
+- 如果边的两个节点不在同一个集合，就加入到一个集合（链接到同一个根节点）。
+- 如果边的节点已经出现在同一个集合里，说明边的两个节点已经连在一起了，再加入这条
+边一定会出现环，则这条边就是所求答案。
+
+
+"""
+
 # 并查集
 class Solution:
     def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
