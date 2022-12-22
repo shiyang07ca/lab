@@ -193,9 +193,39 @@ class Solution1:
         return True
 
 
+"""
+遍历每个顶点，将当前顶点所有邻居节点进行合并，并判断是否存在邻居节点已经和当前节
+点处于同一集合
+"""
+
+# DSU
+class Solution2:
+    def isBipartite(self, g: List[List[int]]) -> bool:
+        N = len(g)
+        p = list(range(N))
+
+        def find(x):
+            if x != p[x]:
+                p[x] = find(p[x])
+
+            return p[x]
+
+        def union(a, b):
+            pa, pb = find(a), find(b)
+            if pa != pb:
+                p[pa] = pb
+
+        for i, neighbor in enumerate(g):
+            for j in neighbor:
+                if p[i] == p[j]:
+                    return False
+                union(neighbor[0], j)
+        return True
+
+
 class TestSolution(unittest.TestCase):
     def setUp(self):
-        self.sl = Solution()
+        self.sl = Solution2()
 
     def test_sl(self):
 
