@@ -87,11 +87,13 @@ import os
 import unittest
 from os.path import abspath, join, dirname
 from typing import *
+from itertools import *
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 parentdir = os.path.dirname(parentdir)  # algo
 parentdir = os.path.dirname(parentdir)  # leetcode
+parentdir = os.path.dirname(parentdir)  # oj
 parentdir = os.path.dirname(parentdir)  # algo
 sys.path.insert(0, parentdir)
 # print(sys.path)
@@ -100,70 +102,32 @@ sys.path.insert(0, parentdir)
 from algo.tree.builder import *
 
 
-class Solution2:
-    def swap(self, n1, n2, n1_parent, n2_parent):
-
-        if n1_parent is not None:
-            if n1_parent.val > n2.val:
-                n1_parent.left = n2
-            else:
-                n1_parent.right = n2
-
-        if n2_parent is not None:
-            if n2_parent.val > n1.val:
-                n2_parent.left = n1
-            else:
-                n2_parent.right = n1
-
-        n1_val = n1.val
-        left = n1.left
-        right = n1.right
-
-        n1.left = n2.left
-        n1.right = n2.right
-        n1.val = n2.val
-
-        n2.left = left
-        n2.right = right
-        n2.val = n1_val
-
-    def process(self, root, node, root_parent, node_parent):
-        if node is None:
-            return
-
-        if node.left and root.val < node.left.val:
-            print(root, node.left)
-            self.swap(root, node.left, root_parent, node)
-            return
-        elif node.left:
-            self.process(root, node.left, root_parent, node)
-
-        if node.right and root.val > node.right.val:
-            print(root, node.right)
-            self.swap(root, node.right, root_parent, node)
-            return
-        elif node.right:
-            self.process(root, node.right, root_parent, node)
-
-        self.process(root.left, root.left, root, root)
-        self.process(root.right, root.right, root, root)
-
-    def recoverTree(self, root: Optional[TreeNode]) -> None:
-        """
-        Do not return anything, modify root in-place instead.
-        """
-        self.process(root, root, None, None)
-
-
 class Solution:
-    def process(self):
-        pass
-
     def recoverTree(self, root: Optional[TreeNode]) -> None:
         """
         Do not return anything, modify root in-place instead.
         """
-        self.process(root)
+
+        def dfs(node):
+            if node is None:
+                return
+            dfs(node.left)
+            arr.append(node)
+            dfs(node.right)
+
+        arr = []
+        dfs(root)
+        # print(arr)
+        x = y = None
+        for a, b in pairwise(arr):
+            if not x and a.val >= b.val:
+                x = a
+            if x and a.val >= b.val:
+                y = b
+
+            # print(a.val, b.val)
+        # print(x, y)
+        x.val, y.val = y.val, x.val
 
 
 class TestSolution(unittest.TestCase):
