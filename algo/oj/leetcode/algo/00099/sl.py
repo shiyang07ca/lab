@@ -101,6 +101,10 @@ sys.path.insert(0, parentdir)
 
 from algo.tree.builder import *
 
+"""
+中序遍历，再找出两个节点
+"""
+
 
 class Solution:
     def recoverTree(self, root: Optional[TreeNode]) -> None:
@@ -127,6 +131,30 @@ class Solution:
 
             # print(a.val, b.val)
         # print(x, y)
+        x.val, y.val = y.val, x.val
+
+
+# 迭代
+class Solution:
+    def recoverTree(self, root: TreeNode) -> None:
+        x = y = None
+        pre = TreeNode(float("-inf"))
+
+        stack = []
+        while root or stack:
+            if root:
+                stack.append(root)
+                root = root.left
+                continue
+            else:
+                node = stack.pop()
+
+            if not x and pre.val > node.val:
+                x = pre
+            if x and pre.val > node.val:
+                y = node
+            pre = node
+            root = node.right
         x.val, y.val = y.val, x.val
 
 
