@@ -144,7 +144,7 @@ class TestSuite(unittest.TestCase):
         #      0  1  2  3  4  5  6  7  8
         arr = [0, 1, 2, 3, 3, 3, 4, 5, 6]
         self.assertEqual(3, bs3(arr, 3))
-        self.assertEqual(bisect_left(arr, 3), bs3(arr, 3))
+        self.assertEqual(bisect_left(arr, 3), bs3(arr, 3))  # 3, 3
         self.assertEqual(5, bs4(arr, 3))
 
         print(bs3(arr, 7), bisect_left(arr, 7))  # 8  9
