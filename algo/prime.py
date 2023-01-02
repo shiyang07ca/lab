@@ -1,4 +1,4 @@
-from math
+import math
 
 # 筛质数
 
