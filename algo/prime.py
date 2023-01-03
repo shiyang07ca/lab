@@ -32,7 +32,6 @@ def get_primes():
     primes.extend((MX, MX))  # 保证下面下标不会越界
 
 
-
 # 分解质因数
 def get_prime_factor(num):
     # 质因数分解
@@ -51,7 +50,24 @@ def get_prime_factor(num):
     # 从小到大返回质因数分解以及对应的幂次，注意 1 返回 []
     return res
 
-if __name__ == '__main__':
+
+def get_prime_factor2(num):
+    res = []
+    i = 2
+    while i * i <= num:
+        if num % i == 0:
+            res.append(i)
+            num //= i
+            while num % i == 0:
+                num //= i
+        i += 1
+    if num > 1:
+        res.append(num)
+
+    return res
+
+
+if __name__ == "__main__":
     nums = list(range(20))
     for n in nums:
-        print(n, get_prime_factor(n))
+        print(n, get_prime_factor(n), get_prime_factor2(n))
