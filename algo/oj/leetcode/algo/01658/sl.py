@@ -41,6 +41,9 @@ Constraints:
 
 ################################################################
 
+# tag: Sliding Window, Prefix Sum
+# TODO
+
 1658. 将 x 减到 0 的最小操作数
 
 给你一个整数数组 nums 和一个整数 x 。每一次操作时，你应当移除数组 nums 最左边或最右边的元素，然后从 x 中减去该元素的值。请注意，需要 修改 数组以供接下来的操作使用。
@@ -105,11 +108,12 @@ sys.path.insert(0, parentdir)
 from algo.tree.builder import *
 
 
+# 双指针
 class Solution:
     def minOperations(self, nums: List[int], x: int) -> int:
         # x = 5
         # 1, 1, 4, 2, 3
-        # sum(nums) - x 的最长长度
+        # 返回sum(nums) - x 的最长长度
         t = sum(nums) - x
         if t < 0:
             return -1
@@ -129,9 +133,46 @@ class Solution:
         return -1 if ans == -1 else len(nums) - ans
 
 
+"""
+https://leetcode.cn/problems/minimum-operations-to-reduce-x-to-zero/solution/by-lcbin-fnue/
+
+方法一：哈希表 + 前缀和
+
+我们可以将问题转换为求中间连续子数组的最大长度，使得子数组的和为 x = sum(nums) -
+x
+
+
+定义一个哈希表 vis，其中 vis[s] 表示前缀和为 s 的最小下标。
+
+遍历数组 nums，对于每个元素 nums[i]，我们先将 nums[i] 加到前缀和 s 上，如果哈希
+表中不存在 s，则将其加入哈希表，其值为当前下标 i。然后我们判断 s - x 是否在哈希
+表中，如果存在，则说明存在一个下标 j，使得 nums[j + 1,..i] 的和为 x，此时我们更
+新答案的最小值，即 ans = min(ans, n - (i - j))
+
+遍历结束，如果找不到满足条件的子数组，返回 -1，否则返回 ans。
+"""
+
+
+class Solution1:
+    def minOperations(self, nums: List[int], x: int) -> int:
+        x = sum(nums) - x
+        vis = {0: -1}
+        ans = inf
+        s, n = 0, len(nums)
+        for i, v in enumerate(nums):
+            s += v
+            if s not in vis:
+                vis[s] = i
+            if s - x in vis:
+                j = vis[s - x]
+                ans = min(ans, n - (i - j))
+        return -1 if ans == inf else ans
+
+
 class TestSolution(unittest.TestCase):
     def setUp(self):
-        self.sl = Solution()
+        # self.sl = Solution()
+        self.sl = Solution1()
 
     def test_sl(self):
         ns = [1, 1, 4, 2, 3]
