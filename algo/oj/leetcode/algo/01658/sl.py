@@ -134,9 +134,25 @@ class TestSolution(unittest.TestCase):
         self.sl = Solution()
 
     def test_sl(self):
+        ns = [1, 1, 4, 2, 3]
+        x = 5
         self.assertEqual(
-            self.sl,
-            None,
+            self.sl.minOperations(ns, x),
+            2,
+        )
+
+        ns = [5, 6, 7, 8, 9]
+        x = 4
+        self.assertEqual(
+            self.sl.minOperations(ns, x),
+            -1,
+        )
+
+        ns = [3, 2, 20, 1, 1, 3]
+        x = 10
+        self.assertEqual(
+            self.sl.minOperations(ns, x),
+            5,
         )
 
 
