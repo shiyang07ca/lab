@@ -140,6 +140,31 @@ class Solution:
                 return ans
 
 
+"""
+https://leetcode.cn/problems/minimum-number-of-operations-to-reinitialize-a-permutation/solution/liang-chong-jie-fa-mo-ni-mo-ni-you-hua-b-2ijm/
+
+对于解法一来说我们枚举了所有位置进行交换，但其实我们不用枚举所有位置。通过分析可
+以发现，所有的数交换后会构成一个环，每个环经过它长度的交换后就回会到最初的状态，
+那么我们求出最大的环的长度(可以发现必然是所有环的最小公倍数），经过在这个长度的
+交换，所有数必然回到最初的位置。
+
+"""
+
+
+class Solution:
+    def reinitializePermutation(self, n: int) -> int:
+        ans, i = 0, 1
+        while True:
+            ans += 1
+            if i % 2 == 0:
+                i >>= 1
+            else:
+                i = (n >> 1) + (i - 1 >> 1)
+            #             print(i)
+            if i == 1:
+                return ans
+
+
 class TestSolution(unittest.TestCase):
     def setUp(self):
         self.sl = Solution()
