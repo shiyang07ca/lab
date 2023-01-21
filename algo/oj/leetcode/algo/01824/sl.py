@@ -60,6 +60,9 @@ Constraints:
 
 ################################################################
 
+# TODO
+# tag: dp
+
 https://leetcode.cn/problems/minimum-sideway-jumps/
 1824. 最少侧跳次数
 
