@@ -73,7 +73,35 @@ Constraints:
 
 """
 
+"""
+比赛时的思路
+
+(x, y - x)  =>  (x, x + y)
+(x - y, y)  =>  (x + y, y)
+GCD 不变
+
+(2 * x, y)  =>  (x / 2, y)
+(x, 2 * y)  =>  (x, y / 2)
+GCD * 2^k
+
+赛后的一些补充
+
+构造一条 (1,1) 到 (x,y) 的路径
+从终点出发
+
+原则：GCD 前两个操作不变 后两个操作可以减半
+和 2 有关 => 和奇偶性有关
+
+构造方法：
+1. 如果 x 和 y 只要有偶数，就把偶数减半
+2. 如果都是奇数， x < y  -> x < (x + y) / 2
+   为了让 y 变得更小 y -> (x + y) / 2
+3. x = y 且都为奇数是， 无法修改，循环体制
+4. 此时如果 x = y = 1 找到起点
+
+"""
+
 class Solution:
     def isReachable(self, targetX: int, targetY: int) -> bool:
         g = gcd(targetX, targetY)
-        return (g & (g - 1)) == 0
+        return (g & (g - 1)) == 0  # 判断是否是 2 的幂次
