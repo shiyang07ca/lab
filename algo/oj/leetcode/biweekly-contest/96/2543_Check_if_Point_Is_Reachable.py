@@ -101,6 +101,7 @@ GCD * 2^k
 
 """
 
+
 class Solution:
     def isReachable(self, targetX: int, targetY: int) -> bool:
         g = gcd(targetX, targetY)
