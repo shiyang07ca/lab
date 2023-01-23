@@ -100,6 +100,58 @@ class SegmentTree:
             self.push_up(idx)
 
 
+# 作者：endlesscheng
+# 链接：https://leetcode.cn/problems/minimum-cost-to-split-an-array/solution/by-endlesscheng-05s0/
+# 来源：力扣（LeetCode）
+# 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+# Lazy 线段树模板（区间加，查询区间最小）
+n = len(nums)
+mn = [0] * (4 * n)
+todo = [0] * (4 * n)
+
+
+def do(o: int, v: int) -> None:
+    mn[o] += v
+    todo[o] += v
+
+
+def spread(o: int) -> None:
+    v = todo[o]
+    if v:
+        do(o * 2, v)
+        do(o * 2 + 1, v)
+        todo[o] = 0
+
+
+# 区间 [L,R] 内的数都加上 v   o,l,r=1,1,n
+def update(o: int, l: int, r: int, L: int, R: int, v: int) -> None:
+    if L <= l and r <= R:
+        do(o, v)
+        return
+    spread(o)
+    m = (l + r) // 2
+    if m >= L:
+        update(o * 2, l, m, L, R, v)
+    if m < R:
+        update(o * 2 + 1, m + 1, r, L, R, v)
+    mn[o] = min(mn[o * 2], mn[o * 2 + 1])
+
+
+# 查询区间 [L,R] 的最小值   o,l,r=1,1,n
+def query(o: int, l: int, r: int, L: int, R: int) -> int:
+    if L <= l and r <= R:
+        return mn[o]
+    spread(o)
+    m = (l + r) // 2
+    if m >= R:
+        return query(o * 2, l, m, L, R)
+    if m < L:
+        return query(o * 2 + 1, m + 1, r, L, R)
+    return min(query(o * 2, l, m, L, R), query(o * 2 + 1, m + 1, r, L, R))
+
+
 import unittest
 
 
