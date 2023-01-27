@@ -45,6 +45,7 @@ Constraints:
 
 ################################################################
 
+# TODO
 # tag: dp, DFS
 
 494. 目标和
@@ -135,7 +136,6 @@ class Solution:
         return dfs(0, 0)
 
 
-
 """
 
 TODO
@@ -187,6 +187,9 @@ class Solution1:
             for i in range(size, num - 1, -1):
                 dp[i] = dp[i] + dp[i - num]
         return dp[size]
+
+
+# https://leetcode.cn/problems/target-sum/solution/gong-shui-san-xie-yi-ti-si-jie-dfs-ji-yi-et5b/
 
 
 class TestSolution(unittest.TestCase):
