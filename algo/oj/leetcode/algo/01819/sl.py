@@ -45,6 +45,10 @@ Constraints:
 
 ################################################################
 
+# TODO
+# tag: Math
+
+
 1819. 序列中不同最大公约数的数目
 
 给你一个由正整数组成的数组 nums 。
@@ -104,6 +108,28 @@ sys.path.insert(0, parentdir)
 
 
 from algo.tree.builder import *
+
+# 作者：endlesscheng
+# 链接：https://leetcode.cn/problems/number-of-different-subsequences-gcds/solution/ji-bai-100mei-ju-gcdxun-huan-you-hua-pyt-get7/
+# 来源：力扣（LeetCode）
+# 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+class Solution:
+    def countDifferentSubsequenceGCDs(self, nums: List[int]) -> int:
+        ans, mx = 0, max(nums)
+        has = [False] * (mx + 1)
+        for x in nums:
+            has[x] = True
+        for i in range(1, mx + 1):
+            g = 0  # 0 和任何数 x 的最大公约数都是 x
+            for j in range(i, mx + 1, i):  # 枚举 i 的倍数 j
+                if has[j]:  # 如果 j 在 nums 中
+                    g = gcd(g, j)  # 更新最大公约数
+                    if g == i:  # 找到一个答案（g 无法继续减小）
+                        ans += 1
+                        break  # 提前退出循环
+        return ans
 
 
 class TestSolution(unittest.TestCase):
