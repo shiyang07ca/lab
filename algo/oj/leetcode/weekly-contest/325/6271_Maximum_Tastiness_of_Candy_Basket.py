@@ -39,6 +39,9 @@ Constraints:
 ################################################################
 
 # TODO
+# tag: binary search
+
+
 6271. 礼盒的最大甜蜜度
 
 给你一个正整数数组 price ，其中 price[i] 表示第 i 类糖果的价格，另给你一个正整数 k 。
@@ -82,4 +85,41 @@ Constraints:
 
 """
 
-# TODO
+"""
+作者：endlesscheng
+链接：https://leetcode.cn/problems/maximum-tastiness-of-candy-basket/solution/er-fen-da-an-by-endlesscheng-r418/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+由于随着甜蜜度的增大，能选择的糖果数量变小，有单调性，所以可以用二分答案来做。
+
+对 price 从小到大排序，二分答案 d。最小的数 x 可以选，下一个可以选的数是第一个 ≥
+x + d 的数，依此类推。
+
+如果可以选的数 < k，说明d 取大了，否则说明 d 取小了，根据这一点来二分。
+
+
+"""
+
+
+class Solution:
+    def maximumTastiness(self, price: List[int], k: int) -> int:
+        price.sort()
+
+        def check(d):
+            cnt, tmp = 1, price[0]
+            for x in price:
+                if x >= tmp + d:
+                    cnt += 1
+                    tmp = x
+            return cnt >= k
+
+        l, r = 0, 10**9
+        while l < r:
+            mid = (l + r + 1) >> 1
+            if check(mid):
+                l = mid
+            else:
+                r = mid - 1
+        return l

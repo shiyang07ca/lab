@@ -83,6 +83,7 @@ s 仅由字母 'a'、'b'、'c' 组成
 """
 
 
+# 双指针
 class Solution:
     def takeCharacters(self, s: str, k: int) -> int:
         # 字符串 = 前缀 + 后缀
@@ -116,7 +117,7 @@ class Solution:
         return ans
 
 
-# TODO
+# 双指针
 """
 
 滑动窗口，可以将两个原字符串拼接，接下来只要维持左端点不越过初始位置即可。由于字

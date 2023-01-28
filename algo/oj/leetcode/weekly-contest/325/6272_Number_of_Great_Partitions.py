@@ -37,6 +37,8 @@ Constraints:
 ################################################################
 
 TODO
+# tag: dp
+
 6272. 好分区的数目
 
 给你一个正整数数组 nums 和一个整数 k 。
@@ -102,7 +104,7 @@ TODO
 
 分类讨论：
 
-- 不选第 i 个数：f[i][j] = f[i-1][j]f[i]
+- 不选第 i 个数：f[i][j] = f[i-1][j]
 - 选第 i 个数：f[i][j] = f[i−1][j−nums[i]]
 
 因此 f[i][j] = f[i-1][j] + f[i−1][j−nums[i]]。
@@ -129,3 +131,43 @@ class Solution:
             for j in range(k - 1, x - 1, -1):
                 f[j] = (f[j] + f[j - x]) % MOD
         return (pow(2, len(nums), MOD) - sum(f) * 2) % MOD
+
+
+"""
+作者：小羊肖恩
+链接：https://leetcode.cn/circle/discuss/RmydJj/view/cYCjYk/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+首先，在总数值小于 k 的情况下不可能满足要求。
+接下来，好的分区相对更难处理，我们计算所有不好的分区，不好的分区只有两种情况，一
+种是第一组小于 k，一种是第二组小于 k，这我们一起处理，再以总数量减去这两者的方案
+数（其实是一致的这两者，且不会有重合）即可得到答案。
+
+因此问题即为在数组中取任意个数使得其和小于 k 的方案数，这是经典的背包问题。
+
+"""
+
+mod = 10**9 + 7
+
+
+class Solution:
+    def countPartitions(self, nums: List[int], k: int) -> int:
+        if sum(nums) < 2 * k:
+            return 0
+        n = len(nums)
+        tot_method = pow(2, n, mod)
+
+        @cache
+        def getRes(idx, space):
+            if idx == n:
+                return 1
+            res = getRes(idx + 1, space)
+            if nums[idx] < space:
+                res += getRes(idx + 1, space - nums[idx])
+            return res % mod
+
+        ans = (tot_method - getRes(0, k) * 2) % mod
+        getRes.cache_clear()
+        return ans
