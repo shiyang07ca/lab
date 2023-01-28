@@ -139,7 +139,6 @@ class Solution:
                 even[i] = nums[i] + even[i + 2]
             else:
                 odd[i] = nums[i] + odd[i + 2]
-        # print(even, odd)
         #       i
         # 0 1   2   3 4 5
         # even(0:i) + odd(i+1:) == odd(0:i) + even(i+1:)
@@ -152,6 +151,47 @@ class Solution:
                 if even[0] - even[i + 1] + odd[i + 2] == odd[1] - odd[i] + even[i + 1]:
                     ans += 1
 
+        return ans
+
+
+"""
+作者：lcbin
+链接：https://leetcode.cn/problems/ways-to-make-a-fair-array/solution/by-lcbin-3jl3/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+方法一：预处理 + 枚举
+
+我们先预处理得到数组 nums 的偶数下标元素之和 s1 以及奇数下标元素之和 s2
+
+然后从前往后枚举数组 nums 的每个元素 v, 用变量 t1 和 t2 分别记录已遍历的偶数下标
+元素之和以及奇数下标元素之和。
+
+我们观察发现，对于当前遍历到的元素 v，如果删除了，那么该元素之后的奇偶下标元素之
+和会发生交换。此时，我们先判断该位置下标 i 是奇数还是偶数。
+
+* 如果是偶数下标，删除该元素后，数组的奇数下标元素之和为 t2 + s1 - t1 − v，而偶
+数下标元素之和为 t1 + s2 - t2 ，如果这两个和相等，那么就是一个平衡数组，答案加一。
+
+* 如果是奇数下标，删除该元素后，数组的偶数下标元素之和为t1 + s2 - t2 − v，而奇数
+下标元素之和为 t2 + s1 - t1 ，如果这两个和相等，那么就是一个平衡数组，答案加一。
+
+然后我们根据下标的奇偶性更新 t1 或 t2，继续遍历下一个元素。遍历完数组后，即可得
+到答案。
+
+"""
+
+
+class Solution:
+    def waysToMakeFair(self, nums: List[int]) -> int:
+        s1, s2 = sum(nums[::2]), sum(nums[1::2])
+        ans = t1 = t2 = 0
+        for i, v in enumerate(nums):
+            ans += i % 2 == 0 and t2 + s1 - t1 - v == t1 + s2 - t2
+            ans += i % 2 == 1 and t2 + s1 - t1 == t1 + s2 - t2 - v
+            t1 += v if i % 2 == 0 else 0
+            t2 += v if i % 2 == 1 else 0
         return ans
 
 
