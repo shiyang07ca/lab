@@ -47,6 +47,7 @@ Constraints:
 ################################################################
 
 # TODO
+# tag: Trie
 
 1803. 统计异或值在范围内的数对有多少
 
@@ -121,6 +122,9 @@ from algo.tree.builder import *
 # 链接：https://leetcode.cn/problems/count-pairs-with-xor-in-a-range/solution/by-lcbin-bmz4/
 # 来源：力扣（LeetCode）
 # 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+# https://leetcode.cn/problems/count-pairs-with-xor-in-a-range/solution/xiao-bai-yi-dong-de-guan-fang-ti-jie-jie-li9y/
 
 
 class Trie:
