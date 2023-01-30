@@ -149,15 +149,13 @@ class Trie:
                 return ans
             v = x >> i & 1
             if limit >> i & 1:
-                if node.children[
-                    v
-                ]:  # limit 第 i 位为 1, 累加和 x 异或和为0 的 cnt(后边的节点一定都小于 limit)
+                # limit 第 i 位为 1, 累加和 x 异或和为0 的 cnt(后边的节点一定都小于 limit)
+                if node.children[v]:
                     ans += node.children[v].cnt
                 node = node.children[v ^ 1]  # 继续遍历下一个异或和为 1 的 node(对 v 取反)
             else:
-                node = node.children[
-                    v
-                ]  # limit 第 i 位为 0, 下一个 node 必须和 v 异或为 0 才可能小于limit
+                # limit 第 i 位为 0, 下一个 node 必须和 v 异或为 0 才可能小于limit
+                node = node.children[v]
         return ans
 
 
