@@ -149,12 +149,38 @@ class Trie:
                 return ans
             v = x >> i & 1
             if limit >> i & 1:
-                if node.children[v]:
+                if node.children[
+                    v
+                ]:  # limit 第 i 位为 1, 累加和 x 异或和为0 的 cnt(后边的节点一定都小于 limit)
                     ans += node.children[v].cnt
-                node = node.children[v ^ 1]
+                node = node.children[v ^ 1]  # 继续遍历下一个异或和为 1 的 node(对 v 取反)
             else:
-                node = node.children[v]
+                node = node.children[
+                    v
+                ]  # limit 第 i 位为 0, 下一个 node 必须和 v 异或为 0 才可能小于limit
         return ans
+
+
+# 作者：endlesscheng
+# 链接：https://leetcode.cn/problems/count-pairs-with-xor-in-a-range/solution/bu-hui-zi-dian-shu-zhi-yong-ha-xi-biao-y-p2pu/
+# 来源：力扣（LeetCode）
+# 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+class Solution:
+    def countPairs(self, nums: List[int], low: int, high: int) -> int:
+        ans, cnt = 0, Counter(nums)
+        high += 1
+        while high:
+            nxt = Counter()
+            for x, c in cnt.items():
+                if high & 1:
+                    ans += c * cnt[x ^ (high - 1)]
+                if low & 1:
+                    ans -= c * cnt[x ^ (low - 1)]
+                nxt[x >> 1] += c
+            cnt = nxt
+            low >>= 1
+            high >>= 1
+        return ans // 2
 
 
 class Solution:
