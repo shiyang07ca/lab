@@ -136,6 +136,29 @@ class Solution:
         return max(lsz, rsz, n - 1 - lsz - rsz) * 2 > n
 
 
+# 作者：lcbin
+# 链接：https://leetcode.cn/problems/binary-tree-coloring-game/solution/python3javacgo-yi-ti-yi-jie-dfsqing-xi-d-eei8/
+# 来源：力扣（LeetCode）
+# 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+class Solution:
+    def btreeGameWinningMove(self, root: Optional[TreeNode], n: int, x: int) -> bool:
+        def dfs(root):
+            if root is None or root.val == x:
+                return root
+            return dfs(root.left) or dfs(root.right)
+
+        def count(root):
+            if root is None:
+                return 0
+            return 1 + count(root.left) + count(root.right)
+
+        node = dfs(root)
+        l, r = count(node.left), count(node.right)
+        return max(l, r, n - l - r - 1) > n // 2
+
+
 class TestSolution(unittest.TestCase):
     def setUp(self):
         self.sl = Solution()
