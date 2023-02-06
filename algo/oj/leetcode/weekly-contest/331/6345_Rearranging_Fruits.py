@@ -74,3 +74,24 @@ basket1.length == bakste2.length
 
 
 """
+
+# 作者：endlesscheng
+# 链接：https://leetcode.cn/problems/rearranging-fruits/solution/tan-xin-gou-zao-by-endlesscheng-c2ui/
+# 来源：力扣（LeetCode）
+# 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+class Solution:
+    def minCost(self, basket1: List[int], basket2: List[int]) -> int:
+        cnt = Counter()
+        for x, y in zip(basket1, basket2):
+            cnt[x] += 1
+            cnt[y] -= 1
+        mn = min(cnt)
+        a = []
+        for x, c in cnt.items():
+            if c % 2:
+                return -1
+            a.extend([x] * (abs(c) // 2))
+        a.sort()  # 也可以用快速选择
+        return sum(min(x, mn * 2) for x in a[: len(a) // 2])
