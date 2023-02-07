@@ -95,3 +95,72 @@ class Solution:
             a.extend([x] * (abs(c) // 2))
         a.sort()  # 也可以用快速选择
         return sum(min(x, mn * 2) for x in a[: len(a) // 2])
+
+
+"""
+作者：小羊肖恩
+链接：https://leetcode.cn/circle/discuss/2Gdn7F/view/43FuHN/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+首先我们查看不可能达成目标的情况。根据最终情况实现了两个相等的果篮，可见每个水果
+出现的次数必须是偶数（否则没法在两组配对）。同时，我们也可以根据整体的计数，得到
+目标的果篮状态。
+
+事实上，我们只需要看第一个果篮就可以知道是否达成了目标，因为一旦第一个果篮和目标
+果篮相同，第二个果篮也和目标相同。
+
+因此，我们查看第一个果篮和最终目标的差别。
+
+接下来我们研究交换方案。如果我们要交换两个果篮中的水果，实际上有两种方式：
+
+第一种： 直接交换，成本为 min(x,y)
+
+第二种： 间接交换，通过找一个成本最小的物品作为中介，实现交换。两侧中找到有最小
+成本的一侧，不妨设在 x 那一组，那么可以进行两步操作：(y,z),(x,z)。
+成本为 min(x,z) + min(y,z) = 2z。
+
+交换一次和交换两次的方案最优显然都是如上，而三次以上交换实现目的的方式成本显然大
+于第二种（每次交换成本最小为 z），故只需要考虑如上情况。
+
+每次上述的完整交换过程，可以减少两次第一个果篮和最终目标的差别。因此我们对所有差
+别进行两两配对。
+
+注意到，一对的成本之和其最小值有关，而要使得最小值的序列最小，我们对差别进行两两
+配对，接下来对每一对计算总成本（即两种交换的最小成本）即可。
+
+时间复杂度：O(nlogn)
+
+"""
+
+
+class Solution:
+    def minCost(self, basket1: List[int], basket2: List[int]) -> int:
+        n = len(basket1)
+
+        # 查看是否可行
+        cnt = Counter(basket1 + basket2)
+        for x in cnt:
+            if cnt[x] % 2:
+                return -1
+            cnt[x] //= 2
+
+        # 查看总共需要的交换的个数
+        cnt1 = Counter(basket1)
+        swaps = 0
+        for x in cnt:
+            swaps += abs(cnt[x] - cnt1[x])
+        swaps //= 2
+
+        # 排序取前一半作为最小值
+        ans = 0
+        min_val = min(cnt)
+        for x in sorted(cnt):
+            diff = abs(cnt1[x] - cnt[x])
+            if diff < swaps:
+                ans += min(min_val * 2, x) * diff
+                swaps -= diff
+            else:
+                ans += min(min_val * 2, x) * swaps
+                break
+        return ans
