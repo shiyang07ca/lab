@@ -154,8 +154,8 @@ class Solution:
             q = []
             for X, Y, S in tmp:
                 for t in (X + 1, Y, S), (X, Y + 1, S), (X, Y, S ^ 1):  # 直接把移动后的位置算出来
-                    x, y, s = t
-                    x2, y2 = x + s, y + (s ^ 1)  # 蛇头
+                    x, y, s = t  # 移动后的蛇尾
+                    x2, y2 = x + s, y + (s ^ 1)  # 移动后的蛇头
                     if (
                         x2 < n
                         and y2 < n
@@ -164,7 +164,7 @@ class Solution:
                         and g[x2][y2] == 0
                         and (s == S or g[x + 1][y + 1] == 0)
                     ):
-                        if x == n - 1 and y == n - 2:  # 此时蛇头一定在 (n-1,n-1)
+                        if x == n - 1 and y == n - 2:  # 此时蛇头一定在 (n-1, n-1)
                             return step
                         vis.add(t)
                         q.append(t)
