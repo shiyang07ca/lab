@@ -93,3 +93,34 @@ s[i] 要么是 '0' ，要么是 '1' 。
 
 
 """
+
+"""
+
+作者：endlesscheng
+链接：https://leetcode.cn/problems/substring-xor-queries/solution/yu-chu-li-suo-you-s-zhong-de-shu-zi-by-e-yxl2/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+val ^ first = second 两边同时异或 first ，得到
+
+           val ^ first ^ first = val = second ^ first  (first ^ first = 0)
+
+问题等价于在 s 中找到值为 seconde ^ frist 的数
+ 由于 10^9 < 2^30 ，我们可以直接预计算所有 s 中长度不超过  的数及其对应的 left
+和 right，记到一个哈希表中，然后 O(1) 地回答询问。
+
+"""
+
+
+class Solution:
+    def substringXorQueries(self, s: str, queries: List[List[int]]) -> List[List[int]]:
+        n, m = len(s), {}
+        for l in range(n):
+            x = 0
+            for r in range(l, min(l + 30, n)):
+                x = (x << 1) | (ord(s[r]) & 1)
+                if x not in m or r - l < m[x][1] - m[x][0]:
+                    m[x] = (l, r)
+
+        NOT_FOUND = (-1, -1)
+        return [m.get(x ^ y, NOT_FOUND) for x, y in queries]
