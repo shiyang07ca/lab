@@ -1,7 +1,9 @@
-// Sequential socket server - accepting one client at a time.
+// Threaded socket server - accepting multiple clients concurrently, by creating
+// a new thread for each connecting client.
 //
 // Eli Bendersky [http://eli.thegreenplace.net]
 // This code is in the public domain.
+#include <pthread.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,13 +14,11 @@
 
 #include "utils.h"
 
+typedef struct { int sockfd; } thread_config_t;
+
 typedef enum { WAIT_FOR_MSG, IN_MSG } ProcessingState;
 
 void serve_connection(int sockfd) {
-  // Clients attempting to connect and send data will succeed even before the
-  // connection is accept()-ed by the server. Therefore, to better simulate
-  // blocking of other clients while one is being served, do this "ack" from the
-  // server which the client expects to see before proceeding.
   if (send(sockfd, "*", 1, 0) < 1) {
     perror_die("send");
   }
@@ -60,6 +60,21 @@ void serve_connection(int sockfd) {
   close(sockfd);
 }
 
+void* server_thread(void* arg) {
+  thread_config_t* config = (thread_config_t*)arg;
+  int sockfd = config->sockfd;
+  free(config);
+
+  // This cast will work for Linux, but in general casting pthread_id to an
+  // integral type isn't portable.
+  unsigned long id = (unsigned long)pthread_self();
+  printf("Thread %lu created to handle connection with socket %d\n", id,
+         sockfd);
+  serve_connection(sockfd);
+  printf("Thread %lu done\n", id);
+  return 0;
+}
+
 int main(int argc, char** argv) {
   setvbuf(stdout, NULL, _IONBF, 0);
 
@@ -68,6 +83,7 @@ int main(int argc, char** argv) {
     portnum = atoi(argv[1]);
   }
   printf("Serving on port %d\n", portnum);
+  fflush(stdout);
 
   int sockfd = listen_inet_socket(portnum);
 
@@ -83,8 +99,18 @@ int main(int argc, char** argv) {
     }
 
     report_peer_connected(&peer_addr, peer_addr_len);
-    serve_connection(newsockfd);
-    printf("peer done\n");
+    pthread_t the_thread;
+
+    thread_config_t* config = (thread_config_t*)malloc(sizeof(*config));
+    if (!config) {
+      die("OOM");
+    }
+    config->sockfd = newsockfd;
+    pthread_create(&the_thread, NULL, server_thread, config);
+
+    // Detach the thread - when it's done, its resources will be cleaned up.
+    // Since the main thread lives forever, it will outlive the serving threads.
+    pthread_detach(the_thread);
   }
 
   return 0;
