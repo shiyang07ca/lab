@@ -73,8 +73,7 @@ class Solution:
             return N
 
         cnt = Counter()
-        l = 0
-        ans = 0
+        ans = l = 0
         for r, c in enumerate(s):
             cnt[c] += 1
             while cnt[c] > 1 and l <= r:
