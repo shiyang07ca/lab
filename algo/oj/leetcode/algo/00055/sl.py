@@ -41,6 +41,7 @@ Constraints:
 
 ################################################################
 
+# TODO
 
 55. 跳跃游戏
 
@@ -124,6 +125,17 @@ class Solution:
                 return True
 
         return False
+
+
+class Solution:
+    def canJump(self, nums: List[int]) -> bool:
+        right_most = 0
+        for i, n in enumerate(nums):
+            right_most = max(right_most, i + n)
+            if right_most >= len(nums) - 1:
+                return True
+            elif right_most == i:
+                return False
 
 
 class TestSolution(unittest.TestCase):
