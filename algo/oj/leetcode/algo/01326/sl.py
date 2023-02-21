@@ -115,6 +115,40 @@ sys.path.insert(0, parentdir)
 from algo.tree.builder import *
 
 
+"""
+作者：endlesscheng
+链接：https://leetcode.cn/problems/minimum-number-of-taps-to-open-to-water-a-garden/solution/yi-zhang-tu-miao-dong-pythonjavacgo-by-e-wqry/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+相似题目
+LC55. 跳跃游戏 https://leetcode.cn/problems/jump-game/
+LC45. 跳跃游戏 II https://leetcode.cn/problems/jump-game-ii/
+lC1024. 视频拼接 https://leetcode.cn/problems/video-stitching/
+
+"""
+
+
+class Solution:
+    def minTaps(self, n: int, ranges: List[int]) -> int:
+        right_most = [0] * (n + 1)
+        for i, r in enumerate(ranges):
+            left = max(i - ranges[i], 0)
+            right_most[left] = max(right_most[left], i + ranges[i])
+
+        ans = 0
+        cur_right = 0  # 已建造的桥的右端点
+        next_right = 0  # 下一座桥的右端点的最大值
+        for i in range(n):  # 注意这里没有遍历到 n，因为它已经是终点了
+            next_right = max(next_right, right_most[i])
+            if i == cur_right:  # 到达已建造的桥的右端点
+                if i == next_right:  # 无论怎么造桥，都无法从 i 到 i+1
+                    return -1
+                cur_right = next_right  # 造一座桥
+                ans += 1
+        return ans
+
+
 class TestSolution(unittest.TestCase):
     def setUp(self):
         self.sl = Solution()
