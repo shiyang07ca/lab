@@ -122,9 +122,10 @@ for i in range(2, 31):
                 break
             NSQ_TO_MASK[i] |= 1 << j  # 把 j 加到集合中
 
+
 class Solution:
     def squareFreeSubsets(self, nums: List[int]) -> int:
-        MOD = 10 ** 9 + 7
+        MOD = 10**9 + 7
         M = 1 << len(PRIMES)
         f = [0] * M  # f[j] 表示恰好组成集合 j 的方案数
         f[0] = 1  # 空集的方案数为 1
