@@ -106,6 +106,18 @@ from algo.tree.builder import *
 """
 https://leetcode.cn/problems/stone-game-ii/solution/jiao-ni-yi-bu-bu-si-kao-dong-tai-gui-hua-jjax/
 
+
+
+题单：博弈类 DP
+
+LC877. 石子游戏 https://leetcode.cn/problems/stone-game/
+LC1140. 石子游戏 II https://leetcode.cn/problems/stone-game-ii/
+LC1406. 石子游戏 III https://leetcode.cn/problems/stone-game-iii/
+LC375. 猜数字大小 II https://leetcode.cn/problems/guess-number-higher-or-lower-ii/
+LC464. 我能赢吗 https://leetcode.cn/problems/can-i-win/
+LC486. 预测赢家 https://leetcode.cn/problems/predict-the-winner/
+LC1025. 除数博弈 https://leetcode.cn/problems/divisor-game/
+
 """
 
 
