@@ -114,13 +114,13 @@ anime/media/
 nohup.out
 
 
-*.swp
-.idea/*
+# yonlanda
+system/server/yolanda/*.swp
+system/server/yolanda/.idea/*
 cmake-build-debug/*
-build/*
-bin/*
-CMakeCache.txt
-CMakeFiles/*
-Makefile
-cmake_install.cmake
-.vscode/*
+system/server/yolanda/build/*
+system/server/yolanda/CMakeCache.txt
+system/server/yolanda/CMakeFiles/*
+system/server/yolanda/Makefile
+system/server/yolanda/cmake_install.cmake
+system/server/yolanda/.vscode/*
