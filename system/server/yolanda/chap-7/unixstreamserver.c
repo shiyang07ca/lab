@@ -25,6 +25,8 @@ int main(int argc, char **argv) {
     servaddr.sun_family = AF_LOCAL;
     strcpy(servaddr.sun_path, local_path);
 
+    printf("local path: %s \n", local_path);
+
     if (bind(listenfd, (struct sockaddr *) &servaddr, sizeof(servaddr)) < 0) {
         error(1, errno, "bind failed");
     }
