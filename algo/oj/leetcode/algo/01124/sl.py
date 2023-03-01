@@ -142,6 +142,28 @@ class Solution:
         return ans
 
 
+# 作者：endlesscheng
+# 链接：https://leetcode.cn/problems/longest-well-performing-interval/solution/liang-chong-zuo-fa-liang-zhang-tu-miao-d-hysl/
+# 来源：力扣（LeetCode）
+# 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
+class Solution:
+    def longestWPI(self, hours: List[int]) -> int:
+        n = len(hours)
+        s = [0] * (n + 1)  # 前缀和
+        st = [0]  # s[0]
+        for j, h in enumerate(hours, 1):
+            s[j] = s[j - 1] + (1 if h > 8 else -1)
+            if s[j] < s[st[-1]]:
+                st.append(j)  # 感兴趣的 j
+        ans = 0
+        for i in range(n, 0, -1):
+            while st and s[i] > s[st[-1]]:
+                ans = max(ans, i - st.pop())  # [st[-1],i) 可能是最长子数组
+        return ans
+
+
 class TestSolution(unittest.TestCase):
     def setUp(self):
         self.sl = Solution()
