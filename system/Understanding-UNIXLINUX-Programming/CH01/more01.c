@@ -12,17 +12,17 @@ void do_more(FILE *);
 int see_more();
 
 int main(int ac, char *av[]) {
-    FILE *fp;
+  FILE *fp;
 
-    if (ac == 1)
-    do_more(stdin);
+  if (ac == 1)
+      do_more(stdin);
   else
-    while (--ac)
+      while (--ac)
       if ((fp = fopen(*++av, "r")) != NULL) {
-        do_more(fp);
-        fclose(fp);
+          do_more(fp);
+          fclose(fp);
       } else
-        exit(1);
+          exit(1);
   return 0;
 }
 
