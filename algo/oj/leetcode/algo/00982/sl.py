@@ -122,11 +122,72 @@ sys.path.insert(0, parentdir)
 
 from algo.tree.builder import *
 
+"""
+
+https://leetcode.cn/problems/triples-with-bitwise-and-equal-to-zero/solution/you-ji-qiao-de-mei-ju-chang-shu-you-hua-daxit/
+
+暴力枚举 i，j，k 的话，时间复杂度O(n^3)
+
+对于 nums[k] 来说，只需要知道它 AND 一个数的结果是否等于 0，至于这个数是由哪些
+nums[i] AND nums[j] 得到的，并不重要
+
+因此，可以先写一个 O(n^2) 的枚举，预处理所有 nums[i] AND nums[j] 的出现次数，存
+到哈希表 cnt 中。然后枚举 nums[k] 和 x，如果 nums[k] AND x 等于 0，那就把 cnt[x]
+加到答案中
+
+"""
+
 
 class Solution:
     def countTriplets(self, nums: List[int]) -> int:
         cnt = Counter(x & y for x in nums for y in nums)
         return sum(c for x, c in cnt.items() for y in nums if x & y == 0)
+
+
+# 注：这一技巧经常用于子集状压 DP 中
+# TODO
+"""
+
+如果把二进制数看成集合的话，二进制从低到高第 i 位为 1 表示 i 在集合中，为 0 表示
+i 不在集合中，例如 a=1101(2) 表示集合 A={0,2,3}。
+
+那么 a AND b=0 相当于集合
+A 和集合 B 没有交集，也可以理解成 B 是 CuA 的子集，这里 U={0,1,2,⋯,15}，对应的数
+字就是 0xffff。一个数异或 0xffff 就可以得到这个数的补集了。
+
+因此，上面的代码可以优化成枚举 m=nums[k]⊕0xffff 的子集。
+
+怎么枚举m 的子集 s 呢？可以从 m 不断减一，直到 0，如果s AND m=s 就表示s 是 m 的
+子集。
+
+更高效的做法是直接「跳到」下一个子集，即 s 更新为 (s−1) AND m。这样做的正确性在
+于，s−1 仅仅把 s 最低位的 1 改成了 0，比这个 1 更低的 0 全部改成了 1，因此下一个
+子集一定是s−1 的子集，直接 AND m，就能得到下一个子集了。
+
+最后，当 s=0 时，由于 −1 的二进制全为 1，所以 (s−1) AND m=m，因此我们可以通过判
+断下一个子集是否又回到 m，来判断是否要退出循环。
+
+注：这一技巧经常用于子集状压 DP 中。
+
+"""
+
+
+class Solution:
+    def countTriplets(self, nums: List[int]) -> int:
+        cnt = [0] * (1 << 16)
+        for x in nums:
+            for y in nums:
+                cnt[x & y] += 1
+        ans = 0
+        for m in nums:
+            m ^= 0xFFFF
+            s = m
+            while True:  # 枚举 m 的子集（包括空集）
+                ans += cnt[s]
+                s = (s - 1) & m
+                if s == m:
+                    break
+        return ans
 
 
 class TestSolution(unittest.TestCase):
