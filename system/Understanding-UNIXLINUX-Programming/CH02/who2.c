@@ -14,16 +14,16 @@ void showtime(long);
 void show_info(struct utmp *);
 
 int main() {
-    struct utmp utbuf; /* read info into here */
-    int utmpfd;        /* read from this descriptor */
+  struct utmp utbuf; /* read info into here */
+  int utmpfd;        /* read from this descriptor */
 
-    if ((utmpfd = open(UTMP_FILE, O_RDONLY)) == -1) {
-        perror(UTMP_FILE);
-        exit(1);
-    }
+  if ((utmpfd = open(UTMP_FILE, O_RDONLY)) == -1) {
+    perror(UTMP_FILE);
+    exit(1);
+  }
 
-    while (read(utmpfd, &utbuf, sizeof(utbuf)) == sizeof(utbuf))
-        show_info(&utbuf);
+  while (read(utmpfd, &utbuf, sizeof(utbuf)) == sizeof(utbuf))
+    show_info(&utbuf);
   close(utmpfd);
   return 0;
 }
