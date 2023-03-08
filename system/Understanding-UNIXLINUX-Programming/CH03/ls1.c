@@ -8,14 +8,14 @@
 
 void do_ls(char[]);
 
-main(int ac, char *av[]) {
+void main(int ac, char *av[]) {
   if (ac == 1)
-    do_ls(".");
+      do_ls(".");
   else
-    while (--ac) {
-      printf("%s:\n", *++av);
-      do_ls(*av);
-    }
+      while (--ac) {
+          printf("%s:\n", *++av);
+          do_ls(*av);
+      }
 }
 
 void do_ls(char dirname[])
