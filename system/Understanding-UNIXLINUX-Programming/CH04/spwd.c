@@ -10,6 +10,8 @@
  **/
 #include <dirent.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -18,8 +20,8 @@ void printpathto(ino_t);
 void inum_to_name(ino_t, char *, int);
 
 int main() {
-    printpathto(get_inode(".")); /* print path to here	*/
-    putchar('\n');               /* then add newline	*/
+  printpathto(get_inode(".")); /* print path to here	*/
+  putchar('\n');               /* then add newline	*/
   return 0;
 }
 
@@ -70,7 +72,7 @@ void inum_to_name(ino_t inode_to_find, char *namebuf, int buflen)
       closedir(dir_ptr);
       return;
     }
-  fprintf(stderr, "error looking for inum %d\n", inode_to_find);
+  fprintf(stderr, "error looking for inum %ld\n", inode_to_find);
   exit(1);
 }
 
