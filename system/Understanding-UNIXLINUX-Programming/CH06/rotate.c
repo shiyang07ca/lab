@@ -2,17 +2,16 @@
  *   purpose: useful for showing tty modes
  */
 
-#include   <stdio.h>
-#include   <ctype.h>
+#include <ctype.h>
+#include <stdio.h>
 
-int main()
-{
-    int c;
-    while ( ( c=getchar() ) != EOF ){
-        if ( c == 'z' )  
-            c = 'a';
-        else if (islower(c))
-            c++;
-        putchar(c);
-    }
+int main() {
+  int c;
+  while ((c = getchar()) != EOF) {
+    if (c == 'z')
+      c = 'a';
+    else if (islower(c))
+      c++;
+    putchar(c);
+  }
 }
