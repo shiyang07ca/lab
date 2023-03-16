@@ -1,6 +1,6 @@
 """
 
-6248. Count Subarrays With Median K
+2488. Count Subarrays With Median K
 
 You are given an array nums of size n consisting of distinct integers from 1 to n and a positive integer k.
 
@@ -37,7 +37,9 @@ The integers in nums are distinct.
 
 """
 
-6248. 统计中位数为 K 的子数组
+# TODO
+
+2488. 统计中位数为 K 的子数组
 
 给你一个长度为 n 的数组 nums ，该数组由从 1 到 n 的 不同 整数组成。另给你一个正
 整数 k 。
