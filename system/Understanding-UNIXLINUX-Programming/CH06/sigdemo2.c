@@ -2,18 +2,15 @@
  *            - press Ctrl-\ to kill this one
  */
 
-#include	<stdio.h>
-#include	<signal.h>
+#include <signal.h>
+#include <stdio.h>
 
-main()
-{
-	signal( SIGINT, SIG_IGN );
+void main() {
+  signal(SIGINT, SIG_IGN);
 
-	printf("you can't stop me!\n");
-	while( 1 )
-	{
-		sleep(1);
-		printf("haha\n");
-	}
+  printf("you can't stop me!\n");
+  while (1) {
+    sleep(1);
+    printf("haha\n");
+  }
 }
-
