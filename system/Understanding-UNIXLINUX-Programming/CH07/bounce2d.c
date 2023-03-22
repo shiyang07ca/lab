@@ -27,14 +27,14 @@ int main() {
   set_up();
 
   while ((c = getchar()) != 'Q') {
-    if (c == 'f')
-      the_ball.x_ttm--;
+    if (c == 'd')
+        the_ball.x_ttm--;
+    else if (c == 'a')
+        the_ball.x_ttm++;
+    else if (c == 'w')
+        the_ball.y_ttm--;
     else if (c == 's')
-      the_ball.x_ttm++;
-    else if (c == 'F')
-      the_ball.y_ttm--;
-    else if (c == 'S')
-      the_ball.y_ttm++;
+        the_ball.y_ttm++;
   }
 
   wrap_up();
