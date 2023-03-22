@@ -1,6 +1,6 @@
-#include	<stdio.h>
-#include        <sys/time.h>
-#include        <signal.h>
+#include <signal.h>
+#include <stdio.h>
+#include <sys/time.h>
 
 /*
  *      set_ticker.c
@@ -12,21 +12,17 @@
  *      arg in milliseconds, converted into micro seoncds
  */
 
+set_ticker(n_msecs) {
+  struct itimerval new_timeset;
+  long n_sec, n_usecs;
 
-set_ticker( n_msecs )
-{
-        struct itimerval new_timeset;
-        long    n_sec, n_usecs;
+  n_sec = n_msecs / 1000;
+  n_usecs = (n_msecs % 1000) * 1000L;
 
-        n_sec = n_msecs / 1000 ;
-        n_usecs = ( n_msecs % 1000 ) * 1000L ;
+  new_timeset.it_interval.tv_sec = n_sec;    /* set reload  */
+  new_timeset.it_interval.tv_usec = n_usecs; /* new ticker value */
+  new_timeset.it_value.tv_sec = n_sec;       /* store this   */
+  new_timeset.it_value.tv_usec = n_usecs;    /* and this     */
 
-        new_timeset.it_interval.tv_sec  = n_sec;        /* set reload  */
-        new_timeset.it_interval.tv_usec = n_usecs;      /* new ticker value */
-        new_timeset.it_value.tv_sec     = n_sec  ;      /* store this   */
-        new_timeset.it_value.tv_usec    = n_usecs ;     /* and this     */
-
-	return setitimer(ITIMER_REAL, &new_timeset, NULL);
+  return setitimer(ITIMER_REAL, &new_timeset, NULL);
 }
-
-

@@ -20,7 +20,7 @@ int	dir   =  1;	/* where we are going	*/
 int	delay = 200;	/* how long to wait	*/
 int	done  = 0;
 
-main()
+void main()
 {
 	void	on_alarm(int);	/* handler for alarm	*/
 	void	on_input(int);	/* handler for keybd    */
@@ -80,4 +80,3 @@ void enable_kbd_signals()
 	fd_flags = fcntl(0, F_GETFL);
 	fcntl(0, F_SETFL, (fd_flags|O_ASYNC));
 }
-
