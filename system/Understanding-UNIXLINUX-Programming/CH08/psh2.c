@@ -34,7 +34,7 @@ int main() {
   return 0;
 }
 
-execute(char *arglist[])
+void execute(char *arglist[])
 /*
  *	use fork and execvp and wait to do it
  */
