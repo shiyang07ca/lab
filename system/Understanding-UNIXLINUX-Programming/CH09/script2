@@ -1,5 +1,5 @@
 #!/bin/sh
-# script2: a real program with variables, input, 
+# script2: a real program with variables, input,
 #          and control flow
 
 BOOK=$HOME/phonebook.data
