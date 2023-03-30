@@ -1,6 +1,6 @@
 /* process.c
  * command processing layer
- * 
+ *
  * The process(char **arglist) function is called by the main loop
  * It sits in front of the execute() function.  This layer handles
  * two main classes of processing:
@@ -8,8 +8,8 @@
  * 	b) control structures (e.g. if, while, for)
  */
 
-#include	<stdio.h>
-#include	"smsh.h"
+#include "smsh.h"
+#include <stdio.h>
 
 int is_control_command(char *);
 int do_control_command(char **);
@@ -23,14 +23,13 @@ int process(char **args)
  *  errors: arise from subroutines, handled there
  */
 {
-	int		rv = 0;
+    int rv = 0;
 
-	if ( args[0] == NULL )
-		rv = 0;
-	else if ( is_control_command(args[0]) )
-		rv = do_control_command(args);
-	else if ( ok_to_execute() )
-		rv = execute(args);
-	return rv;
+    if (args[0] == NULL)
+        rv = 0;
+    else if (is_control_command(args[0]))
+        rv = do_control_command(args);
+    else if (ok_to_execute())
+        rv = execute(args);
+  return rv;
 }
-

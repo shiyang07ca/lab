@@ -1,9 +1,9 @@
-#include	<stdio.h>
-#include	"smsh.h"
+#include "smsh.h"
+#include <stdio.h>
 
 /* process2.c   - version 2 - supports builtins
  * command processing layer
- * 
+ *
  * The process(char **arglist) function is called by the main loop
  * It sits in front of the execute() function.  This layer handles
  * two main classes of processing:
@@ -24,15 +24,14 @@ int process(char **args)
  *  errors: arise from subroutines, handled there
  */
 {
-	int		rv = 0;
+  int rv = 0;
 
-	if ( args[0] == NULL )
-		rv = 0;
-	else if ( is_control_command(args[0]) )
-		rv = do_control_command(args);
-	else if ( ok_to_execute() )
-		if ( !builtin_command(args,&rv) )
-			rv = execute(args);
-	return rv;
+  if (args[0] == NULL)
+    rv = 0;
+  else if (is_control_command(args[0]))
+    rv = do_control_command(args);
+  else if (ok_to_execute())
+    if (!builtin_command(args, &rv))
+      rv = execute(args);
+  return rv;
 }
-
