@@ -4,7 +4,7 @@
  */
 #include <stdio.h>
 
-void main(int ac, char *av[]) {
+int main(int ac, char *av[]) {
   int i;
 
   printf("Number of args: %d, Args are:\n", ac);
