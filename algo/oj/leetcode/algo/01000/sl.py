@@ -78,8 +78,28 @@ sys.path.insert(0, parentdir)
 
 from algo.tree.builder import *
 
+"""
+作者：灵茶山艾府
+链接：https://leetcode.cn/problems/minimum-cost-to-merge-stones/solutions/2207235/tu-jie-qu-jian-dpzhuang-tai-she-ji-yu-yo-ppv0/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+"""
 
 
+class Solution:
+    def mergeStones(self, stones: List[int], k: int) -> int:
+        n = len(stones)
+        if (n - 1) % (k - 1):  # 无法合并成一堆
+            return -1
+        s = list(accumulate(stones, initial=0))  # 前缀和
+
+        @cache  # 缓存装饰器，避免重复计算 dfs 的结果
+        def dfs(i: int, j: int, p: int) -> int:
+            if p == 1:  # 合并成一堆
+                return 0 if i == j else dfs(i, j, k) + s[j + 1] - s[i]
+            return min(dfs(i, m, 1) + dfs(m + 1, j, p - 1) for m in range(i, j, k - 1))
+
+        return dfs(0, n - 1, 1)
 
 
 class TestSolution(unittest.TestCase):
@@ -87,20 +107,18 @@ class TestSolution(unittest.TestCase):
         self.sl = Solution()
 
     def test_sl(self):
-"""
-[3,2,4,1]
-2
-[3,2,4,1]
-3
-[3,5,1,2,6]
-3
-[1]
-2
-[69,39,79,78,16,6,36,97,79,27,14,31,4]
-2
-[29,59,31,7,51,99,47,40,24,20,98,41,42,81,92,55]
-2
-"""
+        """[3,2,4,1]
+        2
+        [3,2,4,1]
+        3
+        [3,5,1,2,6]
+        3
+        [1]
+        2
+        [69,39,79,78,16,6,36,97,79,27,14,31,4]
+        2
+        [29,59,31,7,51,99,47,40,24,20,98,41,42,81,92,55]
+        2"""
         self.assertEqual(
             self.sl,
             None,
