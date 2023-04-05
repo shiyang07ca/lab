@@ -120,6 +120,8 @@ from algo.tree.builder import *
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 """
 
+# 排序 + 动态规划
+
 
 class Solution:
     def bestTeamScore(self, scores: List[int], ages: List[int]) -> int:
@@ -133,12 +135,26 @@ class Solution:
         return max(f)
 
 
+# 基于值域计算
+
+
 class Solution:
     def bestTeamScore(self, scores: List[int], ages: List[int]) -> int:
         max_sum = [0] * (max(ages) + 1)
         for score, age in sorted(zip(scores, ages)):
             max_sum[age] = max(max_sum[: age + 1]) + score
         return max(max_sum)
+
+
+"""
+相似题目
+
+LC300. 最长递增子序列 https://leetcode.cn/problems/longest-increasing-subsequence/
+LC354. 俄罗斯套娃信封问题 https://leetcode.cn/problems/russian-doll-envelopes/
+LC1691. 堆叠长方体的最大高度https://leetcode.cn/problems/maximum-height-by-stacking-cuboids/
+LC2407. 最长递增子序列 II https://leetcode.cn/problems/longest-increasing-subsequence-ii/
+
+"""
 
 
 class TestSolution(unittest.TestCase):
