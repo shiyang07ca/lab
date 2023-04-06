@@ -85,7 +85,8 @@ from math import *
 
 from os.path import abspath, join, dirname
 
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+currentdir = os.path.dirname(
+    os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 parentdir = os.path.dirname(parentdir)  # algo
 parentdir = os.path.dirname(parentdir)  # leetcode
@@ -99,6 +100,7 @@ from algo.tree.builder import *
 
 # https://leetcode.cn/problems/convert-to-base-2/solutions/2210967/duan-chu-fa-pythonyi-xing-jin-shuang-bai-ch27/
 class Solution:
+
     def baseNeg2(self, n: int) -> str:
         if n == 0:
             return "0"
@@ -110,6 +112,7 @@ class Solution:
             return self.baseNeg2(n // -2) + "0"
 
 
+# TODO
 # 作者：ylb
 # 链接：https://leetcode.cn/problems/convert-to-base-2/solutions/2210964/python3javacgotypescript-yi-ti-yi-jie-mo-5edi/
 # 来源：力扣（LeetCode）
@@ -117,6 +120,7 @@ class Solution:
 
 
 class Solution:
+
     def baseNeg2(self, n: int) -> str:
         k = 1
         ans = []
@@ -132,6 +136,7 @@ class Solution:
 
 
 class TestSolution(unittest.TestCase):
+
     def setUp(self):
         self.sl = Solution()
 
