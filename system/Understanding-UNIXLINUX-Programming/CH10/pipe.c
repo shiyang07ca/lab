@@ -9,6 +9,8 @@
  *	* Note: exchange child and parent and watch fun
  */
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #define oops(m, x)                                                             \
@@ -17,7 +19,7 @@
     exit(x);                                                                   \
   }
 
-main(int ac, char **av) {
+int main(int ac, char **av) {
   int thepipe[2], /* two file descriptors	*/
       newfd,      /* useful for pipes	*/
       pid;        /* and the pid		*/
