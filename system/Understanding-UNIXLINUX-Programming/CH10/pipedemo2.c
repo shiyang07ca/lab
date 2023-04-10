@@ -3,6 +3,9 @@
  *		  but child also writes to the pipe
  */
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #define CHILD_MESS "I want a cookie\n"
 #define PAR_MESS "testing..\n"
