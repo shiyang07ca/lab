@@ -5,13 +5,12 @@
  *	to format the data to send.
  */
 
-#include	<stdio.h>
+#include <stdio.h>
 
-main()
-{
-	FILE	*fp;
+int main() {
+  FILE *fp;
 
-	fp = popen( "mail admin backup", "w" );
-	fprintf( fp, "Error with backup!!\n" );
-	pclose( fp );
+  fp = popen("mail admin backup", "w");
+  fprintf(fp, "Error with backup!!\n");
+  pclose(fp);
 }
