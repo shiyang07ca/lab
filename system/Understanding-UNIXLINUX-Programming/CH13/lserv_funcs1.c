@@ -147,8 +147,10 @@ char *do_goodbye(char *msg_p) {
  */
 void narrate(char *msg1, char *msg2, struct sockaddr_in *clientp) {
   fprintf(stderr, "\t\tSERVER: %s %s ", msg1, msg2);
-  if (clientp)
-    fprintf(stderr, "(%s:%d)", inet_ntoa(clientp->sin_addr),
-            ntohs(clientp->sin_port));
+  if (clientp) {
+      char buffer[INET_ADDRSTRLEN];
+      inet_ntop(AF_INET, &clientp->sin_addr, buffer, sizeof(buffer));
+      fprintf(stderr, "(%s:%d)", buffer, ntohs(clientp->sin_port));
+  }
   putc('\n', stderr);
 }
