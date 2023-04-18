@@ -99,6 +99,36 @@ from algo.tree.builder import *
 """
 
 
+"""
+前置知识：集合论，位运算
+
+位运算技巧：
+1. 将元素 x 变成集合 {x}, 即 1 << x
+2. 判断元素 x 是否在集合 A 中， 即 ((A >> x) & 1) == 1
+3. 计算两个集合 A, B 的并集 A U B, 即 A | B。例如 110 | 11 == 111
+4. 计算 A \ B，表示从集合 A 中去掉在集合 B 中的元素，即 A & ~B。例如 110 & ~11 = 100
+5. 全集 U = {0, 1, ..., n-1}，即 (1 << n) - 1
+
+一、转换成 0-1 背包问题
+重新描述一遍问题，从 people 中选择一些元素（技能集合），这些技能集合的并集等于
+reqSkills，要求选的元素个数尽量少。
+
+把 people[i] 看成物品（集合），reqSkills 看成背包容量（目标集合），本题就是一个
+集合版本的 0-1 背包问题
+
+将每个技能映射到不同二进制位上
+类似 0-1 背包，定义 dfs(i, j) 表示从前 i 个集合中选择一些集合，并集包含 j，至少
+需要选择的集合个数。
+
+分类讨论：
+* 不选第 i 个集合： dfs(i, j) = dfs(i - 1, j)
+* 选第 i 个集合：dfs(i, j) = dfs(i - 1, j \ pepole[i]) + 1。j \ pepole[i] 表示选
+  了第 i 个集合 people[i] 后, 就不需要包含 peole[i] 中任何元素了
+* 去最小值，即 dfs(i, j) = min(dfs(i - 1, j), dfs(i - 1, j \ peple[i]) + 1)
+
+"""
+
+
 class Solution:
     def smallestSufficientTeam(
         self, req_skills: List[str], people: List[List[str]]
