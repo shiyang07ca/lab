@@ -1,0 +1,21 @@
+# leetgo project level config, global config is at /Users/iceyasha/.config/leetgo/config.yaml
+# for more details, please refer to https://github.com/j178/leetgo
+language: zh
+code:
+  lang: go
+  python3:
+    out_dir: python
+    # Overrides the default code.filename_template
+    filename_template: ""
+    # Python executable to run the generated code
+    executable: python3
+leetcode:
+  site: https://leetcode.cn
+#  credentials:
+#    from: browser
+editor:
+  use: custom
+  # command: emacs
+  # args: [-nw, -l, ~/.emacs.d/init-mini.el]
+  command: emacsclient
+  args: [-a, "", -nw]
