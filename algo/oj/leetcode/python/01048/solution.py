@@ -85,6 +85,24 @@ class Solution:
 
         return max([dfs(i) for i in range(len(ws))])
 
+    # 作者：灵茶山艾府
+    # 链接：https://leetcode.cn/problems/longest-string-chain/solutions/2247269/jiao-ni-yi-bu-bu-si-kao-dong-tai-gui-hua-wdkm/
+    # 来源：力扣（LeetCode）
+    # 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+    def longestStrChain(self, words: List[str]) -> int:
+        ws = set(words)
+
+        @cache  # 缓存装饰器，避免重复计算 dfs 的结果
+        def dfs(s: str) -> int:
+            res = 0
+            for i in range(len(s)):  # 枚举去掉 s[i]
+                t = s[:i] + s[i + 1 :]
+                if t in ws:  # t 在 words 中
+                    res = max(res, dfs(t))
+            return res + 1
+
+        return max(dfs(s) for s in ws)
+
 
 # @lc code=end
 
