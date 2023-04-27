@@ -59,8 +59,9 @@ from leetgo_py import *
 
 from itertools import accumulate
 
+
 class Solution:
-    def maxSumTwoNoOverlap(self, nums: List[int], a: int, b: int) -> int:
+    def maxSumTwoNoOverlap1(self, nums: List[int], a: int, b: int) -> int:
         nums = list(accumulate(nums, initial=0))
         ans = 0
         n = len(nums)
@@ -82,6 +83,25 @@ class Solution:
                     break
                 da = nums[j + a] - nums[j]
                 ans = max(ans, da + db)
+        return ans
+
+    # 作者：灵茶山艾府
+    # 链接：https://leetcode.cn/problems/maximum-sum-of-two-non-overlapping-subarrays/solutions/2245647/tu-jie-mei-you-si-lu-yi-zhang-tu-miao-do-3lli/
+    # 来源：力扣（LeetCode）
+    # 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+    def maxSumTwoNoOverlap(self, nums: List[int], firstLen: int, secondLen: int) -> int:
+        s = list(accumulate(nums, initial=0))  # nums 的前缀和
+        ans = 0
+
+        def f(firstLen: int, secondLen: int) -> None:
+            nonlocal ans
+            maxSumA = 0
+            for i in range(firstLen + secondLen, len(s)):
+                maxSumA = max(maxSumA, s[i - secondLen] - s[i - secondLen - firstLen])
+                ans = max(ans, maxSumA + s[i] - s[i - secondLen])
+
+        f(firstLen, secondLen)  # 左 a 右 b
+        f(secondLen, firstLen)  # 左 b 右 a
         return ans
 
 
