@@ -36,9 +36,30 @@ from leetgo_py import *
 
 # @lc code=begin
 
+
 class Solution:
-    def lastSubstring(self, s: str) -> str:
+    def lastSubstring1(self, s: str) -> str:
         return max(s[i:] for i in range(len(s)))
+
+    # 作者：ylb
+    # 链接：https://leetcode.cn/problems/last-substring-in-lexicographical-order/solutions/2242562/python3javacgotypescript-yi-ti-yi-jie-sh-3amj/
+    # 来源：力扣（LeetCode）
+    # 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+    def lastSubstring(self, s: str) -> str:
+        i, j, k = 0, 1, 0
+        while j + k < len(s):
+            if s[i + k] == s[j + k]:
+                k += 1
+            elif s[i + k] < s[j + k]:
+                i += k + 1
+                k = 0
+                if i >= j:
+                    j = i + 1
+            else:
+                j += k + 1
+                k = 0
+        return s[i:]
+
 
 # @lc code=end
 

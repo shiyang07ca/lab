@@ -86,9 +86,8 @@ class Solution:
                 if d not in max_len:
                     max_len[d] = dfs(j).get(d, 1) + 1
             return max_len
+
         return max(max(dfs(i).values()) for i in range(1, len(a)))
-
-
 
 
 # @lc code=end
