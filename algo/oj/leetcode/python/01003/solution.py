@@ -67,6 +67,26 @@ class Solution:
             s = s[:i] + s[i + 3 :]
         return True
 
+    """
+    作者：灵茶山艾府
+    链接：https://leetcode.cn/problems/check-if-word-is-valid-after-substitutions/solutions/2253773/zhan-jian-ji-xie-fa-pythonjavacgo-by-end-i9o7/
+
+    * 字符a：直接入栈
+    * 字符b：如果栈为空，或者栈顶不为 a，则返回 false，否则将栈顶修改为b
+    * 字符c：如果栈为空，或者栈顶不为 b，则返回 false，否则弹出栈顶（相当于找到了一个 abc）
+
+    循环结束后，如果栈为空，则返回 true，否则返回 false
+    """
+
+    def isValid(self, s: str) -> bool:
+        st = []
+        for c in map(ord, s):
+            if c > ord("a") and (len(st) == 0 or c - st.pop() != 1):
+                return False
+            if c < ord("c"):
+                st.append(c)
+        return len(st) == 0
+
 
 # @lc code=end
 
