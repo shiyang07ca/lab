@@ -50,6 +50,9 @@ from leetgo_py import *
 
 # @lc code=begin
 
+# template
+# tag: dp, knapsack
+
 
 class Solution:
     # 记忆化搜索
