@@ -20,7 +20,7 @@ def add():
 
 
 def main():
-    print(f'before: {cnt}')
+    print(f"before: {cnt}")
 
     threads = []
 
@@ -33,9 +33,9 @@ def main():
     for thread in threads:
         thread.join()
 
-    print(f'after: {cnt}')
-    print(f'after: {len(lst)}')
+    print(f"after: {cnt}")
+    print(f"after: {len(lst)}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
