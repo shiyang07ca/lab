@@ -1,8 +1,10 @@
 # leetgo project level config, global config is at /Users/iceyasha/.config/leetgo/config.yaml
 # for more details, please refer to https://github.com/j178/leetgo
+author: shiyang07ca
 language: zh
 code:
   lang: go
+  filename_template: '{{ .Id | padWithZero 5 }}'
   python3:
     out_dir: python
     # Overrides the default code.filename_template
@@ -11,6 +13,8 @@ code:
     executable: python3
 leetcode:
   site: https://leetcode.cn
+  credentials:
+    from: cookies
 #  credentials:
 #    from: browser
 editor:
