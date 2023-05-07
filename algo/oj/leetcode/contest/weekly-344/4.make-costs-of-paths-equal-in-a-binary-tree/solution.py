@@ -69,6 +69,7 @@ from leetgo_py import *
 
 # TODO
 # tag: greedy
+# 树上贪心
 
 
 class Solution:
