@@ -79,6 +79,61 @@ class Solution:
         return max(dfs(i, 0) for i in range(0, m))
 
 
+"""
+作者：灵茶山艾府
+链接：https://leetcode.cn/problems/maximum-number-of-moves-in-a-grid/solutions/2269244/cong-ji-yi-hua-sou-suo-dao-di-tui-by-end-pgq3/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+"""
+
+
+class Solution:
+    def maxMoves(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+
+        @cache
+        def dfs(i: int, j: int) -> int:
+            if j == n - 1:
+                return 0
+            res = 0
+            for k in i - 1, i, i + 1:
+                if 0 <= k < m and grid[k][j + 1] > grid[i][j]:
+                    res = max(res, dfs(k, j + 1) + 1)
+            return res
+
+        return max(dfs(i, 0) for i in range(m))
+
+
+class Solution:
+    def maxMoves(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        f = [[0] * n for _ in range(m)]
+        for j in range(n - 2, -1, -1):
+            for i, row in enumerate(grid):
+                for k in i - 1, i, i + 1:
+                    if 0 <= k < m and grid[k][j + 1] > row[j]:
+                        f[i][j] = max(f[i][j], f[k][j + 1] + 1)
+        return max(row[0] for row in f)
+
+
+class Solution:
+    def maxMoves(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        q = range(m)
+        vis = [-1] * m
+        for j in range(n - 1):
+            tmp = q
+            q = []
+            for i in tmp:
+                for k in i - 1, i, i + 1:
+                    if 0 <= k < m and vis[k] != j and grid[k][j + 1] > grid[i][j]:
+                        vis[k] = j  # 时间戳标记，避免重复创建 vis 数组
+                        q.append(k)
+            if len(q) == 0:
+                return j
+        return n - 1
+
+
 # @lc code=end
 
 if __name__ == "__main__":
