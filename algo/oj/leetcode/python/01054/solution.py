@@ -41,7 +41,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def rearrangeBarcodes(self, barcodes: List[int]) -> List[int]:
+    def rearrangeBarcodes1(self, barcodes: List[int]) -> List[int]:
         cnt = Counter(barcodes)
         ans = []
         h = [(-c, n) for n, c in cnt.items()]
@@ -57,6 +57,19 @@ class Solution:
             if c1 != -1:
                 heappush(h, (c1 + 1, n1))
 
+        return ans
+
+    # 作者：ylb
+    # 链接：https://leetcode.cn/problems/distant-barcodes/solutions/2268959/python3javacgotypescript-yi-ti-yi-jie-ji-3or2/
+    # 来源：力扣（LeetCode）
+    # 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+    def rearrangeBarcodes(self, barcodes: List[int]) -> List[int]:
+        cnt = Counter(barcodes)
+        barcodes.sort(key=lambda x: (-cnt[x], x))
+        n = len(barcodes)
+        ans = [0] * len(barcodes)
+        ans[::2] = barcodes[: (n + 1) // 2]
+        ans[1::2] = barcodes[(n + 1) // 2 :]
         return ans
 
 
