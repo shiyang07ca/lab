@@ -41,8 +41,12 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#define DICT_OK 0
-#define DICT_ERR 1
+
+/*
+ * 字典的操作状态
+ */
+#define DICT_OK 0   // 操作成功
+#define DICT_ERR 1  // 操作失败（或出错）
 
 typedef struct dictEntry dictEntry; /* opaque */
 
