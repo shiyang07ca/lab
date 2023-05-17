@@ -114,6 +114,7 @@ class Solution:
 
         return dfs(d - 1, n - 1)
 
+    # TODO：
     def minDifficulty(self, a: List[int], d: int) -> int:
         n = len(a)
         if n < d:
