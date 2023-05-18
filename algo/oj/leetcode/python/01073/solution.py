@@ -52,7 +52,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def addNegabinary(self, arr1: List[int], arr2: List[int]) -> List[int]:
+    def addNegabinary1(self, arr1: List[int], arr2: List[int]) -> List[int]:
         def baseNeg2(n: int) -> List[int]:
             if n == 0:
                 return [0]
@@ -67,6 +67,35 @@ class Solution:
             return sum((-2) ** (len(arr) - i - 1) for i, n in enumerate(arr) if n)
 
         return baseNeg2(int(to10(arr1) + to10(arr2)))
+
+    # 链接：https://leetcode.cn/problems/adding-two-negabinary-numbers/solutions/2273578/fu-er-jin-zhi-shu-xiang-jia-by-leetcode-nwktq/
+    def addNegabinary(self, arr1: List[int], arr2: List[int]) -> List[int]:
+        i, j = len(arr1) - 1, len(arr2) - 1
+        carry = 0
+        ans = list()
+
+        while i >= 0 or j >= 0 or carry:
+            x = carry
+            if i >= 0:
+                x += arr1[i]
+            if j >= 0:
+                x += arr2[j]
+
+            if x >= 2:
+                ans.append(x - 2)
+                carry = -1
+            elif x >= 0:
+                ans.append(x)
+                carry = 0
+            else:
+                ans.append(1)
+                carry = 1
+            i -= 1
+            j -= 1
+
+        while len(ans) > 1 and ans[-1] == 0:
+            ans.pop()
+        return ans[::-1]
 
 
 # @lc code=end
