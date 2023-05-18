@@ -63,7 +63,7 @@ class Solution:
             else:
                 return baseNeg2(n // -2) + [0]
 
-        def to10(arr):
+        def to10(arr: List[int]) -> List[int]:
             return sum((-2) ** (len(arr) - i - 1) for i, n in enumerate(arr) if n)
 
         return baseNeg2(int(to10(arr1) + to10(arr2)))
