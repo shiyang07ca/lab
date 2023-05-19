@@ -63,6 +63,7 @@ class Solution:
             dfs(c)
         return len(cnt)
 
+    # tag: dp
     # TODO:
     # 链接：https://leetcode.cn/problems/letter-tile-possibilities/solutions/2275356/on2-ji-shu-dppythonjavacgo-by-endlessche-hmez/
     def numTilePossibilities(self, tiles: str) -> int:
