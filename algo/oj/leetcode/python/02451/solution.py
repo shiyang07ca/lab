@@ -65,12 +65,11 @@ class Solution:
         for w in words:
             d = tuple(diff(w))
             if d in cnt:
-                cnt[d][0] += 1
-                cnt[d][1].append(w)
+                cnt[d].append(w)
             else:
-                cnt[d] = [1, [w]]
-        for c, ws in cnt.values():
-            if c == 1:
+                cnt[d] = [w]
+        for ws in cnt.values():
+            if len(ws) == 1:
                 return ws[0]
 
 
