@@ -38,7 +38,6 @@
 """
 from functools import *
 
-
 from typing import *
 from leetgo_py import *
 
