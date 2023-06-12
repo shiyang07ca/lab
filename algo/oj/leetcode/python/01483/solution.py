@@ -51,12 +51,9 @@ from leetgo_py import *
 # @lc code=begin
 
 # TODO
-# tag: LCA，树上倍增
+# tag: 树上倍增
 
-# 作者：灵茶山艾府
 # 链接：https://leetcode.cn/problems/kth-ancestor-of-a-tree-node/solutions/2305895/mo-ban-jiang-jie-shu-shang-bei-zeng-suan-v3rw/
-# 来源：力扣（LeetCode）
-# 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 class TreeAncestor:
     def __init__(self, n: int, parent: List[int]):
         m = n.bit_length() - 1
