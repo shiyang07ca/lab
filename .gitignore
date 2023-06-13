@@ -124,3 +124,6 @@ system/server/yolanda/CMakeFiles/*
 system/server/yolanda/Makefile
 system/server/yolanda/cmake_install.cmake
 system/server/yolanda/.vscode/*
+
+# pdmm
+.pdm-python
