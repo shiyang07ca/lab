@@ -69,8 +69,9 @@ dependencies = [
     "zipp==3.13.0",
     "pytest",
     "feedparser>=6.0.10",
+    "google-api-python-client>=2.89.0",
 ]
-requires-python = ">=3.10,<3.11"
+requires-python = ">=3.9"
 
 [build-system]
 requires = ["pdm-backend"]
