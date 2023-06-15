@@ -95,6 +95,18 @@ class Solution:
             ans.append(m // 2 <= k)
         return ans
 
+    def canMakePaliQueries4(self, s: str, queries: List[List[int]]) -> List[bool]:
+        sum = [0]
+        for c in s:
+            bit = 1 << (ord(c) - ord("a"))
+            sum.append(sum[-1] ^ bit)  # 该比特对应字母的奇偶性：奇数变偶数，偶数变奇数
+
+        ans = []
+        for left, right, k in queries:
+            m = (sum[left] ^ sum[right + 1]).bit_count()
+            ans.append(m // 2 <= k)
+        return ans
+
 
 # @lc code=end
 
