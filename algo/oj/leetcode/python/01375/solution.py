@@ -57,13 +57,21 @@ from leetgo_py import *
 
 
 class Solution:
-    def numTimesAllBlue(self, flips: List[int]) -> int:
+    def numTimesAllBlue1(self, flips: List[int]) -> int:
         ans = 0
         t = 0
         for i, p in enumerate(flips, 1):
             t += 1 << (p - 1)
             if t == (1 << i) - 1:
                 ans += 1
+        return ans
+
+    # 链接：https://leetcode.cn/problems/number-of-times-binary-string-is-prefix-aligned/solutions/2308336/qiao-miao-li-yong-xing-zhi-wei-hu-zui-da-79yx/
+    def numTimesAllBlue(self, flips: List[int]) -> int:
+        ans = mx = 0
+        for i, x in enumerate(flips, 1):  # i 从 1 开始
+            mx = max(mx, x)
+            ans += mx == i
         return ans
 
 
