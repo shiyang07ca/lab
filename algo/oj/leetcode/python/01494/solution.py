@@ -87,7 +87,7 @@ class Solution:
             if i == 0:  # 空集
                 return 0
             ci = u ^ i  # i 的补集
-            i1 = 0
+            i1 = 0  # i1 表示可以学的课程
             for j, p in enumerate(pre1):
                 if i >> j & 1 and p | ci == ci:  # p 在 i 的补集中，可以学（否则这学期一定不能学）
                     i1 |= 1 << j
