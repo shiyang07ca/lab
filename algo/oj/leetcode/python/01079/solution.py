@@ -45,6 +45,8 @@ from leetgo_py import *
 
 # @lc code=begin
 
+# tag: dp
+# TODO:
 
 class Solution:
     def numTilePossibilities1(self, tiles: str) -> int:
@@ -63,8 +65,6 @@ class Solution:
             dfs(c)
         return len(cnt)
 
-    # tag: dp
-    # TODO:
     # 链接：https://leetcode.cn/problems/letter-tile-possibilities/solutions/2275356/on2-ji-shu-dppythonjavacgo-by-endlessche-hmez/
     # 定义 f[i][j] 表示用前 i 种字符构造长为 j 的序列的方案数
     def numTilePossibilities(self, tiles: str) -> int:
