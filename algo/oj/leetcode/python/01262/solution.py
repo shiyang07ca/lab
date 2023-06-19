@@ -95,7 +95,7 @@ class Solution:
     # 链接：https://leetcode.cn/problems/greatest-sum-divisible-by-three/solutions/2313700/liang-chong-suan-fa-tan-xin-dong-tai-gui-tsll/
     def maxSumDivThree(self, nums: List[int]) -> int:
         """
-        定义 dfs(i, j) 表示 nums[0] 到 nums[i] 中选数，已选数字之和 s mod 3 = j 的最大值
+        定义 dfs(i, j) 表示 nums[0] 到 nums[i] 中选数，已选数字之和 mod 3 = j 的最大值
         则有：dfs(i, j) = max(dfs(i - 1, j),  不选 x
                               dfs(i - 1, (j + x) mod 3) + x,  选 x
         递归边界：dfs(−1,0)=0, dfs(−1,1)=−∞, dfs(−1,2)=−∞
