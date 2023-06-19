@@ -50,7 +50,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def maxSumDivThree(self, nums: List[int]) -> int:
+    def maxSumDivThree1(self, nums: List[int]) -> int:
         ans = sum(nums)
         a1, a2 = [], []
         for n in nums:
@@ -77,6 +77,37 @@ class Solution:
             ans -= min(t0, t1)
 
         return ans
+
+    # 链接：https://leetcode.cn/problems/greatest-sum-divisible-by-three/solutions/2313700/liang-chong-suan-fa-tan-xin-dong-tai-gui-tsll/
+    def maxSumDivThree2(self, nums: List[int]) -> int:
+        s = sum(nums)
+        if s % 3 == 0:
+            return s
+        a1 = sorted(x for x in nums if x % 3 == 1)
+        a2 = sorted(x for x in nums if x % 3 == 2)
+        if s % 3 == 2:
+            a1, a2 = a2, a1
+        ans = s - a1[0] if a1 else 0
+        if len(a2) > 1:
+            ans = max(ans, s - a2[0] - a2[1])
+        return ans
+
+    # 链接：https://leetcode.cn/problems/greatest-sum-divisible-by-three/solutions/2313700/liang-chong-suan-fa-tan-xin-dong-tai-gui-tsll/
+    def maxSumDivThree(self, nums: List[int]) -> int:
+        """
+        定义 dfs(i, j) 表示 nums[0] 到 nums[i] 中选数，已选数字之和 s mod 3 = j 的最大值
+        则有：dfs(i, j) = max(dfs(i - 1, j),  不选 x
+                              dfs(i - 1, (j + x) mod 3) + x,  选 x
+        递归边界：dfs(−1,0)=0, dfs(−1,1)=−∞, dfs(−1,2)=−∞
+        """
+
+        @cache
+        def dfs(i: int, j: int) -> int:
+            if i < 0:
+                return -inf if j else 0
+            return max(dfs(i - 1, j), dfs(i - 1, (j + nums[i]) % 3) + nums[i])
+
+        return dfs(len(nums) - 1, 0)
 
 
 # @lc code=end
