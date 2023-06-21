@@ -75,7 +75,9 @@ from leetgo_py import *
 # 来源：力扣（LeetCode）
 # 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 class Solution:
-    def connectTwoGroups(self, cost: List[List[int]]) -> int:
+    # 定义 dfs(i, j) 表示第一组 0,1,...,i 和第二组中的 0,1,...,m-1 相连，且第二组的集合
+    # j 未被连接时，最小成本是多少
+    def connectTwoGroups1(self, cost: List[List[int]]) -> int:
         n, m = len(cost), len(cost[0])
         min_cost = [min(col) for col in zip(*cost)]  # 每一列的最小值
 
@@ -88,6 +90,22 @@ class Solution:
             )  # 第一组的点 i 与第二组的点 k
 
         return dfs(n - 1, (1 << m) - 1)
+
+    # 递推
+    def connectTwoGroups(self, cost: List[List[int]]) -> int:
+        n, m = len(cost), len(cost[0])
+        min_cost = [min(col) for col in zip(*cost)]  # 每一列的最小值
+
+        f = [[0] * (1 << m) for _ in range(n + 1)]
+        for j in range(1 << m):
+            f[0][j] = sum(c for k, c in enumerate(min_cost) if j >> k & 1)
+
+        for i, row in enumerate(cost):
+            for j in range(1 << m):
+                f[i + 1][j] = min(
+                    f[i][j & ~(1 << k)] + c for k, c in enumerate(row)
+                )  # 第一组的点 i 与第二组的点 k
+        return f[n][-1]
 
 
 # @lc code=end
