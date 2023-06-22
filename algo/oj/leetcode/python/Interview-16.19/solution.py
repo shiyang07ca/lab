@@ -33,9 +33,12 @@ from leetgo_py import *
 
 # @lc code=begin
 
+# tag: dfs, bfs
+
 
 class Solution:
-    def pondSizes(self, land: List[List[int]]) -> List[int]:
+    # bfs
+    def pondSizes1(self, land: List[List[int]]) -> List[int]:
         def bfs(i, j):
             if land[i][j] != 0:
                 return 0
@@ -62,6 +65,29 @@ class Solution:
                 if res := bfs(i, j):
                     ans.append(res)
         return sorted(ans)
+
+    # dfs
+    # 链接：https://leetcode.cn/problems/pond-sizes-lcci/solutions/2316704/mo-ban-wang-ge-tu-dfsfu-ti-dan-by-endles-p0n1/class Solution:
+    def pondSizes(self, land: List[List[int]]) -> List[int]:
+        m, n = len(land), len(land[0])
+
+        def dfs(x: int, y: int) -> int:
+            land[x][y] = 1  # 标记 (x,y) 被访问，避免重复访问
+            cnt0 = 1
+            # 访问八方向的 0
+            for i in range(x - 1, x + 2):
+                for j in range(y - 1, y + 2):
+                    if 0 <= i < m and 0 <= j < n and land[i][j] == 0:
+                        cnt0 += dfs(i, j)
+            return cnt0
+
+        ans = []
+        for i, row in enumerate(land):
+            for j, x in enumerate(row):
+                if x == 0:  # 从没有访问过的 0 出发
+                    ans.append(dfs(i, j))
+        ans.sort()
+        return ans
 
 
 # @lc code=end
