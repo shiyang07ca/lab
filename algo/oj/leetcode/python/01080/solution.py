@@ -54,6 +54,7 @@ from leetgo_py import *
 
 # @lc code=begin
 
+
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
