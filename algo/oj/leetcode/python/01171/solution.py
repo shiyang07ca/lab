@@ -63,6 +63,7 @@ from leetgo_py import *
 #         self.val = val
 #         self.next = next
 
+
 # 链接：https://leetcode.cn/problems/remove-zero-sum-consecutive-nodes-from-linked-list/solutions/2304678/python3javacgotypescript-yi-ti-yi-jie-qi-3vsy/
 class Solution:
     def removeZeroSumSublists(self, head: Optional[ListNode]) -> Optional[ListNode]:
