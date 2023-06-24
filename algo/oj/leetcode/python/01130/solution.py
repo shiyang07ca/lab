@@ -53,7 +53,7 @@ from leetgo_py import *
 
 # 链接：https://leetcode.cn/problems/minimum-cost-tree-from-leaf-values/solutions/2290549/python3javacgotypescript-yi-ti-shuang-ji-qpwv/
 class Solution:
-    def mctFromLeafValues(self, arr: List[int]) -> int:
+    def mctFromLeafValues1(self, arr: List[int]) -> int:
         @cache
         def dfs(i: int, j: int) -> Tuple:
             if i == j:
@@ -69,6 +69,24 @@ class Solution:
             return s, mx
 
         return dfs(0, len(arr) - 1)[0]
+
+    def mctFromLeafValues(self, arr: List[int]) -> int:
+        @cache
+        def dfs(i: int, j: int) -> int:
+            if i == j:
+                return 0
+            return min(
+                dfs(i, k) + dfs(k + 1, j) + g[i][k] * g[k + 1][j] for k in range(i, j)
+            )
+
+        n = len(arr)
+        # 使用数组 g 记录 arr 中下表范围 [i, j] 内的所有叶节点最大值
+        g = [[0] * n for _ in range(n)]
+        for i in range(n - 1, -1, -1):
+            g[i][i] = arr[i]
+            for j in range(i + 1, n):
+                g[i][j] = max(g[i][j - 1], arr[j])
+        return dfs(0, n - 1)
 
 
 # @lc code=end
