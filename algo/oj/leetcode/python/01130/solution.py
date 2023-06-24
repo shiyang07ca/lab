@@ -50,6 +50,7 @@ from leetgo_py import *
 # TODO
 # tag: dp
 
+
 # 链接：https://leetcode.cn/problems/minimum-cost-tree-from-leaf-values/solutions/2290549/python3javacgotypescript-yi-ti-shuang-ji-qpwv/
 class Solution:
     def mctFromLeafValues(self, arr: List[int]) -> int:
