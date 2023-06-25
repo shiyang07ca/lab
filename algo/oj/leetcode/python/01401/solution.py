@@ -64,7 +64,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def checkOverlap(
+    def checkOverlap1(
         self,
         radius: int,
         xCenter: int,
@@ -98,6 +98,26 @@ class Solution:
             return abs(yCenter - y2) <= radius
 
         return False
+
+    # 链接：https://leetcode.cn/problems/circle-and-rectangle-overlapping/solutions/2319357/python3javacgotypescript-yi-ti-yi-jie-sh-vpsu/
+    def checkOverlap(
+        self,
+        radius: int,
+        xCenter: int,
+        yCenter: int,
+        x1: int,
+        y1: int,
+        x2: int,
+        y2: int,
+    ) -> bool:
+        def f(i: int, j: int, k: int) -> int:
+            if i <= k <= j:
+                return 0
+            return i - k if k < i else k - j
+
+        a = f(x1, x2, xCenter)
+        b = f(y1, y2, yCenter)
+        return a * a + b * b <= radius * radius
 
 
 # @lc code=end
