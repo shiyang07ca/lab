@@ -58,9 +58,10 @@ from leetgo_py import *
 
 # TODO
 
+
 # 链接：https://leetcode.cn/problems/number-of-closed-islands/solutions/2312631/python3javacgotypescript-yi-ti-shuang-ji-ttoe/
 class Solution:
-    def closedIsland(self, grid: List[List[int]]) -> int:
+    def closedIsland1(self, grid: List[List[int]]) -> int:
         def dfs(i: int, j: int) -> int:
             res = int(0 < i < m - 1 and 0 < j < n - 1)
             grid[i][j] = 1
@@ -73,6 +74,35 @@ class Solution:
         m, n = len(grid), len(grid[0])
         dirs = (-1, 0, 1, 0, -1)
         return sum(grid[i][j] == 0 and dfs(i, j) for i in range(m) for j in range(n))
+
+    # 链接：https://leetcode.cn/problems/number-of-closed-islands/solutions/2312616/liang-chong-si-lu-xian-wai-hou-nei-chu-j-b1e4/
+    def closedIsland(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        if m < 3 or n < 3:
+            return 0
+
+        def dfs(x: int, y: int) -> None:
+            grid[x][y] = 1  # 标记 (x,y) 被访问，避免重复访问
+            # 访问四方向的 0
+            for i, j in (x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1):
+                if 0 <= i < m and 0 <= j < n and grid[i][j] == 0:
+                    dfs(i, j)
+
+        for i in range(m):
+            # 如果是第一行和最后一行，访问所有格子
+            # 如果不是，只访问第一列和最后一列的格子
+            step = 1 if i == 0 or i == m - 1 else n - 1
+            for j in range(0, n, step):
+                if grid[i][j] == 0:  # 从没有访问过的 0 出发
+                    dfs(i, j)
+
+        ans = 0
+        for i in range(1, m - 1):
+            for j in range(1, n - 1):
+                if grid[i][j] == 0:  # 从没有访问过的 0 出发
+                    ans += 1  # 一定是封闭岛屿
+                    dfs(i, j)
+        return ans
 
 
 # @lc code=end
