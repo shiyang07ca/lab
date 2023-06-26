@@ -76,7 +76,7 @@ class Solution:
         return sum(grid[i][j] == 0 and dfs(i, j) for i in range(m) for j in range(n))
 
     # 链接：https://leetcode.cn/problems/number-of-closed-islands/solutions/2312616/liang-chong-si-lu-xian-wai-hou-nei-chu-j-b1e4/
-    def closedIsland(self, grid: List[List[int]]) -> int:
+    def closedIsland2(self, grid: List[List[int]]) -> int:
         m, n = len(grid), len(grid[0])
         if m < 3 or n < 3:
             return 0
@@ -102,6 +102,30 @@ class Solution:
                 if grid[i][j] == 0:  # 从没有访问过的 0 出发
                     ans += 1  # 一定是封闭岛屿
                     dfs(i, j)
+        return ans
+
+    def closedIsland(self, grid: List[List[int]]) -> int:
+        m, n = len(grid), len(grid[0])
+        if m < 3 or n < 3:
+            return 0
+
+        def dfs(x: int, y: int) -> None:
+            if x == 0 or x == m - 1 or y == 0 or y == n - 1:  # 边界
+                nonlocal closed
+                closed = False  # 不是封闭岛屿
+            grid[x][y] = 1  # 标记 (x,y) 被访问，避免重复访问
+            # 访问四方向的 0
+            for i, j in (x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1):
+                if 0 <= i < m and 0 <= j < n and grid[i][j] == 0:
+                    dfs(i, j)
+
+        ans = 0
+        for i in range(1, m - 1):
+            for j in range(1, n - 1):
+                if grid[i][j] == 0:  # 从没有访问过的 0 出发
+                    closed = True
+                    dfs(i, j)
+                    ans += closed
         return ans
 
 
