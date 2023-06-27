@@ -43,11 +43,12 @@ from leetgo_py import *
 
 # @lc code=begin
 
-# 作者：ylb
-# 链接：https://leetcode.cn/problems/reverse-subarray-to-maximize-array-value/solutions/2266682/python3javacgotypescript-yi-ti-yi-jie-fe-3ygf/
-# 来源：力扣（LeetCode）
-# 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+# TODO
+# tag: math
+
+
 class Solution:
+    # https://leetcode.cn/problems/reverse-subarray-to-maximize-array-value/solutions/2266682/python3javacgotypescript-yi-ti-yi-jie-fe-3ygf/
     def maxValueAfterReverse(self, nums: List[int]) -> int:
         ans = s = sum(abs(x - y) for x, y in pairwise(nums))
         for x, y in pairwise(nums):
