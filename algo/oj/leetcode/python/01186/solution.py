@@ -55,7 +55,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def maximumSum(self, arr: List[int]) -> int:
+    def maximumSum1(self, arr: List[int]) -> int:
         n = len(arr)
         f1 = [0] * (n + 1)
         f2 = [0] * (n + 1)
@@ -71,6 +71,19 @@ class Solution:
             ans = max(ans, f1[i] + f2[i + 1])
 
         return ans
+
+    # 链接：https://leetcode.cn/problems/maximum-subarray-sum-with-one-deletion/solutions/2321829/jiao-ni-yi-bu-bu-si-kao-dong-tai-gui-hua-hzz6/
+    def maximumSum(self, arr: List[int]) -> int:
+        # 定义 dfs(i,j) 表示子数组的右端点是 arr[i]，不能/必须删除数字的情况下，子数组元素和的最大值。
+        @cache
+        def dfs(i: int, j: int) -> int:
+            if i < 0:
+                return -inf  # 子数组至少要有一个数，不合法
+            if j == 0:
+                return max(dfs(i - 1, 0), 0) + arr[i]
+            return max(dfs(i - 1, 1) + arr[i], dfs(i - 1, 0))
+
+        return max(max(dfs(i, 0), dfs(i, 1)) for i in range(len(arr)))
 
 
 # @lc code=end
