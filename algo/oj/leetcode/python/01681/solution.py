@@ -71,6 +71,7 @@ class Solution:
         size = n // k
         a.sort()  # 排序，便于判断重复
 
+        # left 表示还剩下待选择的数的集合，pre 表示上一个选了哪个数
         @cache
         def dfs(left: int, pre: int) -> int:
             if left == 0:
@@ -80,13 +81,13 @@ class Solution:
                 return dfs(left ^ lb, lb.bit_length() - 1)
             res = inf
             last = a[pre]
-            for i in range(pre + 1, n):  # 枚举这个组的下一个数
+            for i in range(pre + 1, n):  # 枚举这个组的下一个要选的数
                 if left >> i & 1 and a[i] != last:  # 组内不能有重复数字，且 a 中重复数字只需枚举一次
                     last = a[i]
                     res = min(res, last - a[pre] + dfs(left ^ (1 << i), i))
             return res
 
-        return dfs((1 << n) - 2, 0)
+        return dfs((1 << n) - 1, 0)
 
 
 # @lc code=end
