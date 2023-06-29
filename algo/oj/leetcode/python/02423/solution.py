@@ -50,6 +50,7 @@ from collections import *
 
 # @lc code=begin
 
+
 # 作者：灵茶山艾府
 # 链接：https://leetcode.cn/problems/remove-letter-to-equalize-frequency/solutions/2249734/liang-chong-fang-fa-bao-li-fen-lei-tao-l-crt9/
 # 来源：力扣（LeetCode）
