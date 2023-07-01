@@ -77,6 +77,11 @@ from leetgo_py import *
 class Solution:
     # 定义 dfs(i, j) 表示第一组 0,1,...,i 和第二组中的 0,1,...,m-1 相连，且第二组的集合
     # j 未被连接时，最小成本是多少
+    # 枚举第一组的点 i 和第二组的 0，1，，，，，m-1 其中一个点先练，取最小值，即
+    #                dfs(i, j) = min(dfs(i - 1, j \ {k}) + cost[i][k]), 0<=k<=m-1
+    # 其中 j\{k} 表示集合 j 中去掉元素 k 后的集合。
+    # 递归边界：设第二组的点 x 与第一组的点连接时，最小成本是 minCost[x], 那么有
+    #                dfs(-1, j) = sum(minCost[k])
     def connectTwoGroups1(self, cost: List[List[int]]) -> int:
         n, m = len(cost), len(cost[0])
         min_cost = [min(col) for col in zip(*cost)]  # 每一列的最小值
@@ -92,6 +97,8 @@ class Solution:
         return dfs(n - 1, (1 << m) - 1)
 
     # 递推
+    # f[i+1][j] = min(f[i][j\{k] + cost[i][k]), 0<=k<=m-1
+    # 初始值 f[0][j] = sum(minCost[k])
     def connectTwoGroups(self, cost: List[List[int]]) -> int:
         n, m = len(cost), len(cost[0])
         min_cost = [min(col) for col in zip(*cost)]  # 每一列的最小值
