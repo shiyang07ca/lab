@@ -9,7 +9,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def minFallingPathSum(self, matrix: List[List[int]]) -> int:
+    def minFallingPathSum1(self, matrix: List[List[int]]) -> int:
         n = len(matrix)
         if n == 1:
             return min(matrix[0])
@@ -25,6 +25,23 @@ class Solution:
                     new[j] = x + min(pre[j - 1], pre[j], pre[j + 1])
             pre = new
         return min(pre)
+
+    # 链接：https://leetcode.cn/problems/minimum-falling-path-sum/solutions/2341851/cong-di-gui-dao-di-tui-jiao-ni-yi-bu-bu-2cwkb/
+    def minFallingPathSum(self, matrix: List[List[int]]) -> int:
+        n = len(matrix)
+
+        # dfs(r, c) 表示从 matrix[r][c] 出发，向上走到第一行的最小路径和
+        @cache  # 记忆化搜索
+        def dfs(r: int, c: int) -> int:
+            if c < 0 or c >= n:  # 出界
+                return inf
+            if r == 0:  # 到达第一行
+                return matrix[0][c]
+            return (
+                min(dfs(r - 1, c - 1), dfs(r - 1, c), dfs(r - 1, c + 1)) + matrix[r][c]
+            )
+
+        return min(dfs(n - 1, i) for i in range(n))  # 枚举起点，取最小值
 
 
 # @lc code=end
