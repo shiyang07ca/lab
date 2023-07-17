@@ -7,6 +7,8 @@ from leetgo_py import *
 
 # @lc code=begin
 
+# tag: dp
+
 
 class Solution:
     def minFallingPathSum1(self, matrix: List[List[int]]) -> int:
@@ -27,7 +29,8 @@ class Solution:
         return min(pre)
 
     # 链接：https://leetcode.cn/problems/minimum-falling-path-sum/solutions/2341851/cong-di-gui-dao-di-tui-jiao-ni-yi-bu-bu-2cwkb/
-    def minFallingPathSum(self, matrix: List[List[int]]) -> int:
+    # 记忆化搜索
+    def minFallingPathSum2(self, matrix: List[List[int]]) -> int:
         n = len(matrix)
 
         # dfs(r, c) 表示从 matrix[r][c] 出发，向上走到第一行的最小路径和
@@ -42,6 +45,18 @@ class Solution:
             )
 
         return min(dfs(n - 1, i) for i in range(n))  # 枚举起点，取最小值
+
+    # 递推
+    def minFallingPathSum(self, matrix: List[List[int]]) -> int:
+        n = len(matrix)
+        f = [[inf] * (n + 2) for _ in range(n)]
+        f[0][1 : n + 1] = matrix[0]
+        for r in range(1, n):
+            for c in range(n):
+                f[r][c + 1] = (
+                    min(f[r - 1][c], f[r - 1][c + 1], f[r - 1][c + 2]) + matrix[r][c]
+                )
+        return min(f[-1])
 
 
 # @lc code=end
