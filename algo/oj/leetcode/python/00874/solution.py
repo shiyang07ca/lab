@@ -11,7 +11,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def robotSim1(self, commands: List[int], obstacles: List[List[int]]) -> int:
+    def robotSim(self, commands: List[int], obstacles: List[List[int]]) -> int:
         ans = d = 0
         ds = [(0, 1), (1, 0), (0, -1), (-1, 0)]
         cur = [0, 0]
@@ -46,11 +46,10 @@ class Solution:
                     else:
                         cur[0] = x + dx * c
             ans = max(ans, cur[0] ** 2 + cur[1] ** 2)
-            print(cur)
         return ans
 
     # 链接：https://leetcode.cn/problems/walking-robot-simulation/solutions/2349712/python3javacgotypescript-yi-ti-yi-jie-ha-ghjx/
-    def robotSim(self, commands: List[int], obstacles: List[List[int]]) -> int:
+    def robotSim2(self, commands: List[int], obstacles: List[List[int]]) -> int:
         dirs = (0, 1, 0, -1, 0)
         s = {(x, y) for x, y in obstacles}
         ans = k = 0
