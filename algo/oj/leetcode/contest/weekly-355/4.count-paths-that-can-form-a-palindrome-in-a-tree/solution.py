@@ -71,6 +71,26 @@ class Solution:
         dfs(0, 0)
         return ans
 
+    # 链接：https://leetcode.cn/circle/discuss/1AqXeK/view/L7qGfY/
+    def countPalindromePaths2(self, parent: List[int], s: str) -> int:
+        n = len(parent)
+
+        @cache
+        def getRes(idx):
+            if idx == 0:
+                return 0
+            return getRes(parent[idx]) ^ (1 << (ord(s[idx]) - ord("a")))
+
+        vals = [getRes(i) for i in range(n)]
+        cnt = Counter()
+        ans = 0
+        for x in vals:
+            ans += cnt[x]
+            for i in range(26):
+                ans += cnt[x ^ (1 << i)]
+            cnt[x] += 1
+        return ans
+
 
 # @lc code=end
 
