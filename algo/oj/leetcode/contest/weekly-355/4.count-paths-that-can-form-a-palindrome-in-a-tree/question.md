@@ -1,57 +1,48 @@
-# [6942. 树中可以形成回文的路径数][link] (Hard)
+# [2791. 树中可以形成回文的路径数][link] (Hard)
 
 [link]: https://leetcode.cn/contest/weekly-contest-355/problems/count-paths-that-can-form-a-palindrome-in-a-tree/
 
+给你一棵 **树**（即，一个连通、无向且无环的图）， **根** 节点为 `0` ，由编号从 `0` 到 `n - 1` 的 `n`
+个节点组成。这棵树用一个长度为 `n` 、下标从 **0** 开始的数组 `parent` 表示，其中 `parent[i]` 为节点 
+`i` 的父节点，由于节点 `0` 为根节点，所以 `parent[0] == -1` 。
 
-              <p>给你一棵 <strong>树</strong>（即，一个连通、无向且无环的图），<strong>根</strong> 
-节点为 <code>0</code> ，由编号从 <code>0</code> 到 <code>n - 1</code> 的 <code>n</code> 个节点组成。
-这棵树用一个长度为 <code>n</code> 、下标从 <strong>0</strong> 开始的数组 <code>parent</code> 表示，
-其中 <code>parent[i]</code> 为节点 <code>i</code> 的父节点，由于节点 <code>0</code> 为根节点，所以 <
-code>parent[0] == -1</code> 。</p>
+另给你一个长度为 `n` 的字符串 `s` ，其中 `s[i]` 是分配给 `i` 和 `parent[i]` 之间的边的字符。 `s[0]` 
+可以忽略。
 
-<p>另给你一个长度为 <code>n</code> 的字符串 <code>s</code> ，其中 <code>s[i]</code> 是分配给 <code>i
-</code> 和 <code>parent[i]</code> 之间的边的字符。<code>s[0]</code> 可以忽略。</p>
+找出满足 `u < v` ，且从 `u` 到 `v` 的路径上分配的字符可以 **重新排列** 形成 **回文** 的所有节点对 `(
+u, v)` ，并返回节点对的数目。
 
-<p>找出满足 <code>u &lt; v</code> ，且从 <code>u</code> 到 <code>v</code> 的路径上分配的字符可以 <st
-rong>重新排列</strong> 形成 <strong>回文</strong> 的所有节点对 <code>(u, v)</code> ，并返回节点对的
-数目。</p>
+如果一个字符串正着读和反着读都相同，那么这个字符串就是一个 **回文** 。
 
-<p>如果一个字符串正着读和反着读都相同，那么这个字符串就是一个 <strong>回文</strong> 。</p>
+**示例 1：**
 
-<p> </p>
+![](https://assets.leetcode.com/uploads/2023/07/15/treedrawio-8drawio.png)
 
-<p><strong>示例 1：</strong></p>
-
-<p><img alt="" src="https://assets.leetcode.com/uploads/2023/07/15/treedrawio-8drawio.png" style="wi
-dth: 281px; height: 181px;"/></p>
-
-<pre><strong>输入：</strong>parent = [-1,0,0,1,1,2], s = &#34;acaabc&#34;
-<strong>输出：</strong>8
-<strong>解释：</strong>符合题目要求的节点对分别是：
+```
+输入：parent = [-1,0,0,1,1,2], s = "acaabc"
+输出：8
+解释：符合题目要求的节点对分别是：
 - (0,1)、(0,2)、(1,3)、(1,4) 和 (2,5) ，路径上只有一个字符，满足回文定义。
-- (2,3)，路径上字符形成的字符串是 &#34;aca&#34; ，满足回文定义。
-- (1,5)，路径上字符形成的字符串是 &#34;cac&#34; ，满足回文定义。
-- (3,5)，路径上字符形成的字符串是 &#34;acac&#34; ，可以重排形成回文 &#34;acca&#34; 。
-</pre>
+- (2,3)，路径上字符形成的字符串是 "aca" ，满足回文定义。
+- (1,5)，路径上字符形成的字符串是 "cac" ，满足回文定义。
+- (3,5)，路径上字符形成的字符串是 "acac" ，可以重排形成回文 "acca" 。
 
-<p><strong>示例 2：</strong></p>
+```
 
-<pre><strong>输入：</strong>parent = [-1,0,0,0,0], s = &#34;aaaaa&#34;
-<strong>输出：</strong>10
-<strong>解释：</strong>任何满足 u &lt; v 的节点对 (u,v) 都符合题目要求。
-</pre>
+**示例 2：**
 
-<p> </p>
+```
+输入：parent = [-1,0,0,0,0], s = "aaaaa"
+输出：10
+解释：任何满足 u < v 的节点对 (u,v) 都符合题目要求。
 
-<p><strong>提示：</strong></p>
+```
 
-<ul>
-    <li><code>n == parent.length == s.length</code></li>
-    <li><code>1 &lt;= n &lt;= 10<sup>5</sup></code></li>
-    <li>对于所有 <code>i &gt;= 1</code> ，<code>0 &lt;= parent[i] &lt;= n - 1</code> 均成立</li>
-    <li><code>parent[0] == -1</code></li>
-    <li><code>parent</code> 表示一棵有效的树</li>
-    <li><code>s</code> 仅由小写英文数字组成</li>
-</ul>
+**提示：**
 
-            
+- `n == parent.length == s.length`
+- `1 <= n <= 10⁵`
+- 对于所有 `i >= 1` ， `0 <= parent[i] <= n - 1` 均成立
+- `parent[0] == -1`
+- `parent` 表示一棵有效的树
+- `s` 仅由小写英文字母组成
