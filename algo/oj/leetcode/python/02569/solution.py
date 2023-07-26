@@ -10,6 +10,43 @@ from leetgo_py import *
 # TODO
 # tag: Segment Tree
 
+"""
+通过线段树维护数组 nums1 的区间和
+
+定义线段树每个节点为 Node，每个节点包含如下属性：
+
+* l: 节点的左端点，下标从 1 开始
+
+* r: 节点的右端点，下标从 1 开始
+
+* s: 节点的区间和
+
+* lazy：节点的懒标记
+
+
+线段树主要有以下几个操作：
+ * build(u, l, r)：建立线段树
+
+ * pushdown(u): 下传懒标记
+
+ * pushup(u): 用子节点的信息更新父节点的信息
+
+ * modify(u, l, r)：修改区间和，本题中是反转区间中的每个数，
+   那么区间和 s = r - l + 1 - s
+
+ * query(u, l, r): 查询区间和
+
+我们先算出数组 nums2 的所有数之和，记为 s。
+
+执行操作 1：调用 modify(1, l+1, r+1)
+执行操作 2：更新 s = s + p*query(1, l, n)
+执行操作 3：将 s 加入答案数据即可
+
+
+
+https://leetcode.cn/problems/handling-sum-queries-after-update/solutions/2359125/python3javacgo-yi-ti-yi-jie-xian-duan-sh-maq2/
+"""
+
 
 class Node:
     def __init__(self):
