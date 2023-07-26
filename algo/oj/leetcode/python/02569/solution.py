@@ -9,6 +9,7 @@ from leetgo_py import *
 
 # TODO
 # tag: Segment Tree
+# template
 
 """
 通过线段树维护数组 nums1 的区间和
@@ -107,23 +108,6 @@ class SegmentTree:
             self.tr[u << 1 | 1].s = self.tr[u].r - mid - self.tr[u << 1 | 1].s
             self.tr[u << 1 | 1].lazy ^= 1
             self.tr[u].lazy ^= 1
-
-
-class Solution:
-    def handleQuery(
-        self, nums1: List[int], nums2: List[int], queries: List[List[int]]
-    ) -> List[int]:
-        tree = SegmentTree(nums1)
-        s = sum(nums2)
-        ans = []
-        for op, a, b in queries:
-            if op == 1:
-                tree.modify(1, a + 1, b + 1)
-            elif op == 2:
-                s += a * tree.query(1, 1, len(nums1))
-            else:
-                ans.append(s)
-        return ans
 
 
 # @lc code=end
