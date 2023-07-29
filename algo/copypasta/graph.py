@@ -17,7 +17,7 @@ def top_sort(n, edges):
         g[x - 1].append(y - 1)
         indeg[y - 1] += 1
     order = []  # 拓扑序
-    q = deque()
+    q = deque(i for i, v in enumerate(indeg) if v == 0)
     while q:  # BFS，每个点当入度为 0 时放入拓扑序结果中
         x = q.popleft()
         order.append(x)
