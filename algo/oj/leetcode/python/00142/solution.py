@@ -15,7 +15,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+    def detectCycle1(self, head: Optional[ListNode]) -> Optional[ListNode]:
         slow = fast = head
         while fast and fast.next:
             slow, fast = slow.next, fast.next.next
@@ -23,6 +23,15 @@ class Solution:
                 while head != slow:
                     head, slow = head.next, slow.next
                 return slow
+        return None
+
+    def detectCycle(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        vis = set()
+        while head:
+            if head in vis:
+                return head
+            vis.add(head)
+            head = head.next
         return None
 
 
