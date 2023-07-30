@@ -1,0 +1,13 @@
+input:
+"abc"
+"bca"
+"aaa"
+output:
+"aaabca"
+
+input:
+"ab"
+"ba"
+"aba"
+output:
+"aba"
