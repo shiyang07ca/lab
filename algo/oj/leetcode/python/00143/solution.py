@@ -18,7 +18,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def reorderList1(self, head: Optional[ListNode]) -> None:
+    def reorderList(self, head: Optional[ListNode]) -> None:
         """
         Do not return anything, modify head in-place instead.
         """
@@ -38,7 +38,7 @@ class Solution:
         while fast and fast.next:
             slow, fast = slow.next, fast.next.next
         mid = reverse(slow)
-        ans = dummy = ListNode()
+        dummy = ListNode()
         # print(serialize(slow), serialize(head), serialize(mid))
         while head is not slow or mid:
             if head is not slow:
@@ -49,10 +49,9 @@ class Solution:
                 dummy.next = mid
                 mid = mid.next
                 dummy = dummy.next
-        return ans.next
 
     # 链接：https://leetcode.cn/problems/reorder-list/solutions/2365667/python3javacgo-yi-ti-yi-jie-kuai-man-zhi-t9u2/
-    def reorderList(self, head: Optional[ListNode]) -> None:
+    def reorderList2(self, head: Optional[ListNode]) -> None:
         # 快慢指针找到链表中点
         fast = slow = head
         while fast.next and fast.next.next:
