@@ -8,6 +8,8 @@ from leetgo_py import *
 
 # @lc code=begin
 
+# TODO
+
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):
@@ -16,7 +18,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def reorderList(self, head: Optional[ListNode]) -> None:
+    def reorderList1(self, head: Optional[ListNode]) -> None:
         """
         Do not return anything, modify head in-place instead.
         """
@@ -37,7 +39,7 @@ class Solution:
             slow, fast = slow.next, fast.next.next
         mid = reverse(slow)
         ans = dummy = ListNode()
-        print(serialize(slow), serialize(head), serialize(mid))
+        # print(serialize(slow), serialize(head), serialize(mid))
         while head is not slow or mid:
             if head is not slow:
                 dummy.next = head
@@ -48,6 +50,34 @@ class Solution:
                 mid = mid.next
                 dummy = dummy.next
         return ans.next
+
+    # 链接：https://leetcode.cn/problems/reorder-list/solutions/2365667/python3javacgo-yi-ti-yi-jie-kuai-man-zhi-t9u2/
+    def reorderList(self, head: Optional[ListNode]) -> None:
+        # 快慢指针找到链表中点
+        fast = slow = head
+        while fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next
+
+        # cur 指向右半部分链表
+        cur = slow.next
+        slow.next = None
+
+        # 反转右半部分链表
+        pre = None
+        while cur:
+            t = cur.next
+            cur.next = pre
+            pre, cur = cur, t
+        cur = head
+
+        # 此时 cur, pre 分别指向链表左右两半的第一个节点
+        # 合并
+        while pre:
+            t = pre.next
+            pre.next = cur.next
+            cur.next = pre
+            cur, pre = pre.next, t
 
 
 # @lc code=end
