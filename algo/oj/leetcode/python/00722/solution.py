@@ -9,7 +9,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def removeComments(self, source: List[str]) -> List[str]:
+    def removeComments1(self, source: List[str]) -> List[str]:
         # 匹配所有 // 和 /* */，后者用非贪婪模式。将所有匹配结果替换成空串。最后移除多余空行。
         return list(
             filter(
@@ -17,38 +17,31 @@ class Solution:
             )
         )
 
-    # def removeComments2(self, source: List[str]) -> List[str]:
-    #     ans = []
-    #     flag = False
-    #     t = []
-    #     for s in source:
-    #         if not flag and "//" in s and not ("/*" in s and "*/" in s):
-    #             s = s.split("//")[0]
-    #             if len(s) > 0:
-    #                 ans.append(s)
-    #         elif not flag and "/*" in s and "*/" in s:
-    #             a = s.split("/*", 1)[0]
-    #             b = s.rsplit("*/", 1)[1]
-    #             if len(a + b):
-    #                 ans.append(a + b)
-    #         elif not flag and "/*" in s:
-    #             s = s.split("/*", 1)[0]
-    #             t = []
-    #             t.append(s)
-    #             flag = True
-    #         elif flag and "*/" in s:
-    #             s = s.split("*/", 1)[1]
-    #             t.append(s)
-    #             s = "".join(t)
-    #             if len(s):
-    #                 ans.append(s)
-    #             flag = False
-    #         elif flag:
-    #             pass
-    #         elif s:
-    #             ans.append(s)
-    #         # print(ans)
-    #     return ans
+    # 链接：https://leetcode.cn/problems/remove-comments/solutions/2370636/python3javacgorust-yi-ti-yi-jie-fen-qing-0vka/
+    def removeComments(self, source: List[str]) -> List[str]:
+        ans = []
+        t = []
+        block_comment = False
+        for s in source:
+            i, m = 0, len(s)
+            while i < m:
+                if block_comment:
+                    if s[i : i + 2] == "*/":
+                        block_comment = False
+                        i += 1
+                else:
+                    if s[i : i + 2] == "/*":
+                        block_comment = True
+                        i += 1
+                    elif s[i : i + 2] == "//":
+                        break
+                    else:
+                        t.append(s[i])
+                i += 1
+            if not block_comment and t:
+                ans.append("".join(t))
+                t.clear()
+        return ans
 
 
 # @lc code=end
