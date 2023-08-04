@@ -13,37 +13,6 @@ from leetgo_py import *
 
 
 class Solution:
-    def uniquePathsIII1(self, grid: List[List[int]]) -> int:
-        m, n = len(grid), len(grid[0])
-        c1 = 0
-        for i, row in enumerate(grid):
-            for j, v in enumerate(row):
-                if v == 1:
-                    start = (i, j)
-                elif v == -1:
-                    c1 += 1
-
-        c0 = m * n - 2 - c1
-        print(f"cnt: {c0}")
-        q = deque([start])
-        vis = set()
-        dirs = (-1, 0, 1, 0, -1)
-        ans = 0
-        print("================================================================")
-        while q:
-            x, y = q.popleft()
-            for a, b in pairwise(dirs):
-                i, j = x + a, y + b
-                print(i, j)
-                if 0 <= i < m and 0 <= j < n and (i, j) not in vis:
-                    if grid[i][j] == 0:
-                        vis.add((i, j))
-                        q.append((i, j))
-                    if grid[i][j] == 2 and len(vis) == c0:
-                        ans += 1
-
-        return ans
-
     # 链接：https://leetcode.cn/problems/unique-paths-iii/solutions/2372252/liang-chong-fang-fa-hui-su-zhuang-tai-ya-26py/
     def uniquePathsIII(self, grid: List[List[int]]) -> int:
         m, n = len(grid), len(grid[0])
