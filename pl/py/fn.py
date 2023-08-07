@@ -1,5 +1,6 @@
 from functools import partial
 
+
 # A normal function
 def f(a, b, c, x):
     return a + b + c + x

@@ -307,8 +307,32 @@ def fib2(n):
     return fib2(n - 1) + fib2(n - 2)
 
 
-def main():
+################################################################
 
+import datetime
+
+
+def timed_lru_cache(seconds: int, maxsize: int = 128):
+    def wrapper_cache(func):
+        func = lru_cache(maxsize=maxsize)(func)
+        func.lifetime = datetime.timedelta(seconds=seconds)
+        func.expiration = datetime.datetime.now() + func.lifetime
+
+        @wraps(func)
+        def wrapped_func(*args, **kwargs):
+            if datetime.datetime.now() >= func.expiration:
+                func.cache_clear()
+                func.expiration = datetime.datetime.now() + func.lifetime
+
+            return func(*args, **kwargs)
+
+        return wrapped_func
+
+    return wrapper_cache
+
+
+################################################################
+def main():
     # print(fib(35))
 
     print(fib2(35))
