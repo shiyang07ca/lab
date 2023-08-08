@@ -9,7 +9,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def maxAbsoluteSum(self, nums: List[int]) -> int:
+    def maxAbsoluteSum1(self, nums: List[int]) -> int:
         ans = abs(nums[0])
         n = len(nums)
         if n == 1:
@@ -30,6 +30,19 @@ class Solution:
                 pre0 = max(0, pre0 + x)
             ans = max(ans, pre0, abs(pre1))
         return ans
+
+    # 链接：https://leetcode.cn/problems/maximum-absolute-sum-of-any-subarray/solutions/2377930/liang-chong-fang-fa-dong-tai-gui-hua-qia-dczr/
+    def maxAbsoluteSum2(self, nums: List[int]) -> int:
+        ans = f_max = f_min = 0
+        for x in nums:
+            f_max = max(f_max, 0) + x
+            f_min = min(f_min, 0) + x
+            ans = max(ans, f_max, -f_min)
+        return ans
+
+    def maxAbsoluteSum(self, nums: List[int]) -> int:
+        s = list(accumulate(nums, initial=0))  # nums 的前缀和
+        return max(s) - min(s)
 
 
 # @lc code=end
