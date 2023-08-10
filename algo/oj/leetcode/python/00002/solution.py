@@ -50,6 +50,7 @@ from leetgo_py import *
 
 # @lc code=begin
 
+
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, val=0, next=None):

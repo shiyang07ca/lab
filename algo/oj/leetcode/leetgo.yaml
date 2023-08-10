@@ -13,13 +13,13 @@ code:
     executable: python3
 leetcode:
   site: https://leetcode.cn
+  # credentials:
+  #   from: cookies
   credentials:
-    from: cookies
-#  credentials:
-#    from: browser
+    from: browser
 editor:
   use: custom
   # command: emacs
   # args: [-nw, -l, ~/.emacs.d/init-mini.el]
   command: emacsclient
-  args: [-a, "", -nw]
+  args: "-a, -nw {{.Files}}"

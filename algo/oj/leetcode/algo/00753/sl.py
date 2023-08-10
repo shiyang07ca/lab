@@ -121,6 +121,7 @@ from algo.tree.builder import *
 
 # https://leetcode.cn/problems/cracking-the-safe/solution/po-jie-bao-xian-xiang-by-leetcode-solution/
 
+
 class Solution:
     def crackSafe(self, n: int, k: int) -> str:
         seen = set()

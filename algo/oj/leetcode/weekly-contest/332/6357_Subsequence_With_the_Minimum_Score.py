@@ -89,3 +89,63 @@ https://leetcode.cn/contest/weekly-contest-332/problems/subsequence-with-the-min
 1 <= s.length, t.length <= 105
 
 """
+
+
+"""
+
+"""
+
+
+"""
+作者：endlesscheng
+链接：https://leetcode.cn/problems/subsequence-with-the-minimum-score/solution/qian-hou-zhui-fen-jie-san-zhi-zhen-pytho-6cmr/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+前后缀分解+双指针
+
+提示 1
+在 [left,right] 之间的字符，删除是不影响得分的，且删除后更有机会让剩余部分是 s
+的子序列。因此只需考虑删除的是 t 的子串，而不是子序列。
+
+
+提示 2
+删除子串后，剩余部分是 t 的一个前缀和一个后缀。
+假设前缀匹配的是 s 的一个前缀s[:i]，后缀匹配的是s 的一个后缀s[i:]。这里匹配指子
+序列匹配。
+那么枚举 i，分别计算能够与 s[:i] 和 s[i:] 匹配的t 的最长前缀和最长后缀，就知道要
+删除的子串的最小值了。这个技巧叫做「前后缀分解」。
+
+
+提示 3
+具体来说：
+
+定义 pre[i] 为 s[:i] 对应的 t 的最长前缀的结束下标。
+定义 suf[i] 为 s[i:] 对应的 t 的最长后缀的开始下标。
+那么删除的子串就是从 pre[i]+1 到 suf[i]−1 这段，答案就是 suf[i]−pre[i]−1 的最小
+值。
+
+代码实现时，可以先计算 suf，然后一边计算 pre，一边更新最小值，所以 pre 可以省略。
+
+"""
+
+
+class Solution:
+    def minimumScore(self, s: str, t: str) -> int:
+        n, m = len(s), len(t)
+        suf = [m] * (n + 1)
+        j = m - 1
+        for i in range(n - 1, -1, -1):
+            if j >= 0 and s[i] == t[j]:
+                j -= 1
+            suf[i] = j + 1
+        ans = suf[0]  # 删除 t[:suf[0]]
+        if ans == 0:
+            return 0
+
+        j = 0
+        for i, c in enumerate(s):
+            if c == t[j]:  # 注意 j 不会等于 m，因为上面 suf[0]>0 表示 t 不是 s 的子序列
+                j += 1
+                ans = min(ans, suf[i + 1] - j)  # 删除 t[j:suf[i+1]]
+        return ans

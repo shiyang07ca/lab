@@ -9,6 +9,7 @@ from leetgo_py import *
 # @lc code=begin
 
 # TODO
+# tag: 反悔贪心, greedy
 
 
 class Solution:

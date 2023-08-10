@@ -17,5 +17,7 @@ public class Test {
         depv2Class.getMethod("print").invoke(depv2);
 
         System.out.println(depv1Class.equals(depv2Class));
+
+        System.getProperty("java.io.tmpdir.dongtai");
     }
 }

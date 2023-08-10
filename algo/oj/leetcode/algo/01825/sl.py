@@ -87,12 +87,10 @@ from algo.tree.builder import *
 from sortedcontainers import SortedList
 
 
-
 from sortedcontainers import SortedList
 
 
 class MKAverage:
-
     def __init__(self, m: int, k: int):
         self.m = m
         self.k = k
@@ -149,7 +147,6 @@ class MKAverage:
             return -1
         else:
             return self.sum2 // (self.m - 2 * self.k)
-
 
 
 # Your MKAverage object will be instantiated and called as such:
