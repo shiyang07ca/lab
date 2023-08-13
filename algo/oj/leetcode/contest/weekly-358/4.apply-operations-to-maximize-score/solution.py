@@ -10,51 +10,37 @@ from leetgo_py import *
 
 # TODO:
 
-# 链接：https://leetcode.cn/circle/discuss/9wQ08W/view/4drty4/
-maxi = 10**5
-score = [0] * (maxi + 1)
-for i in range(2, maxi + 1):
-    if not score[i]:
-        for j in range(i, maxi + 1, i):
-            score[j] += 1
-
-mod = 10**9 + 7
+MOD = 10**9 + 7
+MX = 10**5 + 1
+omega = [0] * MX
+for i in range(2, MX):  # 预处理 omega
+    if omega[i] == 0:  # i 是质数
+        for j in range(i, MX, i):
+            omega[j] += 1  # i 是 j 的一个质因子
 
 
 class Solution:
+    # 链接：https://leetcode.cn/problems/apply-operations-to-maximize-score/
     def maximumScore(self, nums: List[int], k: int) -> int:
-        note = [score[x] for x in nums]  # 不一定要创建数组，可以直接在后面调用的时候去查；这里为了更直观地展示
         n = len(nums)
+        left = [-1] * n  # 质数分数 >= omega[nums[i]] 的左侧最近元素下标
+        right = [n] * n  # 质数分数 >  omega[nums[i]] 的右侧最近元素下标
+        st = []
+        for i, v in enumerate(nums):
+            while st and omega[nums[st[-1]]] < omega[v]:
+                right[st.pop()] = i
+            if st:
+                left[i] = st[-1]
+            st.append(i)
 
-        # 单调栈可以设定一个哨兵元素
-        left = [None] * n
-        stack = [(-1, inf)]
-        for i in range(n):
-            while stack[-1][1] < note[i]:
-                stack.pop()
-            left[i] = stack[-1][0]
-            stack.append((i, note[i]))
-
-        right = [None] * n
-        stack = [(n, inf)]
-        for i in range(n - 1, -1, -1):
-            while stack[-1][1] <= note[i]:
-                stack.pop()
-            right[i] = stack[-1][0]
-            stack.append((i, note[i]))
-
-        counts = [(right[i] - i) * (i - left[i]) for i in range(n)]
         ans = 1
-        for i in sorted(range(n), key=lambda x: -nums[x]):
-            if k < counts[i]:
-                ans *= pow(nums[i], k, mod)
-                ans %= mod
+        for i, v, l, r in sorted(zip(range(n), nums, left, right), key=lambda z: -z[1]):
+            tot = (i - l) * (r - i)
+            if tot >= k:
+                ans = ans * pow(v, k, MOD) % MOD
                 break
-            else:
-                ans *= pow(nums[i], counts[i], mod)
-                ans %= mod
-                k -= counts[i]
-
+            ans = ans * pow(v, tot, MOD) % MOD
+            k -= tot  # 更新剩余操作次数
         return ans
 
 
