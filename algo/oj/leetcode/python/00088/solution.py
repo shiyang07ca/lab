@@ -9,7 +9,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+    def merge1(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
         """
         Do not return anything, modify nums1 in-place instead.
         """
@@ -31,6 +31,22 @@ class Solution:
                 nums1[cur] = nums2[n - 1]
                 n -= 1
             cur -= 1
+
+    # https://leetcode.cn/problems/merge-sorted-array/solutions/126371/88-by-ikaruga/
+    def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """
+        Do not return anything, modify nums1 in-place instead.
+        """
+        i = len(nums1) - 1
+        m, n = m - 1, n - 1
+        while n >= 0:
+            while m >= 0 and nums1[m] > nums2[n]:
+                nums1[i], nums1[m] = nums1[m], nums1[i]
+                i -= 1
+                m -= 1
+            nums1[i], nums2[n] = nums2[n], nums1[i]
+            i -= 1
+            n -= 1
 
 
 # @lc code=end
