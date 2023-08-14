@@ -17,4 +17,5 @@ def eratosthenes(n):
     return [x for x in range(2, n + 1) if is_prime[x]]
 
 
-print(eratosthenes(120))
+if __name__ == "__main__":
+    print(eratosthenes(120))
