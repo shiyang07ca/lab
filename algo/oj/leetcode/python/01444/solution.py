@@ -8,6 +8,7 @@ from leetgo_py import *
 # @lc code=begin
 
 # TODO:
+# tag: 二维前缀和
 
 
 # 链接：https://leetcode.cn/problems/number-of-ways-of-cutting-a-pizza/solutions/2392051/ji-bai-100cong-di-gui-dao-di-tui-dao-you-dxz5/
