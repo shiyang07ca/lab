@@ -27,6 +27,32 @@ class Solution:
         a, b = g(slices[:-1]), g(slices[1:])
         return max(a, b)
 
+    # 链接：https://leetcode.cn/problems/pizza-with-3n-slices/solutions/2393770/ji-yi-hua-sou-suo-jie-jue-da-jia-jie-she-sora/
+    def maxSizeSlices2(self, slices: List[int]) -> int:
+        n = len(slices)
+        m = n // 3
+
+        # 环状序列相较于普通序列，相当于添加了一个限制：普通序列中的第一个和最后一个数不能同时选。
+        # 第一个数不能选
+        @cache
+        def dfs1(i, c):
+            if i >= n:
+                return 0 if c == 0 else -inf
+            res1 = dfs1(i + 1, c)
+            res2 = dfs1(i + 2, c - 1) + slices[i]
+            return max(res1, res2)
+
+        # 最后一个数不能选
+        @cache
+        def dfs2(i, c):
+            if i >= n - 1:
+                return 0 if c == 0 else -inf
+            res1 = dfs2(i + 1, c)
+            res2 = dfs2(i + 2, c - 1) + slices[i]
+            return max(res1, res2)
+
+        return max(dfs1(1, m), dfs2(0, m))
+
 
 # @lc code=end
 
