@@ -1,0 +1,17 @@
+input:
+"abc"
+"ad"
+output:
+true
+
+input:
+"zc"
+"ad"
+output:
+true
+
+input:
+"ab"
+"d"
+output:
+false
