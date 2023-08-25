@@ -25,8 +25,6 @@ class Solution:
         ans = 0
 
         def dfs(n, m):
-            if not n:
-                return
             nonlocal ans
             if n.val >= m:
                 ans += 1
