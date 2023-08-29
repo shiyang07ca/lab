@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 if hasattr(ssl, "_create_unverified_context"):
     ssl._create_default_https_context = ssl._create_unverified_context
 
+
 def timed_lru_cache(seconds: int, maxsize: int = 128):
     def wrapper_cache(func):
         func = lru_cache(maxsize=maxsize)(func)
@@ -27,11 +28,13 @@ def timed_lru_cache(seconds: int, maxsize: int = 128):
 
     return wrapper_cache
 
+
 @timed_lru_cache(10)
 def get_article_from_server(url):
     print("Fetching article from server...")
     response = requests.get(url)
     return response.text
+
 
 def monitor(url):
     maxlen = 45
@@ -53,5 +56,6 @@ def monitor(url):
                 )
 
         time.sleep(5)
+
 
 monitor("https://realpython.com/atom.xml")
