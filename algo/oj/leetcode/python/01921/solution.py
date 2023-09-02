@@ -9,7 +9,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def eliminateMaximum(self, dist: List[int], speed: List[int]) -> int:
+    def eliminateMaximum1(self, dist: List[int], speed: List[int]) -> int:
         ans = 0
         time = [math.ceil(d / s) for d, s in zip(dist, speed)]
         heapify(time)
@@ -17,6 +17,19 @@ class Solution:
             heappop(time)
             ans += 1
         return ans
+
+    # 链接：https://leetcode.cn/problems/eliminate-maximum-number-of-monsters/solutions/857961/xiao-mie-guai-wu-de-zui-da-shu-liang-by-0ou2p/
+    def eliminateMaximum(self, dist: List[int], speed: List[int]) -> int:
+        arrivalTimes = sorted(
+            [
+                (monsterDist - 1) // monsterSpeed + 1
+                for monsterDist, monsterSpeed in zip(dist, speed)
+            ]
+        )
+        for attackTime, arrivalTime in enumerate(arrivalTimes):
+            if arrivalTime <= attackTime:
+                return attackTime
+        return len(arrivalTimes)
 
 
 # @lc code=end
