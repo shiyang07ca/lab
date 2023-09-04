@@ -18,7 +18,7 @@ from leetgo_py import *
 
 
 # https://leetcode.cn/problems/serialize-and-deserialize-bst/solutions/1485442/by-ac_oier-ncwn/?envType=daily-question&envId=2023-09-04
-class Codec:
+class Codec1:
     def serialize(self, root: Optional[TreeNode]) -> str:
         """Encodes a tree to a single string."""
 
@@ -51,6 +51,41 @@ class Codec:
 
         vs = list(map(int, data.split("#")))
         return dfs(0, len(vs) - 1)
+
+
+# https://leetcode.cn/problems/serialize-and-deserialize-bst/solutions/2425348/python3javacgo-yi-ti-yi-jie-xian-xu-bian-7ktz/
+class Codec:
+    def serialize(self, root: Optional[TreeNode]) -> str:
+        """Encodes a tree to a single string."""
+
+        def dfs(root: Optional[TreeNode]):
+            if root is None:
+                return
+            nums.append(root.val)
+            dfs(root.left)
+            dfs(root.right)
+
+        nums = []
+        dfs(root)
+        return " ".join(map(str, nums))
+
+    def deserialize(self, data: str) -> Optional[TreeNode]:
+        """Decodes your encoded data to tree."""
+
+        def dfs(mi: int, mx: int) -> Optional[TreeNode]:
+            nonlocal i
+            if i == len(nums) or not mi <= nums[i] <= mx:
+                return None
+            x = nums[i]
+            root = TreeNode(x)
+            i += 1
+            root.left = dfs(mi, x)
+            root.right = dfs(x, mx)
+            return root
+
+        nums = list(map(int, data.split()))
+        i = 0
+        return dfs(-inf, inf)
 
 
 # Your Codec object will be instantiated and called as such:
