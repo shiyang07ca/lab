@@ -53,39 +53,34 @@ class Codec1:
         return dfs(0, len(vs) - 1)
 
 
-# https://leetcode.cn/problems/serialize-and-deserialize-bst/solutions/2425348/python3javacgo-yi-ti-yi-jie-xian-xu-bian-7ktz/
+# 链接：https://leetcode.cn/problems/serialize-and-deserialize-bst/solutions/1479903/xu-lie-hua-he-fan-xu-lie-hua-er-cha-sou-5m9r4/
 class Codec:
-    def serialize(self, root: Optional[TreeNode]) -> str:
-        """Encodes a tree to a single string."""
+    def serialize(self, root: TreeNode) -> str:
+        arr = []
 
-        def dfs(root: Optional[TreeNode]):
+        def postOrder(root: TreeNode) -> None:
             if root is None:
                 return
-            nums.append(root.val)
-            dfs(root.left)
-            dfs(root.right)
+            postOrder(root.left)
+            postOrder(root.right)
+            arr.append(root.val)
 
-        nums = []
-        dfs(root)
-        return " ".join(map(str, nums))
+        postOrder(root)
+        return " ".join(map(str, arr))
 
-    def deserialize(self, data: str) -> Optional[TreeNode]:
-        """Decodes your encoded data to tree."""
+    def deserialize(self, data: str) -> TreeNode:
+        arr = list(map(int, data.split()))
 
-        def dfs(mi: int, mx: int) -> Optional[TreeNode]:
-            nonlocal i
-            if i == len(nums) or not mi <= nums[i] <= mx:
+        def construct(lower: int, upper: int) -> TreeNode:
+            if arr == [] or arr[-1] < lower or arr[-1] > upper:
                 return None
-            x = nums[i]
-            root = TreeNode(x)
-            i += 1
-            root.left = dfs(mi, x)
-            root.right = dfs(x, mx)
+            val = arr.pop()
+            root = TreeNode(val)
+            root.right = construct(val, upper)
+            root.left = construct(lower, val)
             return root
 
-        nums = list(map(int, data.split()))
-        i = 0
-        return dfs(-inf, inf)
+        return construct(-inf, inf)
 
 
 # Your Codec object will be instantiated and called as such:
