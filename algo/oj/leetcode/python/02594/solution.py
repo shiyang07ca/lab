@@ -13,11 +13,24 @@ from leetgo_py import *
 
 class Solution:
     # 链接：https://leetcode.cn/problems/minimum-time-to-repair-cars/solutions/2430475/python3javacgotypescript-yi-ti-yi-jie-er-f96a/
-    def repairCars(self, ranks: List[int], cars: int) -> int:
+    def repairCars1(self, ranks: List[int], cars: int) -> int:
         def check(t: int) -> bool:
             return sum(int(sqrt(t // r)) for r in ranks) >= cars
 
         return bisect_left(range(ranks[0] * cars * cars), True, key=check)
+
+    def repairCars(self, ranks: List[int], cars: int) -> int:
+        def check(t: int) -> bool:
+            return sum(int(sqrt(t // r)) for r in ranks) >= cars
+
+        l, r = 0, ranks[0] * cars * cars
+        while l < r:
+            mid = (l + r) >> 1
+            if check(mid):
+                r = mid
+            else:
+                l = mid + 1
+        return l
 
 
 # @lc code=end
