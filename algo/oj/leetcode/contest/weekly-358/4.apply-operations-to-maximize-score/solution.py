@@ -9,6 +9,7 @@ from leetgo_py import *
 # @lc code=begin
 
 # TODO:
+# tag: Monotonic Stack, 贡献法
 
 MOD = 10**9 + 7
 MX = 10**5 + 1
