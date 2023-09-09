@@ -4,6 +4,7 @@
 https://oi-wiki.org/graph/topo/
 https://cp-algorithms.com/graph/topological-sort.html
 
+LC207 https://leetcode.cn/problems/course-schedule/  模版
 LC2392//周赛308D https://leetcode.cn/problems/build-a-matrix-with-conditions/
 LC2050 https://leetcode.cn/problems/parallel-courses-iii/description/
 
