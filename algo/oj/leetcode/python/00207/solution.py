@@ -8,6 +8,7 @@ from leetgo_py import *
 # @lc code=begin
 
 # tag: Topological Sort
+# template
 
 
 class Solution:
