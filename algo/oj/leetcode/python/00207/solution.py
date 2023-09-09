@@ -15,9 +15,9 @@ class Solution:
     def canFinish(self, n: int, edges: List[List[int]]) -> bool:
         g = [[] for _ in range(n)]
         indeg = [0] * n
-        for x, y in edges:
-            g[x - 1].append(y - 1)
-            indeg[y - 1] += 1
+        for y, x in edges:
+            g[x].append(y)
+            indeg[y] += 1
         order = []  # 拓扑序
         q = deque(i for i, v in enumerate(indeg) if v == 0)
         while q:  # BFS，每个点当入度为 0 时放入拓扑序结果中
