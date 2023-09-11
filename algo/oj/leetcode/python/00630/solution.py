@@ -7,6 +7,9 @@ from leetgo_py import *
 
 # @lc code=begin
 
+# TODO:
+# tag: greedy
+
 
 class Solution:
     # 链接：https://leetcode.cn/problems/course-schedule-iii/solutions/2436667/tan-xin-huan-neng-fan-hui-pythonjavacgoj-lcwp/
