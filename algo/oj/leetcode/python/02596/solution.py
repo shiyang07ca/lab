@@ -12,17 +12,17 @@ from leetgo_py import *
 
 class Solution:
     def checkValidGrid(self, grid: List[List[int]]) -> bool:
+        if grid[0][0] != 0:
+            return False
+
         n = len(grid)
         pos = [0] * (n * n)
         for i, row in enumerate(grid):
             for j, x in enumerate(row):
                 pos[x] = (i, j)
-        if pos[0] != (0, 0):
-            return False
         for (x1, y1), (x2, y2) in pairwise(pos):
-            if not (abs(x1 - x2) == 2 and abs(y1 - y2) == 1) and not (
-                abs(x1 - x2) == 1 and abs(y1 - y2) == 2
-            ):
+            dx, dy = abs(x1 - x2), abs(y1 - y2)
+            if not (dx == 2 and dy == 1) and not (dx == 1 and dy == 2):
                 return False
 
         return True
