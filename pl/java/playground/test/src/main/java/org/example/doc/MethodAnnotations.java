@@ -1,21 +1,18 @@
 package org.example.doc;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 import java.lang.reflect.Method;
 
-interface Annotation {
-    boolean equals(Object obj);
-
-    int hashCode();
-
-    String toString();
-
-    //返回真正的注解类型
-    Class<? extends Annotation> annotationType();
-}
+//interface Annotation {
+//    boolean equals(Object obj);
+//
+//    int hashCode();
+//
+//    String toString();
+//
+//    //返回真正的注解类型
+//    Class<? extends Annotation> annotationType();
+//}
 
 
 public class MethodAnnotations {
@@ -23,7 +20,7 @@ public class MethodAnnotations {
         Class<?> cls = MethodAnnotations.class;
         Method method = cls.getMethod("hello",
                 String.class, String.class);
-        Annotation[][] annts = (Annotation[][]) method.getParameterAnnotations();
+        Annotation[][] annts = method.getParameterAnnotations();
         for (int i = 0; i < annts.length; i++) {
             System.out.println("annotations for paramter " + (i + 1));
             Annotation[] anntArr = annts[i];
