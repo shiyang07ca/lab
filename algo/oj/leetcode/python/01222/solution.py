@@ -9,7 +9,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def queensAttacktheKing(
+    def queensAttacktheKing1(
         self, queens: List[List[int]], king: List[int]
     ) -> List[List[int]]:
         ans = []
@@ -34,6 +34,31 @@ class Solution:
             if (x1, y1) == (x2, y2):
                 ans.append(queens[i])
 
+        return ans
+
+    # 链接：https://leetcode.cn/problems/queens-that-can-attack-the-king/
+    def queensAttacktheKing(
+        self, queens: List[List[int]], king: List[int]
+    ) -> List[List[int]]:
+        s = set(map(tuple, queens))
+        ans = []
+        for dx, dy in (
+            (1, 0),
+            (1, 1),
+            (0, 1),
+            (-1, 1),
+            (-1, 0),
+            (-1, -1),
+            (0, -1),
+            (1, -1),
+        ):
+            x, y = king[0] + dx, king[1] + dy
+            while 0 <= x < 8 and 0 <= y < 8:
+                if (x, y) in s:
+                    ans.append([x, y])
+                    break
+                x += dx
+                y += dy
         return ans
 
 
