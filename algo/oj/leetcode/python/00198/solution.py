@@ -9,7 +9,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def rob(self, nums: List[int]) -> int:
+    def rob1(self, nums: List[int]) -> int:
         @cache
         def dfs(i):
             if i < 0:
@@ -17,6 +17,12 @@ class Solution:
             return max(dfs(i - 1), dfs(i - 2) + nums[i])
 
         return dfs(len(nums) - 1)
+
+    def rob(self, nums: List[int]) -> int:
+        f = [0] * (len(nums) + 2)
+        for i, x in enumerate(nums):
+            f[i + 2] = max(f[i + 1], f[i] + x)
+        return f[-1]
 
 
 # @lc code=end
