@@ -16,8 +16,7 @@ class Solution:
                 return 0
             return max(dfs(i - 1), dfs(i - 2) + nums[i])
 
-        n = len(nums)
-        return dfs(n - 1)
+        return dfs(len(nums) - 1)
 
 
 # @lc code=end
