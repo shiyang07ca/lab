@@ -18,11 +18,19 @@ class Solution:
 
         return dfs(len(nums) - 1)
 
-    def rob(self, nums: List[int]) -> int:
+    # 递推
+    def rob2(self, nums: List[int]) -> int:
         f = [0] * (len(nums) + 2)
         for i, x in enumerate(nums):
             f[i + 2] = max(f[i + 1], f[i] + x)
         return f[-1]
+
+    # 空间优化
+    def rob(self, nums: List[int]) -> int:
+        f0 = f1 = 0
+        for x in nums:
+            f0, f1 = f1, max(f1, f0 + x)
+        return f1
 
 
 # @lc code=end
