@@ -1,4 +1,5 @@
 # 埃氏筛
+# 素数筛
 # https://zhuanlan.zhihu.com/p/100051075
 MX = 10**5 + 1
 omega = [0] * MX  # omega[i] 表示 i 的质因子种类数
