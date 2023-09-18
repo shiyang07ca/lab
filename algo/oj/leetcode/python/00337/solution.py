@@ -2,6 +2,8 @@
 # leetgo: dev
 # https://leetcode.cn/problems/house-robber-iii/
 
+from functools import cache
+
 from typing import *
 from leetgo_py import *
 
@@ -18,7 +20,7 @@ from leetgo_py import *
 #         self.right = right
 class Solution:
     # 链接：https://leetcode.cn/problems/house-robber-iii/description/
-    def rob(self, root: Optional[TreeNode]) -> int:
+    def rob1(self, root: Optional[TreeNode]) -> int:
         def dfs(node: Optional[TreeNode]) -> (int, int):
             if node is None:  # 递归边界
                 return 0, 0  # 没有节点，怎么选都是 0
@@ -29,6 +31,35 @@ class Solution:
             return rob, not_rob
 
         return max(dfs(root))  # 根节点选或不选的最大值
+
+    @cache
+    def rob(self, root: Optional[TreeNode]) -> int:
+        if root is None:
+            return 0
+
+        if root.left is None and root.right is None:
+            return root.val
+        elif root.left is None:
+            return max(
+                root.val + self.rob(root.right.left) + self.rob(root.right.right),
+                self.rob(root.right),
+            )
+        elif root.right is None:
+            return max(
+                root.val + self.rob(root.left.left) + self.rob(root.left.right),
+                self.rob(root.left),
+            )
+        l = self.rob(root.left)
+        r = self.rob(root.right)
+
+        return max(
+            l + r,
+            root.val
+            + self.rob(root.left.left)
+            + self.rob(root.left.right)
+            + self.rob(root.right.left)
+            + self.rob(root.right.right),
+        )
 
 
 # @lc code=end
