@@ -7,7 +7,7 @@ from leetgo_py import *
 
 # @lc code=begin
 
-# TODO
+# TODO:
 # tag: binary search, dp
 
 """
