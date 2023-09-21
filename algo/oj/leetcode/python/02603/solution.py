@@ -9,6 +9,9 @@ from leetgo_py import *
 
 # TODO:
 
+# 相似题目
+# LC310. 最小高度树 https://leetcode.cn/problems/minimum-height-trees
+
 
 class Solution:
     # 链接：https://leetcode.cn/problems/collect-coins-in-a-tree/
