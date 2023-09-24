@@ -8,8 +8,8 @@ from leetgo_py import *
 # @lc code=begin
 
 
-# 链接：https://leetcode.cn/problems/operations-on-tree/
 class LockingTree:
+    # https://leetcode.cn/problems/operations-on-tree/solutions/2455158/python3javacgotypescript-yi-ti-yi-jie-df-1iwe/?envType=daily-question&envId=2023-09-23
     def __init__(self, parent: List[int]):
         n = len(parent)
         self.locked = [-1] * n
