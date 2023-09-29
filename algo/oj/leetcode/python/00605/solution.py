@@ -9,7 +9,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def canPlaceFlowers(self, flowerbed: List[int], n: int) -> bool:
+    def canPlaceFlowers1(self, flowerbed: List[int], n: int) -> bool:
         N = len(flowerbed)
         for i, x in enumerate(flowerbed):
             if n <= 0:
@@ -17,12 +17,21 @@ class Solution:
 
             if (
                 x == 0
-                and (i > 0 and flowerbed[i - 1] == 0 or i == 0)
-                and (i < N - 1 and flowerbed[i + 1] == 0 or i == N - 1)
+                and (i == 0 or flowerbed[i - 1] == 0)
+                and (i == N - 1 or flowerbed[i + 1] == 0)
             ):
                 n -= 1
                 flowerbed[i] = 1
 
+        return n <= 0
+
+    # 链接：https://leetcode.cn/problems/can-place-flowers/
+    def canPlaceFlowers(self, flowerbed: List[int], n: int) -> bool:
+        flowerbed = [0] + flowerbed + [0]
+        for i in range(1, len(flowerbed) - 1):
+            if flowerbed[i - 1] == 0 and flowerbed[i] == 0 and flowerbed[i + 1] == 0:
+                flowerbed[i] = 1  # 种花！
+                n -= 1
         return n <= 0
 
 
