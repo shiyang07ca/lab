@@ -18,7 +18,8 @@ class Solution:
             pre = p
         return ans
 
-    def maxProfit(self, prices: List[int]) -> int:
+    # 递归 + 记忆化
+    def maxProfit2(self, prices: List[int]) -> int:
         n = len(prices)
 
         @cache
@@ -31,6 +32,17 @@ class Solution:
             return max(dfs(i - 1, hold), dfs(i - 1, True) + prices[i])
 
         return dfs(n - 1, False)
+
+    # 递推
+    def maxProfit(self, prices: List[int]) -> int:
+        n = len(prices)
+        f = [[0] * 2 for _ in range(n + 1)]
+        f[0][1] = -inf
+        for i, p in enumerate(prices):
+            f[i + 1][0] = max(f[i][0], f[i][1] + p)
+            f[i + 1][1] = max(f[i][1], f[i][0] - p)
+
+        return f[n][0]
 
 
 # @lc code=end
