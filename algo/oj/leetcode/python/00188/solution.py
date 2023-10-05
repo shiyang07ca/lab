@@ -12,7 +12,8 @@ from leetgo_py import *
 
 class Solution:
     # 链接：https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iv/solutions/2201488/shi-pin-jiao-ni-yi-bu-bu-si-kao-dong-tai-kksg/
-    def maxProfit(self, k: int, prices: List[int]) -> int:
+    # 记忆化
+    def maxProfit1(self, k: int, prices: List[int]) -> int:
         n = len(prices)
 
         @cache
@@ -26,6 +27,18 @@ class Solution:
             return max(dfs(i - 1, j, False), dfs(i - 1, j, True) + prices[i])
 
         return dfs(n - 1, k, False)
+
+    # 递推
+    def maxProfit(self, k: int, prices: List[int]) -> int:
+        n = len(prices)
+        f = [[[-inf] * 2 for _ in range(k + 2)] for _ in range(n + 1)]
+        for j in range(1, k + 2):
+            f[0][j][0] = 0
+        for i, p in enumerate(prices):
+            for j in range(1, k + 2):
+                f[i + 1][j][0] = max(f[i][j][0], f[i][j][1] + p)
+                f[i + 1][j][1] = max(f[i][j][1], f[i][j - 1][0] - p)
+        return f[n][k + 1][0]
 
 
 # @lc code=end
