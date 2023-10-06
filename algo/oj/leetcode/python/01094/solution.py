@@ -1,0 +1,36 @@
+# Created by shiyang07ca at 2023/10/06 10:58
+# leetgo: dev
+# https://leetcode.cn/problems/car-pooling/
+
+from typing import *
+from leetgo_py import *
+
+# @lc code=begin
+
+
+class Solution:
+    def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
+        n = 1005
+        diff = [0] * n
+        for x, left, right in trips:
+            diff[left] += x
+            diff[right] -= x
+
+        for i in range(1, n):
+            diff[i] += diff[i - 1]
+
+        for d in diff:
+            if d > capacity:
+                return False
+
+        return True
+
+
+# @lc code=end
+
+if __name__ == "__main__":
+    trips: List[List[int]] = deserialize("List[List[int]]", read_line())
+    capacity: int = deserialize("int", read_line())
+    ans = Solution().carPooling(trips, capacity)
+
+    print("\noutput:", serialize(ans))
