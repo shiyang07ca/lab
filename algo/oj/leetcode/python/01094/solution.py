@@ -7,10 +7,12 @@ from leetgo_py import *
 
 # @lc code=begin
 
+# tag: 差分数组
+
 
 class Solution:
-    def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
-        n = 1005
+    def carPooling1(self, trips: List[List[int]], capacity: int) -> bool:
+        n = 1001
         diff = [0] * n
         for x, left, right in trips:
             diff[left] += x
@@ -24,6 +26,14 @@ class Solution:
                 return False
 
         return True
+
+    # 链接：https://leetcode.cn/problems/car-pooling/
+    def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
+        d = [0] * 1001
+        for num, from_, to in trips:
+            d[from_] += num
+            d[to] -= num
+        return all(s <= capacity for s in accumulate(d))
 
 
 # @lc code=end
