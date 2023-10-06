@@ -31,3 +31,15 @@ def solve(n: int, queries: List[List[int]]) -> List[int]:
     for i in range(1, n):
         diff[i] += diff[i - 1]  # 直接在差分数组上复原数组 a
     return diff
+
+
+"""
+例题
+
+LC1094. 拼车 https://leetcode.cn/problems/car-pooling/description/
+LC1109. 航班预订统计 https://leetcode.cn/problems/corporate-flight-bookings/description/
+LC2381. 字母移位 II https://leetcode.cn/problems/shifting-letters-ii/description/
+LC2406. 将区间分为最少组数 https://leetcode.cn/problems/divide-intervals-into-minimum-number-of-groups/description/
+LC2772. 使数组中的所有元素都等于零 https://leetcode.cn/problems/apply-operations-to-make-all-array-elements-equal-to-zero/description/
+LC2528. 最大化城市的最小供电站数目 https://leetcode.cn/problems/maximize-the-minimum-powered-city/description/
+"""
