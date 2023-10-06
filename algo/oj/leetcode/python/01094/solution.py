@@ -28,12 +28,24 @@ class Solution:
         return True
 
     # 链接：https://leetcode.cn/problems/car-pooling/
-    def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
+    def carPooling2(self, trips: List[List[int]], capacity: int) -> bool:
         d = [0] * 1001
         for num, from_, to in trips:
             d[from_] += num
             d[to] -= num
         return all(s <= capacity for s in accumulate(d))
+
+    def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
+        d = Counter()
+        for num, from_, to in trips:
+            d[from_] += num
+            d[to] -= num
+        s = 0
+        for k in sorted(d):
+            s += d[k]
+            if s > capacity:
+                return False
+        return True
 
 
 # @lc code=end
