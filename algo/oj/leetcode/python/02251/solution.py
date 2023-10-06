@@ -7,6 +7,8 @@ from leetgo_py import *
 
 # @lc code=begin
 
+# tag: binary search, 差分数组
+
 # TODO:
 
 
