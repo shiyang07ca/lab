@@ -43,14 +43,6 @@ class StockPrice:
 # param_3 = obj.maximum()
 # param_4 = obj.minimum()
 
-
-# Your StockPrice object will be instantiated and called as such:
-# obj = StockPrice()
-# obj.update(timestamp,price)
-# param_2 = obj.current()
-# param_3 = obj.maximum()
-# param_4 = obj.minimum()
-
 # @lc code=end
 
 if __name__ == "__main__":
