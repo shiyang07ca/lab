@@ -31,10 +31,10 @@ class Solution:
         for i, c in enumerate(s):
             nums[i] += d if c == "R" else -d
         nums.sort()
-        ans = s = 0
+        ans = pre = 0
         for i, x in enumerate(nums):
-            ans += i * x - s
-            s += x
+            ans += i * x - pre
+            pre += x
         return ans % mod
 
 
