@@ -7,9 +7,11 @@ from leetgo_py import *
 
 # @lc code=begin
 
+# TODO:
+
 
 class Solution:
-    def singleNumber(self, nums: List[int]) -> int:
+    def singleNumber1(self, nums: List[int]) -> int:
         n = len(nums)
         if n == 1:
             return nums[0]
@@ -23,6 +25,15 @@ class Solution:
                     return x
 
         return nums[n - 1]
+
+    # 链接：https://leetcode.cn/problems/single-number-ii/
+    def singleNumber(self, nums: List[int]) -> int:
+        ans = 0
+        for i in range(31):
+            cnt1 = sum(x >> i & 1 for x in nums)
+            ans |= cnt1 % 3 << i
+        cnt1 = sum(x >> 31 & 1 for x in nums)
+        return ans - (cnt1 % 3 << 31)  # 符号位
 
 
 # @lc code=end
