@@ -9,7 +9,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def countPairs(self, n: int, edges: List[List[int]]) -> int:
+    def countPairs1(self, n: int, edges: List[List[int]]) -> int:
         def find(x):
             if p[x] != x:
                 # 路径压缩
@@ -25,7 +25,6 @@ class Solution:
 
         p = list(range(n))
         size = [1] * n
-
         ans = 0
         for a, b in edges:
             union(a, b)
@@ -34,6 +33,31 @@ class Solution:
             ans += n - size[find(i)]
 
         return ans // 2
+
+    # DFS
+    # 链接：https://leetcode.cn/problems/count-unreachable-pairs-of-nodes-in-an-undirected-graph/solutions/
+    def countPairs(self, n: int, edges: List[List[int]]) -> int:
+        g = [[] for _ in range(n)]
+        for x, y in edges:
+            g[x].append(y)
+            g[y].append(x)
+
+        visited = [False] * n
+
+        def dfs(x: int) -> int:
+            visited[x] = True
+            count = 1
+            for y in g[x]:
+                if not visited[y]:
+                    count += dfs(y)
+            return count
+
+        res = 0
+        for i in range(n):
+            if not visited[i]:
+                count = dfs(i)
+                res += count * (n - count)
+        return res // 2
 
 
 # @lc code=end
