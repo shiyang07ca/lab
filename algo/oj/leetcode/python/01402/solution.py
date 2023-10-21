@@ -9,7 +9,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def maxSatisfaction(self, sati: List[int]) -> int:
+    def maxSatisfaction1(self, sati: List[int]) -> int:
         sati.sort()
         n = len(sati)
         suf = [0] * (n + 1)
@@ -22,6 +22,20 @@ class Solution:
             ans = max(ans, ans - suf[i])
 
         return max(ans, 0)
+
+    # 链接：https://leetcode.cn/problems/reducing-dishes/
+    def maxSatisfaction(self, satisfaction: List[int]) -> int:
+        satisfaction.sort(reverse=True)
+
+        ans = pre = 0
+        for num in satisfaction:
+            pre += num
+            if pre >= 0:
+                ans += pre
+            else:
+                break
+
+        return ans
 
 
 # @lc code=end
