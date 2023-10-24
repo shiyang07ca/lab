@@ -17,15 +17,15 @@ class Solution:
 
         @cache
         def dfs(n, target):
-            if target < 0 or (target > 0 and n <= 0):
+            if target < 0 or (target > 0 and n == 0):
                 return 0
             if n == 0 and target == 0:
                 return 1
 
             ans = 0
             for i in range(1, min(k, target) + 1):
-                ans += dfs(n - 1, target - i) % MOD
-            return ans % MOD
+                ans = (ans + dfs(n - 1, target - i)) % MOD
+            return ans
 
         return dfs(n, target)
 
