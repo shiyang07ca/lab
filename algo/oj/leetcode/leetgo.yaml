@@ -22,4 +22,4 @@ editor:
   # command: emacs
   # args: [-nw, -l, ~/.emacs.d/init-mini.el]
   command: emacsclient
-  args: "-a, -nw {{.Files}}"
+  args: "-nw {{.CodeFile}}"
