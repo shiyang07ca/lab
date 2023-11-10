@@ -19,7 +19,7 @@ def add():
         lst.pop()
 
 
-def main():
+def test_thread():
     print(f"before: {cnt}")
 
     threads = []
@@ -35,6 +35,37 @@ def main():
 
     print(f"after: {cnt}")
     print(f"after: {len(lst)}")
+
+
+
+def test_lamda():
+    from collections import defaultdict
+    from functools import partial
+
+    def factory(x):
+        return x * 2
+
+    my_dict = defaultdict(partial(factory, 2))
+    my_dict[2]
+    print(my_dict)
+    my_dict[3] = 5
+    print(my_dict)
+
+    # dic = defaultdict(lambda: {'x': x, 'y': y})
+    # for i in range(3):
+    #     x = y = i
+    #     dic[i]['q'] = 2
+    # print(dic)
+
+    # fn = lambda x, y: x + y
+    # print(fn)
+    # print(fn(2, 3))
+
+def main():
+    ''' '''
+
+    test_lamda()
+
 
 
 if __name__ == "__main__":
