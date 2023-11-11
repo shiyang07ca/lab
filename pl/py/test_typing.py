@@ -12,7 +12,9 @@ class MyClass:
 
 class Test:
     a: str
-    b: int
+
+    def __init__(self):
+        pass
 
     def log(self):
         pass
@@ -38,12 +40,11 @@ from typing import Protocol, Any, TypeVar
 
 
 class SupportsLessThan(Protocol):
-
     def __lt__(self, other: Any) -> bool:
         return self < other
 
 
-LT = TypeVar('LT', bound=SupportsLessThan)
+LT = TypeVar("LT", bound=SupportsLessThan)
 
 
 def top(series: Iterable[LT], length: int) -> list[LT]:
@@ -51,13 +52,55 @@ def top(series: Iterable[LT], length: int) -> list[LT]:
     return ordered[:length]
 
 
+class MyClass:
+    class_var = 10
+
+    def __init__(self, instance_var):
+        self.instance_var = instance_var
+
+    def print_vars(self):
+        print("Class variable:", MyClass.class_var)
+        print("Instance variable:", self.instance_var)
+
+    @classmethod
+    def set_class_var(cls):
+        cls.class_var = 100
+
+
+def t_class_var():
+    a = MyClass(5)
+    b = MyClass(6)
+    a.print_vars()
+    b.print_vars()
+
+    a.instance_var = 8
+    b.instance_var = 9
+    a.print_vars()
+    b.print_vars()
+
+    # a.class_var = 20
+    # b.class_var = 40
+    # a.print_vars()
+    # b.print_vars()
+
+    a.set_class_var()
+    a.print_vars()
+    b.print_vars()
+
+    MyClass.class_var = 30
+    a.print_vars()
+    b.print_vars()
+
+
 if __name__ == "__main__":
+    t_class_var()
+
     # t_dataclass()
 
     # parse_token(1)
 
-    ss = range(8)
-    print(top(ss, 4))
+    # ss = range(8)
+    # print(top(ss, 4))
 
     # import ipdb; ipdb.set_trace()
 
