@@ -27,7 +27,9 @@ print(user.friends)
 # > [1, 2, 3]
 print(user.model_dump())
 
-print(user.schema(), type(user.schema()))
+print(user.model_dump_json(), type(user.model_dump_json()))
+
+print(user.model_json_schema(), type(user.model_json_schema()))
 # print(user.schema_json(), type(user.schema_json()))
 
 """
