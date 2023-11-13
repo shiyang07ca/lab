@@ -8,6 +8,7 @@ from leetgo_py import *
 # @lc code=begin
 
 # TODO:
+# template
 
 # 链接：https://leetcode.cn/problems/range-module/description/
 
