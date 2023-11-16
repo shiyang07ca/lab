@@ -11,20 +11,14 @@ from leetgo_py import *
 class Solution:
     def longestAlternatingSubarray(self, nums: List[int], threshold: int) -> int:
         ans = 0
-        l = r = 0
+        l = 0
+        r = 1
         n = len(nums)
-        while l < n and (nums[l] > threshold or nums[l] % 2 != 0):
-            l += 1
-        if l == n:
-            return 0
-
-        r = l + 1
-        ans = 1
         while l < n:
             if nums[l] % 2 != 0 or nums[l] > threshold:
                 l += 1
                 continue
-            if r < n and nums[r] <= threshold and nums[r] % 2 != nums[r - 1] % 2:
+            while r < n and nums[r] <= threshold and nums[r] % 2 != nums[r - 1] % 2:
                 r += 1
             else:
                 ans = max(ans, r - l)
