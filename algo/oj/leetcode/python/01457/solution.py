@@ -10,8 +10,6 @@ from leetgo_py import *
 
 class Solution:
     def pseudoPalindromicPaths(self, root: Optional[TreeNode]) -> int:
-        ans = 0
-
         def dfs(node, pre):
             if not node.left and not node.right:
                 nonlocal ans
@@ -23,6 +21,7 @@ class Solution:
             if node.right:
                 dfs(node.right, pre ^ (1 << (node.right.val - 1)))
 
+        ans = 0
         dfs(root, (1 << (root.val - 1)))
         return ans
 
