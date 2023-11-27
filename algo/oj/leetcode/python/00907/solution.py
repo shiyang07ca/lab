@@ -8,6 +8,7 @@ from leetgo_py import *
 # @lc code=begin
 
 # TODO:
+# template
 # tag: Monotone Stack
 
 
