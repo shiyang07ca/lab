@@ -33,7 +33,7 @@ a    [ 3       1        2        4 ]
 
 
 class Solution:
-    def sumSubarrayMins(self, arr: List[int]) -> int:
+    def sumSubarrayMins1(self, arr: List[int]) -> int:
         pos = [[]] * len(arr)
         st = []
         N = len(arr)
@@ -56,6 +56,31 @@ class Solution:
         MOD = 10**9 + 7
         for i, (l, r) in enumerate(pos):
             ans += (i - l) * (r - i) * arr[i]
+
+        return ans % MOD
+
+    def sumSubarrayMins(self, arr: List[int]) -> int:
+        def get_near_more(nums):
+            N = len(nums)
+            left = [-1] * N  # left[i] 为左侧严格小于等于 nums[i] 的最近元素位置（不存在时为-1）
+            right = [N] * N  # right[i] 为右侧严格小于 nums[i] 的最近元素位置（不存在时为 N）
+            st = []
+            for i, n in enumerate(nums):
+                while st and nums[st[-1]] > n:
+                    popi = st.pop()
+                    right[popi] = i
+                left[i] = st[-1] if st else -1
+                st.append(i)
+
+            return [[l, r] for l, r in zip(left, right)]
+
+        ans = 0
+        MOD = 10**9 + 7
+        stk = get_near_more(arr)
+
+        for (i, n), (l, r) in zip(enumerate(arr), stk):
+            print(n, l, i, r, ans)
+            ans += n * (i - l) * (r - i)
 
         return ans % MOD
 
