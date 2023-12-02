@@ -40,3 +40,20 @@ print(user.model_json_schema(), type(user.model_json_schema()))
     'name': 'John Doe',
 }
 """
+
+from dataclasses import dataclass
+
+
+@dataclass
+class NetInfo:
+    ip: str
+    mac_addr: Optional[str] = None
+
+
+def main():
+    ip = NetInfo(ip="a.b.c.d")
+    print(ip, ip.__dict__)
+
+
+if __name__ == "__main__":
+    main()

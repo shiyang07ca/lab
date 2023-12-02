@@ -64,7 +64,11 @@ def test_lamda():
 def main():
     ''' '''
 
-    test_lamda()
+    # test_lamda()
+
+    import config
+
+    import ipdb; ipdb.set_trace()
 
 
 
