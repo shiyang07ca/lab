@@ -11,13 +11,12 @@ from leetgo_py import *
 class Solution:
     def maxScore(self, ps: List[int], k: int) -> int:
         n = len(ps)
-        pre = sum(ps[:k])
         ans = suf = sum(ps[-k:])
         for i in range(n - k, n):
             suf -= ps[i]
             suf += ps[(i + k) % n]
             ans = max(ans, suf)
-        return max(ans, pre, suf)
+        return max(ans, suf)
 
 
 # @lc code=end
