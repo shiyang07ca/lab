@@ -27,7 +27,6 @@ class Solution:
 
         return True
 
-    # 链接：https://leetcode.cn/problems/car-pooling/
     def carPooling2(self, trips: List[List[int]], capacity: int) -> bool:
         d = [0] * 1001
         for num, from_, to in trips:
