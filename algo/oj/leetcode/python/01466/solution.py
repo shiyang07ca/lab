@@ -9,7 +9,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def minReorder(self, n: int, connections: List[List[int]]) -> int:
+    def minReorder1(self, n: int, connections: List[List[int]]) -> int:
         g1 = [[] for _ in range(n)]
         g2 = [[] for _ in range(n)]
         for x, y in connections:
@@ -31,6 +31,23 @@ class Solution:
                     q.append(v)
                     vis.add(v)
         return ans
+
+    # 链接：https://leetcode.cn/problems/reorder-routes-to-make-all-paths-lead-to-the-city-zero/solutions/2328146/ke-neng-shi-shang-zui-tong-su-yi-dong-de-58by/
+    def minReorder(self, n: int, connections: List[List[int]]) -> int:
+        def dfs(x: int, parent: int, e: List[List[List[int]]]) -> int:
+            res = 0
+            for a, c in e[x]:
+                if a == parent:
+                    continue
+                res += c + dfs(a, x, e)
+            return res
+
+        e = [[] for _ in range(n)]
+        for a, b in connections:
+            e[a].append([b, 1])
+            e[b].append([a, 0])
+
+        return dfs(0, -1, e)
 
 
 # @lc code=end
