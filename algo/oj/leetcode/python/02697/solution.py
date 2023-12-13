@@ -9,18 +9,14 @@ from leetgo_py import *
 
 
 class Solution:
+    # https://leetcode.cn/problems/lexicographically-smallest-palindrome/solutions/2564425/python3javacgorust-yi-ti-yi-jie-tan-xin-yua0e/?envType=daily-question&envId=2023-12-13
     def makeSmallestPalindrome(self, s: str) -> str:
-        ans = []
-        n = len(s)
-        for i in range(n // 2):
-            if s[i] <= s[-i-1]:
-                ans.append(s[i])
-            else:
-                ans.append(s[-i - 1])
-        if n % 2:
-            return "".join(ans + [s[n // 2]] + ans[::-1])
-        else:
-            return "".join(ans + ans[::-1])
+        cs = list(s)
+        i, j = 0, len(s) - 1
+        while i < j:
+            cs[i] = cs[j] = min(cs[i], cs[j])
+            i, j = i + 1, j - 1
+        return "".join(cs)
 
 
 # @lc code=end
