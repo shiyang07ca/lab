@@ -10,7 +10,7 @@ from leetgo_py import *
 
 class Solution:
     # 链接：https://leetcode.cn/problems/day-of-the-week/solutions/1187956/yi-zhou-zhong-de-di-ji-tian-by-leetcode-w43iw/链接：https://leetcode.cn/problems/day-of-the-week/solutions/1187956/yi-zhou-zhong-de-di-ji-tian-by-leetcode-w43iw/
-    def dayOfTheWeek(self, day: int, month: int, year: int) -> str:
+    def dayOfTheWeek1(self, day: int, month: int, year: int) -> str:
         week = [
             "Monday",
             "Tuesday",
@@ -43,6 +43,30 @@ class Solution:
             "Saturday",
             "Sunday",
         ][datetime.datetime(year, month, day).weekday()]
+
+    def dayOfTheWeek(self, day: int, month: int, year: int) -> str:
+        def is_leap(year):
+            return year % 4 == 0 and year % 100 != 0 or year % 400 == 0
+
+        ws = [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+        ]
+        ms = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        ans = 3
+        for i in range(1971, year):
+            ans += 366 if is_leap(i) else 365
+        for i in range(1, month):
+            ans += ms[i - 1]
+            if i == 2 and is_leap(year):
+                ans += 1
+        ans += day
+        return ws[ans % 7]
 
 
 # @lc code=end
