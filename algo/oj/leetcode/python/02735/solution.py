@@ -7,12 +7,14 @@ from leetgo_py import *
 
 # @lc code=begin
 
+
 # TODO:
+# tag: Enumeration
 
 
 class Solution:
     # 链接：https://leetcode.cn/problems/collecting-chocolates/solutions/2582444/python3javacgorust-yi-ti-yi-jie-mei-ju-q-y3b3/
-    def minCost(self, nums: List[int], x: int) -> int:
+    def minCost1(self, nums: List[int], x: int) -> int:
         n = len(nums)
         f = [[0] * n for _ in range(n)]
         for i, v in enumerate(nums):
@@ -20,6 +22,14 @@ class Solution:
             for j in range(1, n):
                 f[i][j] = min(f[i][j - 1], nums[(i - j) % n])
         return min(sum(f[i][j] for i in range(n)) + x * j for j in range(n))
+
+    def minCost(self, nums: List[int], x: int) -> int:
+        n = len(nums)
+        M = [[inf] * n for _ in range(n)]
+        for i in range(n):
+            for j in range(n):
+                M[i][(i + j) % n] = min(M[i][(i + j - 1) % n], nums[(i + j) % n])
+        return min(k * x + sum(M[i][(i + k) % n] for i in range(n)) for k in range(n))
 
 
 # @lc code=end
