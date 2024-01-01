@@ -13,7 +13,7 @@ from leetgo_py import *
 
 class Solution:
     # https://leetcode.cn/problems/beautiful-towers-ii/solutions/2456562/qian-hou-zhui-fen-jie-dan-diao-zhan-pyth-1exe/?envType=daily-question&envId=2023-12-21
-    def maximumSumOfHeights(self, a: List[int]) -> int:
+    def maximumSumOfHeights1(self, a: List[int]) -> int:
         n = len(a)
         suf = [0] * (n + 1)
         st = [n]  # 哨兵
@@ -38,6 +38,26 @@ class Solution:
             ans = max(ans, pre + suf[i + 1])
             st.append(i)
         return ans
+
+    def maximumSumOfHeights(self, a):
+        n = len(a)
+
+        def get(a):
+            f = [0] * n
+            st = []
+            for i, v in enumerate(a):
+                while st and v < a[st[-1]]:
+                    st.pop()
+                if st:
+                    f[i] = f[st[-1]] + (i - st[-1]) * v
+                else:
+                    f[i] = v * (i + 1)
+                st.append(i)
+            return f
+
+        pre = get(a)
+        suf = get(a[::-1])[::-1]
+        return max(x + y - z for x, y, z in zip(pre, suf, a))
 
 
 # @lc code=end
