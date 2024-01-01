@@ -23,6 +23,7 @@ class Solution:
                 f[i][j] = min(f[i][j - 1], nums[(i - j) % n])
         return min(sum(f[i][j] for i in range(n)) + x * j for j in range(n))
 
+    # https://leetcode.cn/problems/collecting-chocolates/solutions/2304896/qiao-miao-mei-ju-pythonjavacgo-by-endles-5ws2/?envType=daily-question&envId=2023-12-28
     def minCost(self, nums: List[int], x: int) -> int:
         n = len(nums)
         M = [[inf] * n for _ in range(n)]
