@@ -9,6 +9,9 @@ from leetgo_py import *
 
 # @lc code=begin
 
+# template
+# tag: Monotonic Stack
+
 from sortedcontainers import *
 
 
@@ -18,7 +21,7 @@ from sortedcontainers import *
 #         self.val = val
 #         self.next = next
 class Solution:
-    def removeNodes(self, head: Optional[ListNode]) -> Optional[ListNode]:
+    def removeNodes1(self, head: Optional[ListNode]) -> Optional[ListNode]:
         ns = []
         cur = head
         while cur:
@@ -35,6 +38,26 @@ class Solution:
             sl.add(n)
 
         return pre
+
+    def removeNodes(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        ns = []
+        cur = head
+        while cur:
+            ns.append(cur.val)
+            cur = cur.next
+
+        st = []
+        for n in ns:
+            while st and st[-1] < n:
+                st.pop()
+            st.append(n)
+
+        dummy = ListNode()
+        head = dummy
+        for n in st:
+            head.next = ListNode(n)
+            head = head.next
+        return dummy.next
 
 
 # @lc code=end
