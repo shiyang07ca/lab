@@ -7,6 +7,7 @@ from leetgo_py import *
 
 # @lc code=begin
 
+# tag: Hash Table, Math
 # TODO:
 
 
