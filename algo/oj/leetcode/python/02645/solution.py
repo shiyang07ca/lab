@@ -9,7 +9,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def addMinimum(self, word: str) -> int:
+    def addMinimum1(self, word: str) -> int:
         ans = i = 0
         N = len(word)
         while True:
@@ -31,6 +31,10 @@ class Solution:
             ans += 2
 
         return ans
+
+    def addMinimum(self, s: str) -> int:
+        t = 1 + sum(x >= y for x, y in pairwise(s))
+        return t * 3 - len(s)
 
 
 # @lc code=end
