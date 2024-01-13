@@ -35,8 +35,6 @@ class Solution:
                 cnt[i] = 0
                 i -= 1
 
-        # return "".join(ans)
-
 
 # @lc code=end
 
