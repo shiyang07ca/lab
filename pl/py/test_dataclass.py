@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class Rectangle:
-    _width: float
-    _height: float
+    _width: float = 0
+    _height: float = 0
 
     @property
     def width(self):
@@ -36,18 +37,31 @@ class Rectangle:
         self._perimeter = 2 * (self.width + self.height)
 
 
-if __name__ == '__main__':
+def test1():
     # 创建一个 Rectangle 对象
     rectangle = Rectangle(3, 4)
 
     # 输出初始的 area 和 perimeter
-    print(rectangle.area)      # 输出: 12.0
-    print(rectangle.perimeter) # 输出: 14.0
+    print(rectangle.area)  # 输出: 12.0
+    print(rectangle.perimeter)  # 输出: 14.0
 
     # 修改 width 和 height 的值
     rectangle.width = 5
     rectangle.height = 6
 
     # 输出更新后的 area 和 perimeter
-    print(rectangle.area)      # 输出: 30.0
-    print(rectangle.perimeter) # 输出: 22.0
+    print(rectangle.area)  # 输出: 30.0
+    print(rectangle.perimeter)  # 输出: 22.0
+
+
+def test2():
+    rec = Rectangle()
+    rec.width = 5
+    print(rec.width, rec.height)
+
+if __name__ == '__main__':
+    print("================ 1")
+    test1()
+
+    print("================ 2")
+    test2()
