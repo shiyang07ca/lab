@@ -14,7 +14,7 @@ from leetgo_py import *
 #         self.val = val
 #         self.next = next
 class Solution:
-    def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
+    def deleteDuplicates1(self, head: Optional[ListNode]) -> Optional[ListNode]:
         dummy = pre = ListNode()
         dummy.next = cur = head
         cnt = Counter()
@@ -29,6 +29,20 @@ class Solution:
                 pre = head
             head = head.next
 
+        return dummy.next
+
+    # 链接：https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/solutions/2604688/python3javacgotypescript-yi-ti-yi-jie-yi-gzbt/
+    def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = pre = ListNode(next=head)
+        cur = head
+        while cur:
+            while cur.next and cur.next.val == cur.val:
+                cur = cur.next
+            if pre.next == cur:
+                pre = cur
+            else:
+                pre.next = cur.next
+            cur = cur.next
         return dummy.next
 
 
