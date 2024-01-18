@@ -9,7 +9,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def minimumRemoval(self, beans: List[int]) -> int:
+    def minimumRemoval1(self, beans: List[int]) -> int:
         beans.sort()
         pre = list(accumulate(beans, initial=0))
         suf = list(accumulate(beans[::-1], initial=0))
@@ -24,6 +24,11 @@ class Solution:
             ans = min(ans, c)
 
         return ans
+
+    # 链接：https://leetcode.cn/problems/removing-minimum-number-of-magic-beans/solutions/1262419/pai-xu-hou-yi-ci-bian-li-by-endlesscheng-36g8/
+    def minimumRemoval(self, beans: List[int]) -> int:
+        beans.sort()
+        return sum(beans) - max((len(beans) - i) * v for i, v in enumerate(beans))
 
 
 # @lc code=end
