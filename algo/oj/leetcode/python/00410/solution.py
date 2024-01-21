@@ -25,6 +25,7 @@ class Solution:
                         return False
                     cnt += 1
                     s = x
+
             return True
 
         l, r = max(nums), sum(nums)
