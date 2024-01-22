@@ -23,7 +23,6 @@ class Solution:
                 for j in range(len(nums) - 1, i, -1):
                     if sns[i] == ans[j]:
                         ans[j] = n
-                        print(ans)
                         return int("".join(str(n) for n in ans))
         return int("".join(str(n) for n in ans))
 
