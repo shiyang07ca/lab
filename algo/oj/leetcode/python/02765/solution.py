@@ -30,6 +30,18 @@ class Solution:
         return ans
 
     # 链接：https://leetcode.cn/problems/longest-alternating-subarray/solutions/2615916/jiao-ni-yi-ci-xing-ba-dai-ma-xie-dui-on-r57bz/
+    """
+    分组循环
+    n = len(nums)
+    i = 0
+    while i < n:
+        start = i
+        while i < n and ...:
+            i += 1
+        # 从 start 到 i-1 是一组
+        # 下一组从 i 开始，无需 i += 1
+    """
+
     def alternatingSubarray(self, nums: List[int]) -> int:
         ans = -1
         i, n = 0, len(nums)
