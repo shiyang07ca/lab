@@ -65,6 +65,11 @@ def t_typevar():
         def __init__(self, content: T):
             self.content = content
 
+    item: T = first_item(list(range(10)))
+    print(f"first item: {item}")
+    box = Box("hello")
+    print(f"box content: {box.content}")
+
 
 if __name__ == "__main__":
     t_typevar()

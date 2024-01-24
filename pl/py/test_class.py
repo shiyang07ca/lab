@@ -85,10 +85,14 @@ def t_class_var():
     a.print_vars()
     b.print_vars()
 
+    print("================================================================")
+
     a.instance_var = 8
     b.instance_var = 9
     a.print_vars()
     b.print_vars()
+
+    print("================================================================")
 
     # a.class_var = 20
     # b.class_var = 40
@@ -98,6 +102,8 @@ def t_class_var():
     a.set_class_var()
     a.print_vars()
     b.print_vars()
+
+    print("================================================================")
 
     MyClass.class_var = 30
     a.print_vars()
