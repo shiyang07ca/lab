@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from typing import Optional
-from typing import Union
+from typing import Optional, Union
 
 
 @dataclass
@@ -36,7 +35,7 @@ def parse_token(token: str) -> Union[str, float]:
 
 
 from collections.abc import Iterable
-from typing import Protocol, Any, TypeVar
+from typing import Any, Protocol, TypeVar
 
 
 class SupportsLessThan(Protocol):
@@ -52,48 +51,23 @@ def top(series: Iterable[LT], length: int) -> list[LT]:
     return ordered[:length]
 
 
-class MyClass:
-    class_var = 10
+def t_typevar():
+    from typing import Generic, List, TypeVar
 
-    def __init__(self, instance_var):
-        self.instance_var = instance_var
+    T = TypeVar("T")  # 创建一个泛型类型变量
 
-    def print_vars(self):
-        print("Class variable:", MyClass.class_var)
-        print("Instance variable:", self.instance_var)
+    # 在函数签名中使用泛型类型变量
+    def first_item(items: List[T]) -> T:
+        return items[0]
 
-    @classmethod
-    def set_class_var(cls):
-        cls.class_var = 100
-
-
-def t_class_var():
-    a = MyClass(5)
-    b = MyClass(6)
-    a.print_vars()
-    b.print_vars()
-
-    a.instance_var = 8
-    b.instance_var = 9
-    a.print_vars()
-    b.print_vars()
-
-    # a.class_var = 20
-    # b.class_var = 40
-    # a.print_vars()
-    # b.print_vars()
-
-    a.set_class_var()
-    a.print_vars()
-    b.print_vars()
-
-    MyClass.class_var = 30
-    a.print_vars()
-    b.print_vars()
+    # 在类定义中使用泛型类型变量
+    class Box(Generic[T]):
+        def __init__(self, content: T):
+            self.content = content
 
 
 if __name__ == "__main__":
-    t_class_var()
+    t_typevar()
 
     # t_dataclass()
 

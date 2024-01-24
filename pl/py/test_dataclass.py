@@ -59,7 +59,8 @@ def test2():
     rec.width = 5
     print(rec.width, rec.height)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     print("================ 1")
     test1()
 

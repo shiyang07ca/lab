@@ -37,7 +37,6 @@ def test_thread():
     print(f"after: {len(lst)}")
 
 
-
 def test_lamda():
     from collections import defaultdict
     from functools import partial
@@ -61,15 +60,17 @@ def test_lamda():
     # print(fn)
     # print(fn(2, 3))
 
+
 def main():
-    ''' '''
+    """ """
 
     # test_lamda()
 
     import config
 
-    import ipdb; ipdb.set_trace()
+    import ipdb
 
+    ipdb.set_trace()
 
 
 if __name__ == "__main__":
