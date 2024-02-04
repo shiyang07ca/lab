@@ -19,7 +19,9 @@ class Solution:
         def dfs(i: int, j: int) -> int:
             if i == j:  # 递归边界
                 return 0
-            return max(s[j + 1] - s[i + 1] - dfs(i + 1, j), s[j] - s[i] - dfs(i, j - 1))
+            a = s[j + 1] - s[i + 1] - dfs(i + 1, j)
+            b = s[j] - s[i] - dfs(i, j - 1)
+            return max(a, b)
 
         ans = dfs(0, len(stones) - 1)
         dfs.cache_clear()  # 防止爆内存
