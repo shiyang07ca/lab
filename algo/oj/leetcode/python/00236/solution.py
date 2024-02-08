@@ -18,21 +18,24 @@ from leetgo_py import *
 
 
 class Solution:
-    # 链接：https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/solutions/240096/236-er-cha-shu-de-zui-jin-gong-gong-zu-xian-hou-xu/
+    # 分类讨论：
+    # - 当前节点是空节点：返回当前节点
+    # - 当前节点是 p：返回当前节点
+    # - 当前节点是 q：返回当前节点
+    # - 左右子树都能找到：返回当前节点
+    # - 只有左子树找到：返回递归左子树结果
+    # - 只有右子树找到：返回递归右子树结果
+    # - 左右子树都没找到：返回空节点
     def lowestCommonAncestor(
         self, root: TreeNode, p: TreeNode, q: TreeNode
     ) -> TreeNode:
-        if not root or root == p or root == q:
+        if root in (None, p, q):
             return root
         left = self.lowestCommonAncestor(root.left, p, q)
         right = self.lowestCommonAncestor(root.right, p, q)
-        if not left and not right:
-            return
-        if not left:
-            return right
-        if not right:
-            return left
-        return root
+        if left and right:
+            return root
+        return left or right
 
 
 # @lc code=end
