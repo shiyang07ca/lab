@@ -29,7 +29,7 @@ class Solution:
         dfs(root)
         return ans
 
-    def postorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+    def postorderTraversal1(self, root: Optional[TreeNode]) -> List[int]:
         if root is None:
             return []
 
@@ -45,6 +45,26 @@ class Solution:
         ans = []
         while stack2:
             ans.append(stack2.pop().val)
+
+        return ans
+
+    def postorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        if root is None:
+            return []
+
+        ans = []
+        h = root
+        c = None
+        stack = [h]
+        while stack:
+            c = stack[-1]
+            if c.left and h != c.left and h != c.right:
+                stack.append(c.left)
+            elif c.right and h != c.right:
+                stack.append(c.right)
+            else:
+                ans.append(stack.pop().val)
+                h = c
 
         return ans
 
