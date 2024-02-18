@@ -7,6 +7,7 @@ from collections import deque
 from redis import StrictRedis
 
 from CountDownLatch import CountDownLatch
+from decoder import RedBeatJSONDecoder, RedBeatJSONEncoder, to_timestamp
 
 
 class TIMEOUT_ST(Enum):
@@ -46,6 +47,26 @@ def get_redis():
     return conn
 
 
+from celery.schedules import schedule
+
+from datetime import datetime, timedelta, tzinfo
+
+
+def maybe_schedule(s: int | float | timedelta, relative: bool = False):
+    """Return schedule from number, timedelta, or actual schedule."""
+    if s is not None:
+        if isinstance(s, (float, int)):
+            s = timedelta(seconds=s)
+        if isinstance(s, timedelta):
+            return schedule(s, relative)
+    return s
+
+
+SCHEDULE_KEY_PREFIX = "timer::"
+
+SCHEDULE_KEY = SCHEDULE_KEY_PREFIX + "schedule"
+
+
 class RedTimerEntry:
     def __init__(
         self,
@@ -58,7 +79,20 @@ class RedTimerEntry:
         options=None,
         **clsargs,
     ):
-        pass
+        self.name = name
+        self.task = task
+        self.args = args
+        self.kwargs = kwargs if kwargs else {}
+        self.options = options if options else {}
+        self.schedule = maybe_schedule(schedule)
+        # TODO:
+        import ipdb
+
+        ipdb.set_trace()
+        self.last_run_at = self.schedule.now()
+        self.total_run_count = 0
+
+        self.enabled = enabled
 
     @classmethod
     def from_key(cls, key):
@@ -70,8 +104,8 @@ class RedTimerEntry:
         if not definition:
             raise KeyError(key)
 
-        definition = json.loads(definition)
-        meta = json.loads(meta)
+        definition = json.loads(definition, cls=RedBeatJSONDecoder)
+        meta = json.loads(meta, cls=RedBeatJSONDecoder)
         definition.update(meta)
 
         entry = cls(**definition)
@@ -79,20 +113,80 @@ class RedTimerEntry:
 
         return entry
 
-    ...
+    @property
+    def score(self):
+        """return UTC based UNIX timestamp"""
+        return to_timestamp(self.due_at)
+
+    @property
+    def due_at(self):
+        # never run => due now
+        if self.last_run_at is None:
+            return self.schedule.now()
+
+        delta = self.schedule.remaining_estimate(self.last_run_at)
+        # if no delta, means no more events after the last_run_at.
+        if delta is None:
+            return None
+
+        # overdue => due now
+        if delta.total_seconds() < 0:
+            return self.schedule.now()
+
+        return self.last_run_at + delta
+
+    @property
+    def key(self):
+        return SCHEDULE_KEY_PREFIX + self.name
+
+    def save(self):
+        definition = {
+            "name": self.name,
+            "task": self.task,
+            "args": self.args,
+            "kwargs": self.kwargs,
+            "options": self.options,
+            "schedule": self.schedule,
+            "enabled": self.enabled,
+        }
+        meta = {
+            "last_run_at": self.last_run_at,
+        }
+        with get_redis().pipeline() as pipe:
+            pipe.hset(
+                self.key, "definition", json.dumps(definition, cls=RedBeatJSONEncoder)
+            )
+            pipe.hsetnx(self.key, "meta", json.dumps(meta, cls=RedBeatJSONEncoder))
+            pipe.zadd(SCHEDULE_KEY, {self.key: self.score})
+            pipe.execute()
+
+        return self
 
 
 # TODO: redis 分布式锁
 class RedTimer:
     max_interval = 30
 
-    schedule_key = "TIMER"
-
-    schedule_dict = {}
+    schedule_dict = {
+        "test_every_5_seconds": {
+            "name": "test_every_5_seconds",
+            "task": "test_every_5_seconds_task",
+            "schedule": timedelta(minutes=30),
+            "args": ["param1", "param2"],  # optional
+            "kwargs": {"max_targets": 100},  # optional
+            "enabled": True,  # optional
+        }
+    }
 
     def start(self):
         for name, entry in RedTimer.schedule_dict.items():
-            pass
+            try:
+                entry = RedTimerEntry(**entry)
+            except Exception as e:
+                print("Add entry error", name, e)
+                continue
+            entry.save()
+            print(f"Sotred entry: {entry}")
 
     def stop(self):
         """释放锁, 退出进程"""
@@ -137,13 +231,15 @@ class ResTimerTest(unittest.TestCase):
     #     return super().setUp()
 
     def testRedis(self):
-        print("================ Timer Redis ================")
+        print("================ Test Timer Redis ================")
         client = get_redis()
-        # import ipdb ; ipdb.set_trace()
 
     def testGetSchedule(self):
         schedule = RedTimer().schedule
-        print(schedule)
+        # print(schedule)
+
+    def testTimerStart(self):
+        RedTimer().start()
 
 
 def main():
