@@ -31,7 +31,7 @@ class Solution:
         left_size = root_index - il
         # preoder
         #    root          left                              right
-        # |  pl  | pl+1  ....   pl + left_size  | pl + left_size + 1  .... lr |
+        # |  pl  | pl+1  ....   pl + left_size  | pl + left_size + 1  .... pr |
 
         # inorder
         #       left                        root                  right
