@@ -1,6 +1,7 @@
 from datetime import datetime
 from enum import Enum
 import json
+from time import sleep
 from typing import Deque
 from collections import deque
 
@@ -86,9 +87,8 @@ class RedTimerEntry:
         self.options = options if options else {}
         self.schedule = maybe_schedule(schedule)
         # TODO:
-        import ipdb
-
-        ipdb.set_trace()
+        # import ipdb
+        # ipdb.set_trace()
         self.last_run_at = self.schedule.now()
         self.total_run_count = 0
 
@@ -135,6 +135,14 @@ class RedTimerEntry:
 
         return self.last_run_at + delta
 
+    def is_due(self):
+        rem_delta = self.remaining_estimate(self.last_run_at)
+        remaining_s = max(rem_delta.total_seconds(), 0)
+        if remaining_s == 0:
+            return True, 0
+        else:
+            return False, remaining_s
+
     @property
     def key(self):
         return SCHEDULE_KEY_PREFIX + self.name
@@ -163,23 +171,24 @@ class RedTimerEntry:
         return self
 
 
+SCHEDULE_DICT = {
+    "test_every_5_seconds": {
+        "name": "test_every_5_seconds",
+        "task": "test_every_5_seconds_task",
+        "schedule": timedelta(seconds=5),
+        "args": ["param1", "param2"],  # optional
+        "kwargs": {"max_targets": 100},  # optional
+        "enabled": True,  # optional
+    }
+}
+
+
 # TODO: redis 分布式锁
 class RedTimer:
-    max_interval = 30
+    max_interval = 3000
 
-    schedule_dict = {
-        "test_every_5_seconds": {
-            "name": "test_every_5_seconds",
-            "task": "test_every_5_seconds_task",
-            "schedule": timedelta(minutes=30),
-            "args": ["param1", "param2"],  # optional
-            "kwargs": {"max_targets": 100},  # optional
-            "enabled": True,  # optional
-        }
-    }
-
-    def start(self):
-        for name, entry in RedTimer.schedule_dict.items():
+    def install_entries(self):
+        for name, entry in SCHEDULE_DICT.items():
             try:
                 entry = RedTimerEntry(**entry)
             except Exception as e:
@@ -187,6 +196,11 @@ class RedTimer:
                 continue
             entry.save()
             print(f"Sotred entry: {entry}")
+
+    def start(self):
+        self.install_entries()
+
+        pass
 
     def stop(self):
         """释放锁, 退出进程"""
@@ -199,22 +213,51 @@ class RedTimer:
         client = get_redis()
         max_due_at = int(datetime.now().timestamp())
         with client.pipeline() as pipe:
-            pipe.zrangebyscore(RedTimer.max_interval, 0, max_due_at)
+            pipe.zrangebyscore(SCHEDULE_KEY, 0, max_due_at)
+            pipe.zrangebyscore(
+                SCHEDULE_KEY,
+                "({}".format(max_due_at),
+                max_due_at + RedTimer.max_interval,
+                start=0,
+                num=1,
+            )
 
-            due_tasks = pipe.execute()
+            due_tasks, maybe_due = pipe.execute()
+        print(f"Loadding {len(due_tasks)} tasks, {due_tasks}, {maybe_due}")
 
         s = {}
         for key in due_tasks:
-            print(f"key: {key}")
+            try:
+                entry = RedTimerEntry.from_key(key)
+                print(f"entry: {entry}")
+            except Exception as e:
+                print("Add entry error", key, e)
+                continue
+            s[entry.name] = entry
+        return s
 
     def tick(self):
-        pass
+        remaining_times = []
+        try:
+            for entry in self.schedule.values():
+                is_due, next_time_to_run = entry.is_due()
+                if is_due:
+                    print(f"Call due task: {entry}")
+
+                if next_time_to_run:
+                    remaining_times.append(next_time_to_run)
+                mi = min(remaining_times + [RedTimer.max_interval])
+        except:
+            print("An exception occurred")
+        return mi
 
     def newTimeout(self):
         pass
 
     ...
 
+
+from celery.utils.time import maybe_timedelta
 
 import unittest
 
@@ -226,20 +269,47 @@ import unittest
 #     pass
 
 
-class ResTimerTest(unittest.TestCase):
-    # def setUp(self) -> None:
-    #     return super().setUp()
+class mocked_schedule(schedule):
+    def __init__(self, remaining):
+        self._remaining = maybe_timedelta(remaining)
+        self.run_every = timedelta(seconds=1)
+        self.nowfun = datetime.utcnow
 
-    def testRedis(self):
-        print("================ Test Timer Redis ================")
-        client = get_redis()
+    def remaining_estimate(self, last_run_at):
+        return self._remaining
+
+
+due_now = mocked_schedule(0)
+due_next = mocked_schedule(1)
+
+
+class ResTimerTest(unittest.TestCase):
+    def setUp(self) -> None:
+        super().setUp()
+
+        self.s = RedTimer()
+
+    # def testRedis(self):
+    #     print("================ Test Timer Redis ================")
+    #     client = get_redis()
 
     def testGetSchedule(self):
         schedule = RedTimer().schedule
-        # print(schedule)
+        print(schedule)
 
     def testTimerStart(self):
         RedTimer().start()
+
+    def testTimerTick(self):
+        entry = RedTimerEntry(
+            name="next",
+            task="test",
+            schedule=due_next,
+        )
+        entry.save()
+
+        sleep = self.s.tick()
+        print(f"sleep: {sleep}")
 
 
 def main():
