@@ -1,3 +1,3 @@
 package org.example.timer;
 
-public class Schedule {}
+public class Crontab {}

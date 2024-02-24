@@ -2,7 +2,7 @@ package org.example.unittest;
 
 import org.junit.*;
 
-class SampleTest {
+public class SampleTest {
 
   private static Resource expensiveResource;
 

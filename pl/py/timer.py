@@ -1,14 +1,13 @@
+import json
+from collections import deque
 from datetime import datetime
 from enum import Enum
-import json
 from time import sleep
 from typing import Deque
-from collections import deque
-
-from redis import StrictRedis
 
 from CountDownLatch import CountDownLatch
 from decoder import RedBeatJSONDecoder, RedBeatJSONEncoder, to_timestamp
+from redis import StrictRedis
 
 
 class TIMEOUT_ST(Enum):
@@ -48,9 +47,9 @@ def get_redis():
     return conn
 
 
-from celery.schedules import schedule
-
 from datetime import datetime, timedelta, tzinfo
+
+from celery.schedules import schedule
 
 
 def maybe_schedule(s: int | float | timedelta, relative: bool = False):
@@ -136,7 +135,7 @@ class RedTimerEntry:
         return self.last_run_at + delta
 
     def is_due(self):
-        rem_delta = self.remaining_estimate(self.last_run_at)
+        rem_delta = self.schedule.remaining_estimate(self.last_run_at)
         remaining_s = max(rem_delta.total_seconds(), 0)
         if remaining_s == 0:
             return True, 0
@@ -185,7 +184,7 @@ SCHEDULE_DICT = {
 
 # TODO: redis 分布式锁
 class RedTimer:
-    max_interval = 3000
+    max_interval = 5
 
     def install_entries(self):
         for name, entry in SCHEDULE_DICT.items():
@@ -226,7 +225,7 @@ class RedTimer:
         print(f"Loadding {len(due_tasks)} tasks, {due_tasks}, {maybe_due}")
 
         s = {}
-        for key in due_tasks:
+        for key in due_tasks + maybe_due:
             try:
                 entry = RedTimerEntry.from_key(key)
                 print(f"entry: {entry}")
@@ -241,15 +240,15 @@ class RedTimer:
         try:
             for entry in self.schedule.values():
                 is_due, next_time_to_run = entry.is_due()
+                print(f"tick: {entry.name}, {is_due}, {next_time_to_run}")
                 if is_due:
-                    print(f"Call due task: {entry}")
+                    print(f"Call due task: {entry.name}")
 
                 if next_time_to_run:
                     remaining_times.append(next_time_to_run)
-                mi = min(remaining_times + [RedTimer.max_interval])
-        except:
-            print("An exception occurred")
-        return mi
+        except Exception as e:
+            print(f"An exception occurred {e}")
+        return min(remaining_times + [RedTimer.max_interval])
 
     def newTimeout(self):
         pass
@@ -257,9 +256,9 @@ class RedTimer:
     ...
 
 
-from celery.utils.time import maybe_timedelta
-
 import unittest
+
+from celery.utils.time import maybe_timedelta
 
 # def testScheduleTimeoutShouldRunAfterDelay(self):
 #     print('================ Timer test')
@@ -297,8 +296,8 @@ class ResTimerTest(unittest.TestCase):
         schedule = RedTimer().schedule
         print(schedule)
 
-    def testTimerStart(self):
-        RedTimer().start()
+    # def testTimerStart(self):
+    #     RedTimer().start()
 
     def testTimerTick(self):
         entry = RedTimerEntry(
@@ -309,7 +308,7 @@ class ResTimerTest(unittest.TestCase):
         entry.save()
 
         sleep = self.s.tick()
-        print(f"sleep: {sleep}")
+        # print(f"sleep: {sleep}")
 
 
 def main():

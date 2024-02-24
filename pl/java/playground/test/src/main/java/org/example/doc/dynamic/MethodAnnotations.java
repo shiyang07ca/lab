@@ -17,11 +17,11 @@ public class MethodAnnotations {
       System.out.println("annotations for paramter " + (i + 1));
       Annotation[] anntArr = annts[i];
       for (Annotation annt : anntArr) {
-        if (annt instanceof QueryParam qp) {
-			System.out.println(qp.annotationType().getSimpleName() + ":" + qp.value());
-        } else if (annt instanceof DefaultValue dv) {
-			System.out.println(dv.annotationType().getSimpleName() + ":" + dv.value());
-        }
+        //        if (annt instanceof QueryParam qp) {
+        //			System.out.println(qp.annotationType().getSimpleName() + ":" + qp.value());
+        //        } else if (annt instanceof DefaultValue dv) {
+        //			System.out.println(dv.annotationType().getSimpleName() + ":" + dv.value());
+        //        }
       }
     }
   }
