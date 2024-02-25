@@ -16,20 +16,18 @@ from leetgo_py import *
 #         self.right = right
 class Solution:
     def rangeSumBST(self, root: Optional[TreeNode], low: int, high: int) -> int:
-        vals = []
+        ans = 0
 
         def dfs(node):
             if not node:
                 return
             dfs(node.left)
-            vals.append(node.val)
+            if low <= node.val <= high:
+                nonlocal ans
+                ans += node.val
             dfs(node.right)
 
         dfs(root)
-        ans = 0
-        for v in vals:
-            if low <= v <= high:
-                ans += v
         return ans
 
 
