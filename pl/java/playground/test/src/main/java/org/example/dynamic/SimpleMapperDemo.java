@@ -1,31 +1,31 @@
-package shuo.laoma.dynamic.c84;
+package org.example.dynamic;
 
 public class SimpleMapperDemo {
-	static class Student {
-		String name;
-		int age;
-		Double score;
+  public static void main(String[] args) {
+    Student zhangsan = new Student("张三", 18, 89d);
+    String str = SimpleMapper.toString(zhangsan);
+    System.out.println(str);
+    Student zhangsan2 = (Student) SimpleMapper.fromString(str);
+    System.out.println(zhangsan2);
+  }
 
-		public Student() {
-		}
+  static class Student {
+    String name;
+    int age;
+    Double score;
 
-		public Student(String name, int age, Double score) {
-			super();
-			this.name = name;
-			this.age = age;
-			this.score = score;
-		}
+    public Student() {}
 
-		@Override
-		public String toString() {
-			return "Student [name=" + name + ", age=" + age + ", score=" + score + "]";
-		}
-	}
+    public Student(String name, int age, Double score) {
+      super();
+      this.name = name;
+      this.age = age;
+      this.score = score;
+    }
 
-	public static void main(String[] args) {
-		Student zhangsan = new Student("张三", 18, 89d);
-		String str = SimpleMapper.toString(zhangsan);
-		Student zhangsan2 = (Student) SimpleMapper.fromString(str);
-		System.out.println(zhangsan2);
-	}
+    @Override
+    public String toString() {
+      return "Student [name=" + name + ", age=" + age + ", score=" + score + "]";
+    }
+  }
 }
