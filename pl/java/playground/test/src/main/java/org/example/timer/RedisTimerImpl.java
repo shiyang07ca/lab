@@ -1,21 +1,18 @@
-package org.example.timer;public class RedisTimerImpl implements Timer {
-    @Override
-    public void tick() {
+package org.example.timer;
 
-    }
+public class RedisTimerImpl implements Timer {
 
-    @Override
-    public void getSchedule() {
+  RedisTimerEntry JOB_ENTRY;
 
-    }
+  @Override
+  public void tick() {}
 
-    @Override
-    public void addTimeout() {
+  @Override
+  public void getSchedule() {}
 
-    }
+  @Override
+  public void addTimeout() {}
 
-    @Override
-    public void deleteTimeout() {
-
-    }
+  @Override
+  public void deleteTimeout() {}
 }
