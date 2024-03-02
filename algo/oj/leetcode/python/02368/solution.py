@@ -9,7 +9,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def reachableNodes(
+    def reachableNodes1(
         self, n: int, edges: List[List[int]], restricted: List[int]
     ) -> int:
         g = [[] for _ in range(n)]
@@ -34,6 +34,26 @@ class Solution:
 
         dfs(0)
         return ans
+
+    # 链接：https://leetcode.cn/problems/reachable-nodes-with-restrictions/solutions/2662538/shu-shang-dfspythonjavacgojsrust-by-endl-0r3a/
+    def reachableNodes(
+        self, n: int, edges: List[List[int]], restricted: List[int]
+    ) -> int:
+        r = set(restricted)
+        g = [[] for _ in range(n)]
+        for x, y in edges:
+            if x not in r and y not in r:
+                g[x].append(y)  # 都不受限才连边
+                g[y].append(x)
+
+        def dfs(x: int, fa: int) -> int:
+            cnt = 1
+            for y in g[x]:
+                if y != fa:
+                    cnt += dfs(y, x)
+            return cnt
+
+        return dfs(0, -1)
 
 
 # @lc code=end
