@@ -27,6 +27,8 @@ public class UpsertRedisEntryTest {
 
   String jobKey;
 
+  String TIMER_SCHEDULE_KEY = "timer::schedule";
+
   @Before
   public void setUp() {
     original = TimeZone.getDefault();
@@ -56,38 +58,40 @@ public class UpsertRedisEntryTest {
     assertEquals(set.toArray(), new String[] {"1", "2", "3"});
   }
 
-  @Test
-  public void initRedisEntryTest() {
+  public void initRedisEntry(String jobName, String cronExp) {
     // 每 3 分钟触发一次
-    String cronExp = "0 0/3 * * * ?";
+    //    String cronExp = "0 0/3 * * * ?";
+    //    String jobName = "job1";
 
-    String jobName = "job1";
-    String jobKey = String.format("timer::%s", jobName);
-
-    String TIMER_SCHEDULE_KEY = "timer::schedule";
+    // split cron exp to field
+    String[] fields = cronExp.split(" ");
+    String type = fields[0];
+    String second = fields[0];
+    String minute = fields[1];
+    String hour = fields[2];
+    String dayOfMonth = fields[3];
+    String month = fields[4];
+    String dayOfWeek = fields[5];
 
     ScheduleDto scheduleDto =
         ScheduleDto.builder()
-            .type("crontab")
-            .second("0")
-            .minute("0/3")
-            .hour("*")
-            .dayOfMonth("*")
-            .month("*")
-            .dayOfWeek("?")
+            .type(type)
+            .second(second)
+            .minute(minute)
+            .hour(hour)
+            .dayOfMonth(dayOfMonth)
+            .month(month)
+            .dayOfWeek(dayOfWeek)
             .build();
     JobDefinitionDto defDto =
         JobDefinitionDto.builder().name(jobName).params("test").schedule(scheduleDto).build();
     JobMetaDto metaDto =
         JobMetaDto.builder().lastRunAt(ZonedDateTime.of(2010, 1, 1, 0, 0, 0, 0, zoneId)).build();
 
-    //    JobDto jobDto = JobDto.builder().definition(defDto).meta(metaDto).build();
-
+    String jobKey = String.format("timer::%s", jobName);
     RMap<String, Object> map = r.getMap(jobKey);
     map.put("definition", defDto);
     map.put("meta", metaDto);
-    //    System.out.println("map: " + map.get("definition"));
-    //    System.out.println("=======================");
   }
 
   @Test
@@ -109,17 +113,52 @@ public class UpsertRedisEntryTest {
     long timestamp2 = ZonedDateTime.of(2015, 12, 1, 0, 0, 0, 0, zoneId).toEpochSecond();
     long nowTimestamp = ZonedDateTime.now().toEpochSecond();
 
-    RScoredSortedSet<String> set = r.getScoredSortedSet("mySortedSet");
-    set.add(timestamp1, "t1");
-    set.add(timestamp2, "t2");
+    RScoredSortedSet<String> set = r.getScoredSortedSet("timer::schedule");
+    set.add(timestamp1, "timer::job1");
+    set.add(timestamp2, "timer::job2");
     List<String> jobNames = (List<String>) set.valueRange(0, true, nowTimestamp, true);
-    for (String string : jobNames) {
-      System.out.println("string: " + string + '\n');
-    }
+    //    for (String string : jobNames) {
+    //      System.out.println("string: " + string + '\n');
+    //    }
+    assertEquals(set.toArray(), new String[] {"timer::job1", "timer::job2"});
+  }
+
+  @Test
+  public void initRedisJobs() {
+    initRedisEntry("job1", "0 0/3 * * * ?");
+    initRedisEntry("job2", "0 0 12 ? * WED");
   }
 
   @Test
   public void testGetTimerSchedule() {
     new RedisTimerImpl().getSchedule();
+  }
+
+  @Test
+  public void testTimerServiceTick() {
+    new RedisTimerImpl().tick();
+  }
+
+  @Test
+  public void testTimerAddTimeout() {
+    // TODO: implement
+    new RedisTimerImpl().addTimeout(jobKey, "0 0/3 * * * ?");
+  }
+
+  @Test
+  public void testUpdateJobSchedule() {
+    RedisTimerEntry entry = RedisTimerEntry.getJobByName(jobKey);
+    ZonedDateTime time = ZonedDateTime.of(2018, 10, 1, 0, 0, 0, 0, zoneId);
+    entry.updateJobSchedule(jobKey, time);
+  }
+
+  @Test
+  public void testEntryGetNextRunTimes() {
+    RedisTimerEntry entry = RedisTimerEntry.getJobByName(jobKey);
+    ZonedDateTime start = ZonedDateTime.of(2018, 10, 1, 0, 0, 0, 0, zoneId);
+    List<ZonedDateTime> nextRunTimes = entry.getNextRunTimes(start);
+    System.out.println("Star: " + start);
+    System.out.println("Cron: " + entry.jobDef.getSchedule().getCronExp());
+    System.out.println("nextRunTime: " + nextRunTimes);
   }
 }

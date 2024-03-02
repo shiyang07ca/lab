@@ -15,4 +15,8 @@ public class ScheduleDto {
   private String dayOfMonth;
   private String month;
   private String dayOfWeek;
+
+  public String getCronExp() {
+    return second + " " + minute + " " + hour + " " + dayOfMonth + " " + month + " " + dayOfWeek;
+  }
 }

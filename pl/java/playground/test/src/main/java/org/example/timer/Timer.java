@@ -1,11 +1,13 @@
 package org.example.timer;
 
+import java.util.List;
+
 public interface Timer {
-  void tick();
+  Long tick();
 
-  void getSchedule();
+  List<RedisTimerEntry> getSchedule();
 
-  void addTimeout();
+  void addTimeout(String jobName, String cronExp);
 
   void deleteTimeout();
 }
