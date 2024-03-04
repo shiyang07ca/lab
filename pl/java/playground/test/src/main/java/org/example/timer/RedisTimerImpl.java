@@ -1,12 +1,13 @@
 package org.example.timer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.api.sync.RedisCommands;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import org.redisson.api.RScoredSortedSet;
-import org.redisson.api.RedissonClient;
 
 public class RedisTimerImpl implements Timer {
 
@@ -14,13 +15,12 @@ public class RedisTimerImpl implements Timer {
   // default max interval is 500ms
   Long maxInterval = 2000L;
 
-  private static RedissonClient getRedisClient() {
-    RedisManager.initialize();
+  private static RedisClient getRedisClient() {
     return RedisManager.getInstance();
   }
 
   @Override
-  public Long tick() {
+  public Long tick() throws JsonProcessingException {
     List<Long> nextTimes = new ArrayList<>(List.of(maxInterval));
 
     List<RedisTimerEntry> entries = getSchedule();
@@ -45,15 +45,17 @@ public class RedisTimerImpl implements Timer {
   }
 
   @Override
-  public List<RedisTimerEntry> getSchedule() {
+  public List<RedisTimerEntry> getSchedule() throws JsonProcessingException {
     List<RedisTimerEntry> entries = new ArrayList<>();
     // TODO: extract schedule key
-    RedissonClient r = RedisTimerImpl.getRedisClient();
-    RScoredSortedSet<String> set = r.getScoredSortedSet("timer::schedule");
-    List<String> jobKeys =
-        (List<String>) set.valueRange(0, true, ZonedDateTime.now().toEpochSecond(), true);
+    RedisCommands<String, String> commands = RedisTimerImpl.getRedisClient().connect().sync();
+    // TODO: modify this
+    String key = "timer::schedule";
+    List<String> jobKeys = commands.zrangebyscore(key, 0, ZonedDateTime.now().toEpochSecond());
+
     for (String jobKey : jobKeys) {
-      entries.add(RedisTimerEntry.getJobByName(jobKey));
+      // TODO:
+      entries.add(new RedisTimerEntry(jobKey));
     }
     return entries;
     // TODO: prefetch 1 job by zrangebyscore for check due time

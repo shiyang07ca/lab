@@ -1,13 +1,15 @@
 package org.example.timer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.api.sync.RedisCommands;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.example.timer.dto.JobDefinitionDto;
 import org.example.timer.dto.JobMetaDto;
-import org.redisson.api.RMap;
-import org.redisson.api.RScoredSortedSet;
-import org.redisson.api.RedissonClient;
 
 public class RedisTimerEntry {
 
@@ -15,19 +17,26 @@ public class RedisTimerEntry {
   public JobDefinitionDto jobDef;
   public JobMetaDto jobMeta;
 
-  public RedisTimerEntry(String jobNmae, JobDefinitionDto jobDef, JobMetaDto jobMeta) {
-    this.jobDef = jobDef;
-    this.jobMeta = jobMeta;
-    this.jobName = jobNmae;
+  public RedisTimerEntry(String jobName) throws JsonProcessingException {
+    this.jobName = jobName;
+    RedisClient r = RedisManager.getInstance();
+    RedisCommands<String, String> commands = r.connect().sync();
+    Map<String, String> map = commands.hgetall(jobName);
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    this.jobDef = objectMapper.readValue(map.get("definition"), JobDefinitionDto.class);
+    this.jobMeta = objectMapper.readValue(map.get("meta"), JobMetaDto.class);
   }
 
-  public static RedisTimerEntry getJobByName(String jobName) {
-    RedisManager.initialize();
-    RedissonClient r = RedisManager.getInstance();
-    RMap<String, Object> map = r.getMap(jobName);
-    return new RedisTimerEntry(
-        jobName, (JobDefinitionDto) map.get("definition"), (JobMetaDto) map.get("meta"));
-  }
+  //  public void getJobByName() throws JsonProcessingException {
+  //    // TODO: encapsulate redis client
+  //
+  //    //    return new RedisTimerEntry(
+  //    //        jobName,
+  //    //        objectMapper.readValue(map.get("definition"), JobDefinitionDto.class),
+  //    //        objectMapper.readValue(map.get("meta"), JobMetaDto.class));
+  //    //  }
+  //  }
 
   public ZonedDateTime dueAt() {
     ZonedDateTime lastRunAt = jobMeta.getLastRunAt();
@@ -46,32 +55,46 @@ public class RedisTimerEntry {
     return list;
   }
 
-  // 更新任务的最后一次运行时间，运行总数
-  public void updateJobMeta(String jobName, ZonedDateTime lastRunAt) {
+  // 更新任务的最后一次运行时间，运行统计
+  public void updateJobMeta(String jobName, ZonedDateTime lastRunAt)
+      throws JsonProcessingException {
     this.jobMeta.setLastRunAt(lastRunAt);
     this.jobMeta.setTotalRunCount(this.jobMeta.getTotalRunCount() + 1);
     this.save(jobName, this.jobMeta);
   }
 
+  /**
+   * Updates the job schedule in Redis based on the provided job name and current time.
+   *
+   * @param jobName the name of the job to update the schedule for
+   * @param now the current time
+   */
   public void updateJobSchedule(String jobName, ZonedDateTime now) {
-    RedisManager.initialize();
-    RedissonClient r = RedisManager.getInstance();
+    RedisClient r = RedisManager.getInstance();
+    RedisCommands<String, String> commands = r.connect().sync();
+
     // TODO: extract schedule key
-    RScoredSortedSet<String> set = r.getScoredSortedSet("timer::schedule");
+    String key = "timer::schedule";
     ZonedDateTime nextRunAt =
         new CronExpression(jobDef.getSchedule().getCronExp()).nextTimeAfter(now);
-    set.add(nextRunAt.toEpochSecond(), jobName);
+    commands.zadd(key, nextRunAt.toEpochSecond(), jobName);
   }
 
-  public void save(String jobName, JobMetaDto jobMeta) {
+  public void save(String jobName, JobMetaDto jobMeta) throws JsonProcessingException {
     // TODO: save job definition and meta to redis entry
     // TODO: zadd job and score to redis schedule
-    RedisManager.initialize();
-    RedissonClient r = RedisManager.getInstance();
-    RMap<String, Object> map = r.getMap(jobName);
-    map.put("meta", jobMeta);
+    // TODO: encapsulate redis client
+    RedisClient r = RedisManager.getInstance();
+    RedisCommands<String, String> commands = r.connect().sync();
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    String defStr = objectMapper.writeValueAsString(jobDef);
+    String metaStr = objectMapper.writeValueAsString(jobMeta);
+    commands.hset(jobName, "definition", defStr);
+    commands.hset(jobName, "meta", metaStr);
   }
 
+  // Send job data through redis pubsub
   public void apply() {
     System.out.println("================================>");
     System.out.println("Called job: " + jobName);

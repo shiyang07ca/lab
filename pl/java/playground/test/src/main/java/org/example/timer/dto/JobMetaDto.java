@@ -12,8 +12,10 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.jackson.Jacksonized;
 
 class ZonedDateTimeDeserializer extends JsonDeserializer<ZonedDateTime> {
@@ -31,6 +33,8 @@ class ZonedDateTimeDeserializer extends JsonDeserializer<ZonedDateTime> {
 }
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Jacksonized
 public class JobMetaDto {
@@ -40,5 +44,6 @@ public class JobMetaDto {
   private ZonedDateTime lastRunAt;
 
   private int totalRunCount;
+
   //  private String timezone = "Asia/Shanghai";
 }
