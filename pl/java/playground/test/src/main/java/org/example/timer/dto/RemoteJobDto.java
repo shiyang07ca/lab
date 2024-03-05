@@ -17,13 +17,24 @@ import org.example.timer.util.ZonedDateTimeDeserializer;
 @AllArgsConstructor
 @Builder
 @Jacksonized
-public class JobMetaDto {
+public class RemoteJobDto {
+  //  private boolean enabled = true;
+
+  private String name;
+
+  private String lang = "java";
+
+  // job 触发时间
   @JsonSerialize(using = ZonedDateTimeSerializer.class)
   @JsonDeserialize(using = ZonedDateTimeDeserializer.class)
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-  private ZonedDateTime lastRunAt;
+  private ZonedDateTime triggeredAt;
 
-  private int totalRunCount;
+  // job 所属业务
+  private String group = "allinone";
 
-  //  private String timezone = "Asia/Shanghai";
+  // job 对应函数参数
+  private String params = "";
+
+  private ScheduleDto schedule;
 }

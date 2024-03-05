@@ -3,7 +3,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.lettuce.core.RedisClient;
+import io.lettuce.core.*;
 import io.lettuce.core.api.sync.RedisCommands;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -118,6 +118,17 @@ public class UpsertRedisEntryTest {
   }
 
   @Test
+  public void testUpdateJobSchedule() throws JsonProcessingException {
+    RedisTimerEntry before = new RedisTimerEntry(jobKey);
+    ZonedDateTime time = ZonedDateTime.of(2018, 10, 1, 0, 0, 0, 0, zoneId);
+    //    ZonedDateTime time = ZonedDateTime.now();
+    before.updateJobSchedule(jobKey, time);
+
+    List<RedisTimerEntry> entries = new RedisTimerImpl().getSchedule();
+    System.out.println(entries.stream().map(e -> e.jobName).collect(Collectors.toList()));
+  }
+
+  @Test
   public void initRedisJobs() throws JsonProcessingException {
     initRedisEntry("job1", "0 0/3 * * * ?");
     initRedisEntry("job2", "0 0 12 ? * WED");
@@ -127,7 +138,6 @@ public class UpsertRedisEntryTest {
   public void testGetTimerSchedule() throws JsonProcessingException {
     long timestamp1 = ZonedDateTime.of(2010, 1, 1, 0, 0, 0, 0, zoneId).toEpochSecond();
     long timestamp2 = ZonedDateTime.of(2015, 12, 1, 0, 0, 0, 0, zoneId).toEpochSecond();
-    long nowTimestamp = ZonedDateTime.now().toEpochSecond();
 
     String key = "timer::schedule";
     RedisCommands<String, String> commands = r.connect().sync();
@@ -144,67 +154,69 @@ public class UpsertRedisEntryTest {
   //  public void testTimerServiceTick() {
   //    new RedisTimerImpl().tick();
   //  }
-  //
+
   @Test
-  public void testRedisStream() {
-    RStream<String, String> stream = r.getStream("myStream");
-    // 发布消息
-    System.out.println("Stream: " + r);
+  public void testRedisStreamPubMsg() {
+    RedisCommands<String, String> commands = r.connect().sync();
+
+    //    String key = "timer::allinone::stream";
+    String key = "myStream";
+    String groupName = "myGroup";
+
+    // lettuce check consumer group is exist
+
+    // 使用Lettuce提供的方法来获取stream的信息
+    // 直接调用xinfoGroups获取消费者组列表
+    //    List<ConsumerGroup> groups = commands.xinfoGroups(key);
+    //    boolean groupExists = groups.stream().anyMatch(group ->
+    // groupName.equals(group.getName()));
+    //    System.out.println("groupExists: " + groupExists);
+
+    //    commands.xgroupCreate(
+    //            XReadArgs.StreamOffset.from(key, "$"), groupName,
+    // XGroupCreateArgs.Builder.mkstream());
+    //    Map<String, String> messageBody = new HashMap<>();
+    //    messageBody.put("speed", "15");
+    //    messageBody.put("direction", "270");
+    //    commands.xadd(key, messageBody);
   }
 
-  //
-  //  @Test
-  //  public void testRedisPubMsg() {
-  //    RStream<String, String> stream = r.getStream("test");
-  //
-  //    stream.createGroup("testGroup");
-  //
-  //    StreamMessageId id1 = stream.add(StreamAddArgs.entry("1", "1"));
-  //    StreamMessageId id2 = stream.add(StreamAddArgs.entry("2", "2"));
-  //
-  //    Map<StreamMessageId, Map<String, String>> group =
-  //        stream.readGroup("testGroup", "consumer1", StreamReadGroupArgs.neverDelivered());
-  //
-  //    // return entries in pending state after read group method execution
-  //    Map<StreamMessageId, Map<String, String>> pendingData =
-  //        stream.pendingRange(
-  //            "testGroup", "consumer1", StreamMessageId.MIN, StreamMessageId.MAX, 100);
-  //
-  //    // transfer ownership of pending messages to a new consumer
-  //    List<StreamMessageId> transferedIds =
-  //        stream.fastClaim("testGroup", "consumer2", 1, TimeUnit.MILLISECONDS, id1, id2);
-  //
-  //    // mark pending entries as correctly processed
-  //    long amount = stream.ack("testGroup", id1, id2);
-  //  }
-  //
-  //  @Test
-  //  public void testRedisReadMsg1() throws InterruptedException {
-  //    CountDownLatch latch = new CountDownLatch(1);
-  //
-  //    RStream<String, String> stream = r.getStream("anySet");
-  //
-  //    int listenerId =
-  //        stream.addListener(
-  //            new DeletedObjectListener() {
-  //              @Override
-  //              public void onDeleted(String name) {
-  //                System.out.println("stream: " + name);
-  //                // ...
-  //              }
-  //            });
-  //
-  //    // ...
-  //
-  //    stream.removeListener(listenerId);
-  //    latch.await();
-  //  }
+  @Test
+  public void testRedisReadMsg1() throws InterruptedException {
+    //    CountDownLatch latch = new CountDownLatch(1);
+
+    RedisCommands<String, String> commands = r.connect().sync();
+    String key = "myStream";
+    String groupName = "myGroup";
+    //    List<StreamMessage<String, String>> messages =
+    //        commands.xreadgroup(
+    //            Consumer.from(group, "consumer1"), XReadArgs.StreamOffset.lastConsumed(key));
+    //
+
+    List<StreamMessage<String, String>> messages =
+        commands.xreadgroup(
+            Consumer.from(groupName, "consumer_1"),
+            XReadArgs.Builder.block(5000).count(2),
+            XReadArgs.StreamOffset.lastConsumed(key));
+
+    if (!messages.isEmpty()) {
+      for (StreamMessage<String, String> message : messages) {
+        System.out.println("==================Message ID: " + message.getId());
+        System.out.println("==================Message Body: " + message.getBody());
+        // Confirm that the message has been processed using XACK
+        //        commands.xack(key, groupName, message.getId());
+        break;
+      }
+    }
+
+    //    latch.await();
+  }
+
   //
   //  @Test
   //  public void testRedisReadMsg2() throws InterruptedException {
   //    CountDownLatch latch = new CountDownLatch(1);
   //
-  //    // 获取话题
   //    RTopic topic = r.getTopic("myTopic");
   //
   //    // 添加消息监听器
@@ -227,12 +239,6 @@ public class UpsertRedisEntryTest {
   //    new RedisTimerImpl().addTimeout(jobKey, "0 0/3 * * * ?");
   //  }
   //
-  //  @Test
-  //  public void testUpdateJobSchedule() {
-  //    RedisTimerEntry entry = RedisTimerEntry.getJobByName(jobKey);
-  //    ZonedDateTime time = ZonedDateTime.of(2018, 10, 1, 0, 0, 0, 0, zoneId);
-  //    entry.updateJobSchedule(jobKey, time);
-  //  }
 
   @Test
   public void testEntryGetNextRunTimes() throws JsonProcessingException {
