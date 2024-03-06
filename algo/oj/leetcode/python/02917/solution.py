@@ -15,10 +15,10 @@ class Solution:
         for b in range(bits):
             t = 0
             for n in nums:
-                if n & (2**b) == 2**b:
+                if n >> b & 1:
                     t += 1
             if t >= k:
-                ans += 2**b
+                ans += 1 << b
         return ans
 
 
