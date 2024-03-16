@@ -27,9 +27,7 @@ class Solution:
                 ans = max(ans, dfs(i, j + 1) + 1)
             return ans
 
-        for i in range(m):
-            print(dfs(i, 0))
-        return max(dfs(i, 0) for i in range(0, m))
+        return max(dfs(i, 0) for i in range(m))
 
 
 # @lc code=end
