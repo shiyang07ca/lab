@@ -1,4 +1,4 @@
-package org.example.dynamic;
+package org.example.dynamic.c85;
 
 public class ServiceA {
 

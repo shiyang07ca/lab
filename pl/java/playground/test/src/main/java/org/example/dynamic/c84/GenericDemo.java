@@ -1,4 +1,4 @@
-package org.example.dynamic;
+package org.example.dynamic.c84;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -33,7 +33,7 @@ public class GenericDemo {
     }
 
     // 方法的泛型参数
-    Method m = cls.getMethod("test", List.class);
+    Method m = cls.getMethod("test", new Class[] {List.class});
     for (Type t : m.getGenericParameterTypes()) {
       System.out.println(t);
     }

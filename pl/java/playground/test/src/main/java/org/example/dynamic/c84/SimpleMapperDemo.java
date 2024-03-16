@@ -1,10 +1,9 @@
-package org.example.dynamic;
+package org.example.dynamic.c84;
 
 public class SimpleMapperDemo {
   public static void main(String[] args) {
     Student zhangsan = new Student("张三", 18, 89d);
     String str = SimpleMapper.toString(zhangsan);
-    System.out.println(str);
     Student zhangsan2 = (Student) SimpleMapper.fromString(str);
     System.out.println(zhangsan2);
   }
