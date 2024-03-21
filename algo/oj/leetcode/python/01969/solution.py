@@ -8,6 +8,7 @@ from leetgo_py import *
 # @lc code=begin
 
 # TODO:
+# [50. Pow (x, n) - 力扣（LeetCode）](https://leetcode.cn/problems/powx-n/description/)
 
 
 class Solution:
