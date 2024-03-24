@@ -83,7 +83,7 @@ class Solution:
         return ans if ans is not inf else -1
 
     # 滚动数组
-    def coinChange(self, coins: List[int], amount: int) -> int:
+    def coinChange3(self, coins: List[int], amount: int) -> int:
         n = len(coins)
         f = [inf] * (amount + 1)
         f[0] = 0
@@ -93,6 +93,20 @@ class Solution:
 
         ans = f[amount]
         return ans if ans is not inf else -1
+
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        dp = [0] + [-1] * amount
+        for v in coins:
+            # 完全背包模版
+            # dp[i] 表示兑换 i 金额的最小硬币数
+            for i in range(v, amount + 1):
+                if dp[i - v] != -1:
+                    if dp[i] == -1:
+                        dp[i] = dp[i - v] + 1
+                    else:
+                        dp[i] = min(dp[i], dp[i - v] + 1)
+
+        return dp[amount]
 
 
 # @lc code=end
