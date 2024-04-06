@@ -50,8 +50,9 @@ from leetgo_py import *
 
 # @lc code=begin
 
-# TODO
+# TODO:
 # tag: 树上倍增
+
 
 # 链接：https://leetcode.cn/problems/kth-ancestor-of-a-tree-node/solutions/2305895/mo-ban-jiang-jie-shu-shang-bei-zeng-suan-v3rw/
 class TreeAncestor:
