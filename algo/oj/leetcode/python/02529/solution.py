@@ -12,12 +12,9 @@ from leetgo_py import *
 
 class Solution:
     def maximumCount(self, nums: List[int]) -> int:
-        n = len(nums)
-        a = bisect_left(nums, 0)
-        b = bisect_right(nums, 0)
-        a = a if a > 0 else 0
-        b = n - b if b < n else 0
-        return max(a, b)
+        neg = bisect_left(nums, 0)
+        pos = len(nums) - bisect_right(nums, 0)
+        return max(neg, pos)
 
 
 # @lc code=end
