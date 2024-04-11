@@ -7,6 +7,8 @@ from leetgo_py import *
 
 # @lc code=begin
 
+# TODO:
+
 # 预处理：coprime[i] 保存 [1, MX) 中与 i 互质的所有元素
 MX = 51
 coprime = [[j for j in range(1, MX) if gcd(i, j) == 1] for i in range(MX)]
