@@ -11,7 +11,6 @@ from leetgo_py import *
 
 
 class Solution:
-    # 链接：https://leetcode.cn/problems/verify-preorder-serialization-of-a-binary-tree/solutions/2716508/python3javacgotypescript-yi-ti-yi-jie-zh-mqy9/
     def isValidSerialization(self, preorder: str) -> bool:
         stk = []
         for c in preorder.split(","):
@@ -20,6 +19,18 @@ class Solution:
                 stk = stk[:-3]
                 stk.append("#")
         return len(stk) == 1 and stk[0] == "#"
+
+    # 链接：https://leetcode.cn/problems/verify-preorder-serialization-of-a-binary-tree/solutions/651132/pai-an-jiao-jue-de-liang-chong-jie-fa-zh-66nt/
+    def isValidSerialization(self, preorder):
+        nodes = preorder.split(",")
+        diff = 0
+        for node in nodes:
+            diff -= 1
+            if diff < -1:
+                return False
+            if node != "#":
+                diff += 2
+        return diff == -1
 
 
 # @lc code=end
