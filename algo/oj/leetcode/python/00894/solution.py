@@ -30,8 +30,24 @@ for i in range(2, MX):  # 计算 f[i]
 
 
 class Solution:
-    def allPossibleFBT(self, n: int) -> List[Optional[TreeNode]]:
+    def allPossibleFBT1(self, n: int) -> List[Optional[TreeNode]]:
         return f[(n + 1) // 2] if n % 2 else []
+
+    # 链接：https://leetcode.cn/problems/all-possible-full-binary-trees/solutions/2720015/python3javacgotypescript-yi-ti-yi-jie-ji-d1vm/
+    def allPossibleFBT(self, n: int) -> List[Optional[TreeNode]]:
+        @cache
+        def dfs(n: int) -> List[Optional[TreeNode]]:
+            if n == 1:
+                return [TreeNode()]
+            ans = []
+            for i in range(n - 1):
+                j = n - 1 - i
+                for left in dfs(i):
+                    for right in dfs(j):
+                        ans.append(TreeNode(0, left, right))
+            return ans
+
+        return dfs(n)
 
 
 # @lc code=end
