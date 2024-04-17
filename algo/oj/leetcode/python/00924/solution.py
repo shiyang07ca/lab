@@ -9,6 +9,9 @@ from leetgo_py import *
 
 
 # TODO:
+# tag: dfs
+
+
 class Solution:
     # 链接：https://leetcode.cn/problems/minimize-malware-spread/solutions/2741790/zhi-bao-han-yi-ge-bei-gan-ran-jie-dian-d-ym39/
     def minMalwareSpread(self, graph: List[List[int]], initial: List[int]) -> int:
