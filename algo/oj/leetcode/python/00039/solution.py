@@ -13,23 +13,23 @@ from leetgo_py import *
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         ans = []
-        N = len(candidates)
+        path = []
         candidates.sort()
 
-        def dfs(i, target, cur):
-            if i == N or candidates[i] > target:
+        def dfs(i, target):
+            if i == len(candidates) or target < 0:
                 return
 
-            if candidates[i] == target:
-                cur.append(candidates[i])
-                ans.append(cur)
+            if target == 0:
+                ans.append(path[:])
             else:
-                cur.append(candidates[i])
-                dfs(i, target - candidates[i], cur[:])
-                cur.pop()
-                dfs(i + 1, target, cur[:])
+                path.append(candidates[i])  # 选
+                dfs(i, target - candidates[i])
+                path.pop()  # 恢复现场
 
-        dfs(0, target, [])
+                dfs(i + 1, target)  # 不选
+
+        dfs(0, target)
         return ans
 
 
