@@ -11,10 +11,10 @@ from leetgo_py import *
 
 
 class Solution:
-    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+    def combinationSum1(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
         ans = []
         path = []
-        candidates.sort()
 
         def dfs(i, target):
             if target == 0:  # 找到答案
@@ -29,6 +29,30 @@ class Solution:
             path.pop()  # 恢复现场
 
             dfs(i + 1, target)  # 不选
+
+        dfs(0, target)
+        return ans
+
+    # 链接：https://leetcode.cn/problems/combination-sum/solutions/2747858/liang-chong-fang-fa-xuan-huo-bu-xuan-mei-mhf9/
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        ans = []
+        path = []
+
+        def dfs(i: int, left: int) -> None:
+            if left == 0:
+                # 找到一个合法组合
+                ans.append(path.copy())
+                return
+
+            if left < candidates[i]:
+                return
+
+            # 枚举选哪个
+            for j in range(i, len(candidates)):
+                path.append(candidates[j])
+                dfs(j, left - candidates[j])
+                path.pop()  # 恢复现场
 
         dfs(0, target)
         return ans
