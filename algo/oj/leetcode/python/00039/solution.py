@@ -17,17 +17,18 @@ class Solution:
         candidates.sort()
 
         def dfs(i, target):
-            if i == len(candidates) or target < 0:
+            if target == 0:  # 找到答案
+                ans.append(path[:])
                 return
 
-            if target == 0:
-                ans.append(path[:])
-            else:
-                path.append(candidates[i])  # 选
-                dfs(i, target - candidates[i])
-                path.pop()  # 恢复现场
+            if i == len(candidates) or target < candidates[i]:
+                return
 
-                dfs(i + 1, target)  # 不选
+            path.append(candidates[i])  # 选
+            dfs(i, target - candidates[i])
+            path.pop()  # 恢复现场
+
+            dfs(i + 1, target)  # 不选
 
         dfs(0, target)
         return ans
