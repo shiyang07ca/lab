@@ -12,7 +12,7 @@ from leetgo_py import *
 
 
 class Solution:
-    def jobScheduling(
+    def jobScheduling1(
         self, startTime: List[int], endTime: List[int], profit: List[int]
     ) -> int:
         inv = sorted(zip(endTime, startTime, profit))
@@ -26,6 +26,18 @@ class Solution:
             # 开始循环，因此需要加 1，dp[j - 1 + 1]
             dp[i] = max(dp[i - 1], dp[j] + p)
         return dp[-1]
+
+    # 链接：https://leetcode.cn/problems/maximum-profit-in-job-scheduling/solutions/1913089/dong-tai-gui-hua-er-fen-cha-zhao-you-hua-zkcg/
+    def jobScheduling(
+        self, startTime: List[int], endTime: List[int], profit: List[int]
+    ) -> int:
+        jobs = sorted(zip(endTime, startTime, profit))  # 按照结束时间排序
+        f = [0] * (len(jobs) + 1)
+        for i, (_, st, p) in enumerate(jobs):
+            j = bisect_left(jobs, (st + 1,), hi=i)  # hi=i 表示二分上界为 i（默认为 n）
+            # 状态转移中，为什么是 j 不是 j+1：上面算的是 > st，-1 后得到 <= st，但由于还要 +1，抵消了
+            f[i + 1] = max(f[i], f[j] + p)
+        return f[-1]
 
 
 # @lc code=end
