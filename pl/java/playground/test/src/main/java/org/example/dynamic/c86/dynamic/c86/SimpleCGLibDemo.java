@@ -1,40 +1,39 @@
-package shuo.laoma.dynamic.c86.dynamic.c86;
+package org.example.dynamic.c86.dynamic.c86;
 
+import java.lang.reflect.Method;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-import java.lang.reflect.Method;
-
 public class SimpleCGLibDemo {
-    static class RealService {
-        public void sayHello() {
-            System.out.println("hello");
-        }
-    }
+  @SuppressWarnings("unchecked")
+  private static <T> T getProxy(Class<T> cls) {
+    Enhancer enhancer = new Enhancer();
+    enhancer.setSuperclass(cls);
+    enhancer.setCallback(new SimpleInterceptor());
+    return (T) enhancer.create();
+  }
 
-    static class SimpleInterceptor implements MethodInterceptor {
+  public static void main(String[] args) throws Exception {
+    RealService proxyService = getProxy(RealService.class);
+    proxyService.sayHello();
+  }
 
-        @Override
-        public Object intercept(Object object, Method method,
-                Object[] args, MethodProxy proxy) throws Throwable {
-            System.out.println("entering " + method.getName());
-            Object result = proxy.invokeSuper(object, args);
-            System.out.println("leaving " + method.getName());
-            return result;
-        }
+  static class RealService {
+    public void sayHello() {
+      System.out.println("hello");
     }
+  }
 
-    @SuppressWarnings("unchecked")
-    private static <T> T getProxy(Class<T> cls) {
-        Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(cls);
-        enhancer.setCallback(new SimpleInterceptor());
-        return (T) enhancer.create();
-    }
+  static class SimpleInterceptor implements MethodInterceptor {
 
-    public static void main(String[] args) throws Exception {
-        RealService proxyService = getProxy(RealService.class);
-        proxyService.sayHello();
+    @Override
+    public Object intercept(Object object, Method method, Object[] args, MethodProxy proxy)
+        throws Throwable {
+      System.out.println("entering " + method.getName());
+      Object result = proxy.invokeSuper(object, args);
+      System.out.println("leaving " + method.getName());
+      return result;
     }
+  }
 }

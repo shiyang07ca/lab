@@ -1,12 +1,32 @@
-package shuo.laoma.dynamic.c86;
+package org.example.dynamic.c86;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 public class GeneralProxyDemo {
+    @SuppressWarnings("unchecked")
+    private static <T> T getProxy(Class<T> intf, T realObj) {
+        return (T) Proxy.newProxyInstance(intf.getClassLoader(), new Class<?>[] { intf },
+                new SimpleInvocationHandler(realObj));
+    }
+
+    public static void main(String[] args) throws Exception {
+        IServiceA a = new ServiceAImpl();
+        IServiceA aProxy = getProxy(IServiceA.class, a);
+        aProxy.sayHello();
+
+        IServiceB b = new ServiceBImpl();
+        IServiceB bProxy = getProxy(IServiceB.class, b);
+        bProxy.fly();
+    }
+
     static interface IServiceA {
         public void sayHello();
+    }
+
+    static interface IServiceB {
+        public void fly();
     }
 
     static class ServiceAImpl implements IServiceA {
@@ -15,10 +35,6 @@ public class GeneralProxyDemo {
         public void sayHello() {
             System.out.println("hello");
         }
-    }
-
-    static interface IServiceB {
-        public void fly();
     }
 
     static class ServiceBImpl implements IServiceB {
@@ -43,21 +59,5 @@ public class GeneralProxyDemo {
             System.out.println("leaving " + realObj.getClass().getSimpleName() + "::" + method.getName());
             return result;
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T> T getProxy(Class<T> intf, T realObj) {
-        return (T) Proxy.newProxyInstance(intf.getClassLoader(), new Class<?>[] { intf },
-                new SimpleInvocationHandler(realObj));
-    }
-
-    public static void main(String[] args) throws Exception {
-        IServiceA a = new ServiceAImpl();
-        IServiceA aProxy = getProxy(IServiceA.class, a);
-        aProxy.sayHello();
-
-        IServiceB b = new ServiceBImpl();
-        IServiceB bProxy = getProxy(IServiceB.class, b);
-        bProxy.fly();
     }
 }

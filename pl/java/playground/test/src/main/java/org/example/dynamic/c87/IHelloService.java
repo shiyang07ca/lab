@@ -1,5 +1,5 @@
-package shuo.laoma.dynamic.c87;
+package org.example.dynamic.c87;
 
 public interface IHelloService {
-	public void sayHello();
+  public void sayHello();
 }

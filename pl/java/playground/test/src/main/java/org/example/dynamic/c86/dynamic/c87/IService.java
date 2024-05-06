@@ -1,7 +1,6 @@
-package shuo.laoma.dynamic.c86.dynamic.c87;
+package org.example.dynamic.c86.dynamic.c87;
 
 public interface IService {
 
-	public void action();
-	
+  public void action();
 }

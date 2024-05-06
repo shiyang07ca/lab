@@ -1,4 +1,4 @@
- package org.example.concurrent.c77;
+package org.example.concurrent.c77;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,7 +20,7 @@ public class InvokeAllDemo {
     String url2 = "http://www.cnblogs.com/swiftma/p/5399315.html";
 
     Collection<UrlTitleParser> tasks =
-        Arrays.asList(new UrlTitleParser[] {new UrlTitleParser(url1), new UrlTitleParser(url2)});
+        Arrays.asList(new UrlTitleParser(url1), new UrlTitleParser(url2));
     try {
       List<Future<String>> results = executor.invokeAll(tasks, 10, TimeUnit.SECONDS);
       for (Future<String> result : results) {
@@ -54,4 +54,4 @@ public class InvokeAllDemo {
       return null;
     }
   }
- }
+}
