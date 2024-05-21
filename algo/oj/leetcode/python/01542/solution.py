@@ -21,8 +21,10 @@ class Solution:
         for i, x in enumerate(map(int, s)):
             pre ^= 1 << x
             ans = max(
-                ans, i - pos[pre], max(i - pos[pre ^ (1 << d)] for d in range(D))  # 偶数
-            )  # 奇数
+                ans,
+                i - pos[pre],  # 偶数
+                max(i - pos[pre ^ (1 << d)] for d in range(D)),  # 奇数
+            )
             if pos[pre] == n:  # 首次遇到值为 pre 的前缀异或和，记录其下标 i
                 pos[pre] = i
         return ans
