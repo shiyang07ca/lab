@@ -11,16 +11,25 @@ from leetgo_py import *
 
 
 class Solution:
-    # 链接：https://leetcode.cn/problems/burst-balloons/solutions/2805284/python3javacgotypescript-yi-ti-yi-jie-do-ptf8/
+    # 链接：https://leetcode.cn/problems/burst-balloons/solutions/336390/chuo-qi-qiu-by-leetcode-solution/
     def maxCoins(self, nums: List[int]) -> int:
         n = len(nums)
-        arr = [1] + nums + [1]
-        f = [[0] * (n + 2) for _ in range(n + 2)]
-        for i in range(n - 1, -1, -1):
-            for j in range(i + 2, n + 2):
-                for k in range(i + 1, j):
-                    f[i][j] = max(f[i][j], f[i][k] + f[k][j] + arr[i] * arr[k] * arr[j])
-        return f[0][-1]
+        val = [1] + nums + [1]
+
+        @cache
+        def solve(left: int, right: int) -> int:
+            if left >= right - 1:
+                return 0
+
+            best = 0
+            for i in range(left + 1, right):
+                total = val[left] * val[i] * val[right]
+                total += solve(left, i) + solve(i, right)
+                best = max(best, total)
+
+            return best
+
+        return solve(0, n + 1)
 
 
 # @lc code=end
