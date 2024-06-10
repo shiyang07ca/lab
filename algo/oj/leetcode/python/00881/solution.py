@@ -9,18 +9,17 @@ from leetgo_py import *
 
 
 class Solution:
-    # 链接：https://leetcode.cn/problems/boats-to-save-people/solutions/958838/jiu-sheng-ting-by-leetcode-solution-0nsp/
     def numRescueBoats(self, people: List[int], limit: int) -> int:
+        people.sort(reverse=True)
+        left = 0
+        right = len(people) - 1
         ans = 0
-        people.sort()
-        light, heavy = 0, len(people) - 1
-        while light <= heavy:
-            if people[light] + people[heavy] > limit:
-                heavy -= 1
-            else:
-                light += 1
-                heavy -= 1
+        while left <= right:
+            if people[left] + people[right] <= limit:
+                right -= 1
             ans += 1
+            left += 1
+
         return ans
 
 
