@@ -8,24 +8,31 @@ from abc import ABCMeta, abstractmethod
 
 
 class Timer(metaclass=ABCMeta):
-
     def __init__(self):
         """Pass."""
 
     @abstractmethod
-    def init_timer(self, ):
+    def init_timer(
+        self,
+    ):
         """Pass."""
 
     @abstractmethod
-    def add_entry(self, ):
+    def add_entry(
+        self,
+    ):
         """Pass."""
 
     @abstractmethod
-    def cancel_entry(self, ):
+    def cancel_entry(
+        self,
+    ):
         """Pass."""
 
     @abstractmethod
-    def expire_entry(self, ):
+    def expire_entry(
+        self,
+    ):
         """Pass."""
 
     @abstractmethod
@@ -35,12 +42,10 @@ class Timer(metaclass=ABCMeta):
 
 _sentinel = object()
 
-Event = namedtuple('Event',
-                   'time, priority, sequence, action, argument, kwargs')
+Event = namedtuple("Event", "time, priority, sequence, action, argument, kwargs")
 
 
 class HeapSched(Timer):
-
     def __init__(self, timefunc=_time, delayfunc=time.sleep):
         self._queue = []
         self.timefunc = timefunc
@@ -50,18 +55,14 @@ class HeapSched(Timer):
     def init_timer(self, timefunc=_time, delayfunc=time.sleep):
         return HeapSched(timefunc=_time, delayfunc=time.sleep)
 
-    def add_entry(self,
-                  delay,
-                  priority,
-                  action,
-                  argument=(),
-                  kwargs=_sentinel):
+    def add_entry(self, delay, priority, action, argument=(), kwargs=_sentinel):
         if kwargs is _sentinel:
             kwargs = {}
 
         time = self.timefunc() + delay
-        event = Event(time, priority, next(self._sequence_generator), action,
-                      argument, kwargs)
+        event = Event(
+            time, priority, next(self._sequence_generator), action, argument, kwargs
+        )
         heapq.heappush(self._queue, event)
 
         return event
@@ -100,17 +101,24 @@ class HeapSched(Timer):
 
 
 class TimeWheel(Timer):
-
-    def init_timer(self, ):
+    def init_timer(
+        self,
+    ):
         self._queue = []
 
-    def add_entry(self, ):
+    def add_entry(
+        self,
+    ):
         """Pass."""
 
-    def cancel_entry(self, ):
+    def cancel_entry(
+        self,
+    ):
         """Pass."""
 
-    def expire_entry(self, ):
+    def expire_entry(
+        self,
+    ):
         """Pass."""
 
     def entrys(self):
@@ -121,7 +129,6 @@ import unittest
 
 
 class TestHeapSched(unittest.TestCase):
-
     def setUp(self):
         pass
 
@@ -130,7 +137,7 @@ class TestHeapSched(unittest.TestCase):
         fun = lambda x: l.append(x)
         hs = HeapSched.init_timer(time.time, time.sleep)
         for x in [0.5, 0.4, 0.3, 0.2, 0.1]:
-            z = hs.add_entry(x, 1, fun, (x, ))
+            z = hs.add_entry(x, 1, fun, (x,))
         hs.expire_entry()
         self.assertEqual(l, [0.1, 0.2, 0.3, 0.4, 0.5])
 
@@ -139,11 +146,11 @@ class TestHeapSched(unittest.TestCase):
         fun = lambda x: l.append(x)
         hs = HeapSched.init_timer(time.time, time.sleep)
         now = time.time()
-        event1 = hs.add_entry(0.01, 1, fun, (0.01, ))
-        event2 = hs.add_entry(0.02, 1, fun, (0.02, ))
-        event3 = hs.add_entry(0.03, 1, fun, (0.03, ))
-        event4 = hs.add_entry(0.04, 1, fun, (0.04, ))
-        event5 = hs.add_entry(0.05, 1, fun, (0.05, ))
+        event1 = hs.add_entry(0.01, 1, fun, (0.01,))
+        event2 = hs.add_entry(0.02, 1, fun, (0.02,))
+        event3 = hs.add_entry(0.03, 1, fun, (0.03,))
+        event4 = hs.add_entry(0.04, 1, fun, (0.04,))
+        event5 = hs.add_entry(0.05, 1, fun, (0.05,))
         hs.cancel_entry(event1)
         hs.cancel_entry(event5)
         hs.expire_entry()
@@ -159,14 +166,14 @@ def main():
 
     s = scheduler(time.time, time.sleep)
 
-    def print_time(a='default'):
+    def print_time(a="default"):
         print("From print_time", time.time(), a)
 
     def print_some_times():
         print(time.time())
         s.enter(10, 1, print_time)
-        s.enter(5, 2, print_time, argument=('positional', ))
-        s.enter(5, 1, print_time, kwargs={'a': 'keyword'})
+        s.enter(5, 2, print_time, argument=("positional",))
+        s.enter(5, 1, print_time, kwargs={"a": "keyword"})
         s.run()
         print(time.time())
 
@@ -174,17 +181,17 @@ def main():
         hs = HeapSched.init_timer(time.time, time.sleep)
         print(time.time())
         hs.add_entry(10, 1, print_time)
-        hs.add_entry(5, 2, print_time, argument=('positional', ))
-        hs.add_entry(5, 1, print_time, kwargs={'a': 'keyword'})
+        hs.add_entry(5, 2, print_time, argument=("positional",))
+        hs.add_entry(5, 1, print_time, kwargs={"a": "keyword"})
         hs.expire_entry()
         print(time.time())
 
     # print_some_times()
-    print('================')
+    print("================")
     # print_heap_timer()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # main()
 
     unittest.main()

@@ -1,5 +1,6 @@
 import threading
 
+
 class CountDownLatch:
     def __init__(self, count=1):
         self.count = count
@@ -14,6 +15,7 @@ class CountDownLatch:
             self.count -= 1
             if self.count == 0:
                 self.lock.release()
+
 
 # 使用示例
 def worker(latch):

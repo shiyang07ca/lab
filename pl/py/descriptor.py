@@ -1,15 +1,4 @@
-"""
-
-
-
-
-
-
-
-
-
-
-"""
+""" """
 
 
 def object_getattribute(obj, name):
