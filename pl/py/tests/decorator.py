@@ -22,8 +22,6 @@ def doublewrap(f):
 
 
 def test_doublewrap():
-    from functools import wraps
-
     @doublewrap
     def mult(f, factor=2):
         """multiply a function's return value"""
