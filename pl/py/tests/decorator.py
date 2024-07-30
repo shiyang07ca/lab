@@ -47,9 +47,14 @@ def test_doublewrap():
     def f3(x, y):
         return x - y
 
+    @mult()
+    def f4(x, y):
+        return x * y
+
     assert f(2, 3) == 10
     assert f2(2, 5) == 30
     assert f3(8, 1) == 5 * 7
+    assert f4(8, 1) == 16
 
 
 if __name__ == "__main__":
