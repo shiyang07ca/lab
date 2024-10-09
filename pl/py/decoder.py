@@ -3,6 +3,7 @@ import json
 from datetime import datetime, timedelta, timezone
 
 from celery.schedules import crontab, schedule
+
 # from dateutil.rrule import weekday
 
 try:
