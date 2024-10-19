@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar  # noqa: F401
 
 # Before 3.12 you have to write:
 # T = TypeVar("T")
