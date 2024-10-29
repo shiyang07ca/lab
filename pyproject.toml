@@ -84,3 +84,31 @@ build-backend = "pdm.backend"
 url = "https://pypi.tuna.tsinghua.edu.cn/simple"
 verify_ssl = false
 name = "pypi"
+
+
+[tool.ruff]
+lint.select = [
+    "E",   # pycodestyle - Error
+    "F",   # Pyflakes
+    "W",   # pycodestyle - Warning
+    "I",   # isort
+    "S",   # flake8-bandit
+    "B",   # flake8-bugbear
+    "N",   # pep8-naming
+    "C90", # mccabe
+    "RUF", # ruff
+]
+fix = true
+lint.ignore = [
+    "E501", # 忽略行太长的错误
+]
+line-length = 88 # 设置最大行长度
+lint.ignore-init-module-imports = true
+target-version = "py311"
+
+
+[tool.ruff.lint.mccabe]
+max-complexity = 15
+
+[tool.ruff.lint.isort]
+force-single-line = true

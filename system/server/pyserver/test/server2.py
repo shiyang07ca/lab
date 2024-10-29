@@ -5,7 +5,6 @@ import sys
 
 
 class WSGIServer(object):
-
     address_family = socket.AF_INET
     socket_type = socket.SOCK_STREAM
     request_queue_size = 1

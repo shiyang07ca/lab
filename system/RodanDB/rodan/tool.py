@@ -13,14 +13,12 @@ BAD_INPUT = 2
 
 @unique
 class MetaCommandResult(Enum):
-
     META_COMMAND_SUCCESS = auto()
     META_COMMAND_UNRECOGNIZED_COMMAND = auto()
 
 
 @unique
 class PrepareResult(Enum):
-
     PREPARE_SUCCESS = auto()
     PREPARE_SYNTAX_ERROR = auto()
     PREPARE_UNRECOGNIZED_STATEMENT = auto()
@@ -28,20 +26,17 @@ class PrepareResult(Enum):
 
 @unique
 class ExecuteResult(Enum):
-
     ECXCUTE_SUCCESS = auto()
     EXECUTE_TABLE_FULL = auto()
 
 
 @unique
 class StatementType(Enum):
-
     STATEMENT_INSERT = auto()
     STATEMENT_SELECT = auto()
 
 
 class Statement:
-
     def __init__(self, statement_type=None):
         self.statement_type = statement_type
 
@@ -57,7 +52,7 @@ COLUMN_EMAIL_SIZE = 255
 
 
 def print_prompt():
-    print('db > ', end='')
+    print("db > ", end="")
 
 
 def read_input():
@@ -72,19 +67,19 @@ def read_input():
 
 
 def do_meta_cmd(line):
-    if line == '.exit':
+    if line == ".exit":
         # return MetaCommandResult.META_COMMAND_SUCCESS
-        print('exit.')
+        print("exit.")
         exit(EXIT_SUCCESS)
 
     return MetaCommandResult.META_COMMAND_UNRECOGNIZED_COMMAND
 
 
 def prepare_statement(line, statement):
-    if 'insert' in line:
+    if "insert" in line:
         statement.statement_type = StatementType.STATEMENT_INSERT
         return PrepareResult.PREPARE_SUCCESS
-    elif 'select' in line:
+    elif "select" in line:
         statement.statement_type = StatementType.STATEMENT_SELECT
         return PrepareResult.PREPARE_SUCCESS
 
@@ -93,7 +88,7 @@ def prepare_statement(line, statement):
 
 def exec_statement(statement):
     if statement.statement_type == StatementType.STATEMENT_INSERT:
-        print('This is where we would do an insert.')
+        print("This is where we would do an insert.")
         return ExecuteResult.ECXCUTE_SUCCESS
     elif statement.statement_type == StatementType.STATEMENT_SELECT:
         print("This is where we would do a select.")
@@ -103,13 +98,13 @@ def exec_statement(statement):
 
 
 def main(argv):
-    print('================ RodanDB ================')
+    print("================ RodanDB ================")
     # REPL
     while True:
         print_prompt()
         line = read_input()
 
-        if line and line[0] == '.':
+        if line and line[0] == ".":
             ans = do_meta_cmd(line)
             if ans == MetaCommandResult.META_COMMAND_SUCCESS:
                 continue
@@ -128,7 +123,7 @@ def main(argv):
 
         exec_res = exec_statement(statement)
         if exec_res == ExecuteResult.ECXCUTE_SUCCESS:
-            print('Executed.')
+            print("Executed.")
 
 
 if __name__ == "__main__":

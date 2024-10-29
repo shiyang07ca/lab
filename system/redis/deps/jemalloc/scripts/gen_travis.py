@@ -4,15 +4,15 @@ from itertools import combinations, chain
 from enum import Enum, auto
 
 
-LINUX = 'linux'
-OSX = 'osx'
-WINDOWS = 'windows'
-FREEBSD = 'freebsd'
+LINUX = "linux"
+OSX = "osx"
+WINDOWS = "windows"
+FREEBSD = "freebsd"
 
 
-AMD64 = 'amd64'
-ARM64 = 'arm64'
-PPC64LE = 'ppc64le'
+AMD64 = "amd64"
+ARM64 = "arm64"
+PPC64LE = "ppc64le"
 
 
 TRAVIS_TEMPLATE = """\
@@ -93,8 +93,11 @@ class Option(object):
         return Option(Option.Type.FEATURE, value)
 
     def __eq__(self, obj):
-        return (isinstance(obj, Option) and obj.type == self.type
-                and obj.value == self.value)
+        return (
+            isinstance(obj, Option)
+            and obj.type == self.type
+            and obj.value == self.value
+        )
 
 
 # The 'default' configuration is gcc, on linux, with no compiler or configure
@@ -106,38 +109,50 @@ class Option(object):
 MAX_UNUSUAL_OPTIONS = 2
 
 
-GCC = Option.as_compiler('CC=gcc CXX=g++')
-CLANG = Option.as_compiler('CC=clang CXX=clang++')
-CL = Option.as_compiler('CC=cl.exe CXX=cl.exe')
+GCC = Option.as_compiler("CC=gcc CXX=g++")
+CLANG = Option.as_compiler("CC=clang CXX=clang++")
+CL = Option.as_compiler("CC=cl.exe CXX=cl.exe")
 
 
-compilers_unusual = [CLANG,]
+compilers_unusual = [
+    CLANG,
+]
 
 
-CROSS_COMPILE_32BIT = Option.as_feature('CROSS_COMPILE_32BIT')
+CROSS_COMPILE_32BIT = Option.as_feature("CROSS_COMPILE_32BIT")
 feature_unusuals = [CROSS_COMPILE_32BIT]
 
 
-configure_flag_unusuals = [Option.as_configure_flag(opt) for opt in (
-    '--enable-debug',
-    '--enable-prof',
-    '--disable-stats',
-    '--disable-libdl',
-    '--enable-opt-safety-checks',
-    '--with-lg-page=16',
-)]
+configure_flag_unusuals = [
+    Option.as_configure_flag(opt)
+    for opt in (
+        "--enable-debug",
+        "--enable-prof",
+        "--disable-stats",
+        "--disable-libdl",
+        "--enable-opt-safety-checks",
+        "--with-lg-page=16",
+    )
+]
 
 
-malloc_conf_unusuals = [Option.as_malloc_conf(opt) for opt in (
-    'tcache:false',
-    'dss:primary',
-    'percpu_arena:percpu',
-    'background_thread:true',
-)]
+malloc_conf_unusuals = [
+    Option.as_malloc_conf(opt)
+    for opt in (
+        "tcache:false",
+        "dss:primary",
+        "percpu_arena:percpu",
+        "background_thread:true",
+    )
+]
 
 
-all_unusuals = (compilers_unusual + feature_unusuals
-    + configure_flag_unusuals + malloc_conf_unusuals)
+all_unusuals = (
+    compilers_unusual
+    + feature_unusuals
+    + configure_flag_unusuals
+    + malloc_conf_unusuals
+)
 
 
 def get_extra_cflags(os, compiler):
@@ -150,20 +165,17 @@ def get_extra_cflags(os, compiler):
         # 'malloc_conf' symbols and such, which are declared weak under Linux.
         # Weak symbols don't work with MinGW-GCC.
         if compiler != CL.value:
-            return ['-fcommon']
+            return ["-fcommon"]
         else:
             return []
 
     # We get some spurious errors when -Warray-bounds is enabled.
-    extra_cflags = ['-Werror', '-Wno-array-bounds']
+    extra_cflags = ["-Werror", "-Wno-array-bounds"]
     if compiler == CLANG.value or os == OSX:
-        extra_cflags += [
-            '-Wno-unknown-warning-option',
-            '-Wno-ignored-attributes'
-        ]
+        extra_cflags += ["-Wno-unknown-warning-option", "-Wno-ignored-attributes"]
     if os == OSX:
         extra_cflags += [
-            '-Wno-deprecated-declarations',
+            "-Wno-deprecated-declarations",
         ]
     return extra_cflags
 
@@ -171,39 +183,44 @@ def get_extra_cflags(os, compiler):
 # Formats a job from a combination of flags
 def format_job(os, arch, combination):
     compilers = [x.value for x in combination if x.type == Option.Type.COMPILER]
-    assert(len(compilers) <= 1)
-    compiler_flags = [x.value for x in combination if x.type == Option.Type.COMPILER_FLAG]
-    configure_flags = [x.value for x in combination if x.type == Option.Type.CONFIGURE_FLAG]
+    assert len(compilers) <= 1
+    compiler_flags = [
+        x.value for x in combination if x.type == Option.Type.COMPILER_FLAG
+    ]
+    configure_flags = [
+        x.value for x in combination if x.type == Option.Type.CONFIGURE_FLAG
+    ]
     malloc_conf = [x.value for x in combination if x.type == Option.Type.MALLOC_CONF]
     features = [x.value for x in combination if x.type == Option.Type.FEATURE]
 
     if len(malloc_conf) > 0:
-        configure_flags.append('--with-malloc-conf=' + ','.join(malloc_conf))
+        configure_flags.append("--with-malloc-conf=" + ",".join(malloc_conf))
 
     if not compilers:
         compiler = GCC.value
     else:
         compiler = compilers[0]
 
-    extra_environment_vars = ''
+    extra_environment_vars = ""
     cross_compile = CROSS_COMPILE_32BIT.value in features
     if os == LINUX and cross_compile:
-        compiler_flags.append('-m32')
+        compiler_flags.append("-m32")
 
-    features_str = ' '.join([' {}=yes'.format(feature) for feature in features])
+    features_str = " ".join([" {}=yes".format(feature) for feature in features])
 
-    stringify = lambda arr, name: ' {}="{}"'.format(name, ' '.join(arr)) if arr else ''
-    env_string = '{}{}{}{}{}{}'.format(
-            compiler,
-            features_str,
-            stringify(compiler_flags, 'COMPILER_FLAGS'),
-            stringify(configure_flags, 'CONFIGURE_FLAGS'),
-            stringify(get_extra_cflags(os, compiler), 'EXTRA_CFLAGS'),
-            extra_environment_vars)
+    stringify = lambda arr, name: ' {}="{}"'.format(name, " ".join(arr)) if arr else ""
+    env_string = "{}{}{}{}{}{}".format(
+        compiler,
+        features_str,
+        stringify(compiler_flags, "COMPILER_FLAGS"),
+        stringify(configure_flags, "CONFIGURE_FLAGS"),
+        stringify(get_extra_cflags(os, compiler), "EXTRA_CFLAGS"),
+        extra_environment_vars,
+    )
 
-    job = '    - os: {}\n'.format(os)
-    job += '      arch: {}\n'.format(arch)
-    job += '      env: {}'.format(env_string)
+    job = "    - os: {}\n".format(os)
+    job += "      arch: {}\n".format(arch)
+    job += "      env: {}".format(env_string)
     return job
 
 
@@ -215,7 +232,8 @@ def generate_unusual_combinations(unusuals, max_unusual_opts):
     @param max_unusual_opts: Limit of unusual options per combination.
     """
     return chain.from_iterable(
-            [combinations(unusuals, i) for i in range(max_unusual_opts + 1)])
+        [combinations(unusuals, i) for i in range(max_unusual_opts + 1)]
+    )
 
 
 def included(combination, exclude):
@@ -233,7 +251,7 @@ def generate_jobs(os, arch, exclude, max_unusual_opts, unusuals=all_unusuals):
     for combination in generate_unusual_combinations(unusuals, max_unusual_opts):
         if included(combination, exclude):
             jobs.append(format_job(os, arch, combination))
-    return '\n'.join(jobs)
+    return "\n".join(jobs)
 
 
 def generate_linux(arch):
@@ -245,7 +263,10 @@ def generate_linux(arch):
     exclude = []
     if arch == PPC64LE:
         # Avoid 32 bit builds and clang on PowerPC
-        exclude = (CROSS_COMPILE_32BIT, CLANG,)
+        exclude = (
+            CROSS_COMPILE_32BIT,
+            CLANG,
+        )
 
     return generate_jobs(os, arch, exclude, max_unusual_opts)
 
@@ -255,12 +276,16 @@ def generate_macos(arch):
 
     max_unusual_opts = 1
 
-    exclude = ([Option.as_malloc_conf(opt) for opt in (
-            'dss:primary',
-            'percpu_arena:percpu',
-            'background_thread:true')] +
-        [Option.as_configure_flag('--enable-prof')] +
-        [CLANG,])
+    exclude = (
+        [
+            Option.as_malloc_conf(opt)
+            for opt in ("dss:primary", "percpu_arena:percpu", "background_thread:true")
+        ]
+        + [Option.as_configure_flag("--enable-prof")]
+        + [
+            CLANG,
+        ]
+    )
 
     return generate_jobs(os, arch, exclude, max_unusual_opts)
 
@@ -270,7 +295,7 @@ def generate_windows(arch):
 
     max_unusual_opts = 3
     unusuals = (
-        Option.as_configure_flag('--enable-debug'),
+        Option.as_configure_flag("--enable-debug"),
         CL,
         CROSS_COMPILE_32BIT,
     )
@@ -282,13 +307,12 @@ def generate_freebsd(arch):
 
     max_unusual_opts = 4
     unusuals = (
-        Option.as_configure_flag('--enable-debug'),
-        Option.as_configure_flag('--enable-prof --enable-prof-libunwind'),
-        Option.as_configure_flag('--with-lg-page=16 --with-malloc-conf=tcache:false'),
+        Option.as_configure_flag("--enable-debug"),
+        Option.as_configure_flag("--enable-prof --enable-prof-libunwind"),
+        Option.as_configure_flag("--with-lg-page=16 --with-malloc-conf=tcache:false"),
         CROSS_COMPILE_32BIT,
     )
     return generate_jobs(os, arch, (), max_unusual_opts, unusuals)
-
 
 
 def get_manual_jobs():
@@ -307,21 +331,19 @@ EXTRA_CFLAGS="-Werror -Wno-array-bounds"
 
 
 def main():
-    jobs = '\n'.join((
-        generate_windows(AMD64),
-
-        generate_freebsd(AMD64),
-
-        generate_linux(AMD64),
-        generate_linux(PPC64LE),
-
-        generate_macos(AMD64),
-
-        get_manual_jobs(),
-    ))
+    jobs = "\n".join(
+        (
+            generate_windows(AMD64),
+            generate_freebsd(AMD64),
+            generate_linux(AMD64),
+            generate_linux(PPC64LE),
+            generate_macos(AMD64),
+            get_manual_jobs(),
+        )
+    )
 
     print(TRAVIS_TEMPLATE.format(jobs=jobs))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
