@@ -87,6 +87,13 @@ name = "pypi"
 
 
 [tool.ruff]
+lint.ignore = [
+    "E501", # 忽略行太长的错误
+    "S101", # 忽略断言的错误
+
+]
+
+
 lint.select = [
     "E",   # pycodestyle - Error
     "F",   # Pyflakes
@@ -99,12 +106,13 @@ lint.select = [
     "RUF", # ruff
 ]
 fix = true
-lint.ignore = [
-    "E501", # 忽略行太长的错误
-]
+
 line-length = 88 # 设置最大行长度
-lint.ignore-init-module-imports = true
+ignore-init-module-imports = true
 target-version = "py311"
+
+# Allow minus-sign (U+2212), greek-small-letter-rho (U+03C1), and the asterisk-operator (U+2217),
+lint.allowed-confusables = ["，", "∗", "。", "！", "？", "（", "）"]
 
 
 [tool.ruff.lint.mccabe]

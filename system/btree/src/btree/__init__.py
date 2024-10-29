@@ -45,22 +45,17 @@ class BTreeNode:
         self.children = [None for _ in range(order)]
 
     def contains(self, key):
-        for i, e in enumerate(self.elements):
-            if key == e["key"]:
-                return True
-
-            # 在左子树中查找
-            if key < e["key"]:
-                # 如果有子节点，继续在子节点中查找
-                if len(self.children) > i:
-                    return self.children[i].contains(key)
-                # 如果没有子节点，说明未找到
-                return False
-
-        # 如果遍历完当前节点都没找到，且键值比所有项都大
-        # 则在最右边的子节点中查找（如果存在的话）
-        if len(self.children) > len(self.elements):
-            return self.children[-1].contains(key)
+        for i, child in enumerate(self.children):
+            if i < len(self.elements):
+                if self.elements[i] is not None:
+                    if key == self.elements[i]["key"]:
+                        return True
+                    elif key < self.elements[i]["key"] and child is not None:
+                        return child.contains(key)
+                elif child is not None:
+                    return child.contains(key)
+            elif child is not None:
+                return child.contains(key)
 
         return False
 
@@ -79,13 +74,60 @@ class BTreeNode:
                 elif child is not None:
                     return self.insert_child(toinsert, i, child)
 
-        assert False, "Should never happen"
+        raise AssertionError("Should never happen")
 
     def split(self, copy, children_copy):
-        pass
+        left_elements = copy[: self.order // 2]
+        right_elements = copy[self.order // 2 + 1 :]
 
+        left = BTreeNode(self.order)
+
+        left.elements[: self.order // 2] = left_elements
+        left_children = children_copy[: self.order // 2 + 1]
+        left.children[: len(left_children)] = left_children
+        assert len(left.elements) == self.order - 1
+        assert len(left.children) == self.order
+
+        middle = copy[self.order // 2]
+
+        right = BTreeNode(self.order)
+        right.elements[: len(right_elements)] = right_elements
+        right_children = children_copy[self.order // 2 + 1 :]
+        right.children[: len(right_children)] = right_children
+        assert len(right.elements) == self.order - 1
+        assert len(right.children) == self.order
+        return None, middle, left, right
+
+    # TODO:
     def insert_leaf(self, toinsert):
-        pass
+        copy = self.elements.copy()
+        location_to_insert = 0
+        for ele in copy:
+            if ele is None or toinsert["key"] < ele["key"]:
+                break
+            location_to_insert += 1
+
+        copy.insert(location_to_insert, toinsert)
+
+        children_copy = self.children.copy()
+        children_copy.insert(location_to_insert, None)
+
+        has_space = self.elements.count(None) > 0
+        if has_space:
+            new_self = BTreeNode(self.order)
+            assert copy[-1] is None
+            copy.pop()
+            assert len(copy) == self.order - 1
+
+            assert children_copy[-1] is None
+            children_copy.pop()
+            new_self.children = children_copy
+            assert len(new_self.children) == self.order
+
+            return new_self, None, None, None
+        else:
+            # No space, split
+            return self.split(copy, children_copy)
 
     def insert_child(self, toinsert, i, child):
         new_self = BTreeNode(self.order)
@@ -108,10 +150,10 @@ class BTreeNode:
         assert sorted(
             [x["key"] if x is not None else math.inf for x in new_self.elements]
         ) == [x["key"] if x is not None else math.inf for x in new_self.elements]
-
         new_self.children.insert(location_to_insert, None)
+
         new_self.children[location_to_insert] = left
-        new_self.children.insert(location_to_insert + 1, right)
+        new_self.children[location_to_insert + 1] = right
 
         has_space = self.elements.count(None) > 0
         if has_space:
