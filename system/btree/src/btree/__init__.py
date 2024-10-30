@@ -39,18 +39,35 @@ class BTreeNode:
     def __init__(self, order=3):
         self.id = str(uuid.uuid4())[:8]
         self.order = order
-        if order < 3:
-            raise ValueError("BTree node must have at least 2 children")
+        if self.order < 3:
+            raise Exception("BTree must have at least 2 children.")
         self.elements = [None for _ in range(order - 1)]
         self.children = [None for _ in range(order)]
+
+    def walk(self, fn, level=0, parent_id=None):
+        assert len(self.children) == self.order
+        assert len(self.elements) == self.order - 1
+        assert self.order >= 3
+
+        for i, child in enumerate(self.children):
+            if child is not None:
+                child.walk(fn, level + 1, self.id)
+
+            if i < len(self.elements):
+                el = self.elements[i]
+                if el is None:
+                    continue
+
+                fn(el, level, self.id, parent_id)
 
     def contains(self, key):
         for i, child in enumerate(self.children):
             if i < len(self.elements):
-                if self.elements[i] is not None:
-                    if key == self.elements[i]["key"]:
+                ele = self.elements[i]
+                if ele is not None:
+                    if key == ele["key"]:
                         return True
-                    elif key < self.elements[i]["key"] and child is not None:
+                    elif key < ele["key"] and child is not None:
                         return child.contains(key)
                 elif child is not None:
                     return child.contains(key)
@@ -59,22 +76,15 @@ class BTreeNode:
 
         return False
 
-    def insert(self, toinsert):
-        is_leaf = self.children.count(None) == len(self.children)
-        if is_leaf:
-            return self.insert_leaf(toinsert)
-        else:
-            for i, child in enumerate(self.children):
-                if i < len(self.elements):
-                    if (
-                        self.elements[i] is None
-                        or toinsert["key"] < self.elements[i]["key"]
-                    ):
-                        return self.insert_child(toinsert, i, child)
-                elif child is not None:
-                    return self.insert_child(toinsert, i, child)
+    def list(self):
+        lst = []
 
-        raise AssertionError("Should never happen")
+        def _tolist(node, *args):
+            lst.append(node)
+
+        self.walk(_tolist)
+
+        return lst
 
     def split(self, copy, children_copy):
         left_elements = copy[: self.order // 2]
@@ -98,12 +108,11 @@ class BTreeNode:
         assert len(right.children) == self.order
         return None, middle, left, right
 
-    # TODO:
     def insert_leaf(self, toinsert):
         copy = self.elements.copy()
         location_to_insert = 0
-        for ele in copy:
-            if ele is None or toinsert["key"] < ele["key"]:
+        for e in copy:
+            if e is None or toinsert["key"] < e["key"]:
                 break
             location_to_insert += 1
 
@@ -117,17 +126,18 @@ class BTreeNode:
             new_self = BTreeNode(self.order)
             assert copy[-1] is None
             copy.pop()
-            assert len(copy) == self.order - 1
+            new_self.elements = copy
+            assert len(new_self.elements) == new_self.order - 1
 
             assert children_copy[-1] is None
             children_copy.pop()
             new_self.children = children_copy
-            assert len(new_self.children) == self.order
+            assert len(new_self.children) == new_self.order
 
             return new_self, None, None, None
-        else:
-            # No space, split
-            return self.split(copy, children_copy)
+
+        # Otherwise, no space, let's split.
+        return self.split(copy, children_copy)
 
     def insert_child(self, toinsert, i, child):
         new_self = BTreeNode(self.order)
@@ -135,22 +145,22 @@ class BTreeNode:
         new_self.children = self.children.copy()
 
         ret, middle, left, right = child.insert(toinsert)
-        if middle is None:
+        if middle is None:  # 子节点没有分裂
             new_self.children[i] = ret
             return new_self, None, None, None
 
-        # No space, must split
+        # No space, we must split.
         location_to_insert = 0
-        for ele in new_self.elements:
-            if ele is None or toinsert["key"] < ele["key"]:
+        for e in new_self.elements:
+            if e is None or toinsert["key"] < e["key"]:
                 break
             location_to_insert += 1
 
         new_self.elements.insert(location_to_insert, middle)
+        new_self.children.insert(location_to_insert, None)
         assert sorted(
             [x["key"] if x is not None else math.inf for x in new_self.elements]
         ) == [x["key"] if x is not None else math.inf for x in new_self.elements]
-        new_self.children.insert(location_to_insert, None)
 
         new_self.children[location_to_insert] = left
         new_self.children[location_to_insert + 1] = right
@@ -166,52 +176,53 @@ class BTreeNode:
             assert len(new_self.children) == new_self.order
 
             return new_self, None, None, None
-        else:  # No space, split
-            return self.split(new_self.elements, new_self.children)
 
-    def walk(self, fn, level=0, parent_id=None):
-        assert len(self.children) == self.order
-        assert len(self.elements) == self.order - 1
-        assert self.order >= 3
+        # No space, let's split.
+        return self.split(new_self.elements, new_self.children)
+
+    def insert(self, toinsert):
+        is_leaf = self.children.count(None) == len(self.children)
+        if is_leaf:
+            return self.insert_leaf(toinsert)
 
         for i, child in enumerate(self.children):
-            if child is not None:
-                child.walk(fn, level + 1, self.id)
-
+            # 如果当前位置的元素为空, 或新键小于当前元素
             if i < len(self.elements):
-                ele = self.elements[i]
-                if ele is not None:
-                    fn(ele, level, self.id, parent_id)
+                if (
+                    self.elements[i] is None
+                    or toinsert["key"] < self.elements[i]["key"]
+                ):
+                    return self.insert_child(toinsert, i, child)
+            # 处理最后一个子节点
+            elif child is not None:
+                return self.insert_child(toinsert, i, child)
 
-    def list(self):
-        lst = []
-        self.walk(lambda x: lst.append(x), 0, None)
-        return lst
+        raise AssertionError()
 
 
 class BTree:
-    def __init__(self, order):
+    def __init__(self, order=3):
         self.root = BTreeNode(order)
 
-    # TODO:
     def insert(self, toinsert):
         all_elements = self.list()
 
         new_self = BTree(self.root.order)
         new_node, middle, left, right = self.root.insert(toinsert)
-        if middle is not None:  # Split at root
+        if middle is None:
+            assert new_node is not None
+            new_self.root = new_node
+        else:
+            # Otherwise, split at root.
             new_self.root.elements[0] = middle
             new_self.root.children[0] = left
             new_self.root.children[1] = right
-        else:
-            assert new_node is not None
-            new_self.root = new_node
 
         all_elements.append(toinsert)
-        for ele in all_elements:
+        for el in all_elements:
             assert new_self.contains(
-                ele["key"]
-            ), f"Expected {ele} in {new_self.list()}\n{new_self.print()}"
+                el["key"]
+            ), f"Expected {el} in {new_self.list()}\n{new_self.print()}"
 
         return new_self
 

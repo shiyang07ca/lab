@@ -1,3 +1,6 @@
+import os
+import struct
+
 from src.btree import BTree
 
 
@@ -46,30 +49,30 @@ for i in list(reversed(range(10))):
 
 test(3, generated)
 
-# # Then insert going forward.
-# generated = []
-# for i in list(range(10)):
-#     r = i
-#     generated.append(r)
+# Then insert going forward.
+generated = []
+for i in list(range(10)):
+    r = i
+    generated.append(r)
 
-# test(3, generated)
+test(3, generated)
 
-# # Then insert randomly.
-# generated = []
-# for _ in list(range(10)):
-#     r = struct.unpack("H", os.urandom(2))[0]
-#     generated.append(r)
+# Then insert randomly.
+generated = []
+for _ in list(range(10)):
+    r = struct.unpack("H", os.urandom(2))[0]
+    generated.append(r)
 
-# test(3, generated)
+test(3, generated)
 
-# generated = []
-# for _ in list(range(20)):
-#     r = struct.unpack("H", os.urandom(2))[0]
-#     generated.append(r)
+generated = []
+for _ in list(range(20)):
+    r = struct.unpack("H", os.urandom(2))[0]
+    generated.append(r)
 
-# test(8, generated)
+test(8, generated)
 
-# # Now let's try some big ones.
+# Now let's try some big ones.
 # for tree_size in [3, 100, 4096]:
 #     generated = []
 #     for _ in list(range(10000)):
