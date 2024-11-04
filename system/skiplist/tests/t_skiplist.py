@@ -1,37 +1,99 @@
 """
-# TODO:
-
-跳表
 
 https://epaperpress.com/sortsearch/download/skiplist.pdf
 
 https://cmps-people.ok.ubc.ca/ylucet/DS/SkipList.html
 
+https://github.com/TheAlgorithms/Python/blob/master/data_structures/linked_list/skip_list.py
 """
 
 
-class Node:
-    def __init__(self, key, value):
+class Node[KT, VT]:
+    def __init__(self, key: KT | str = "root", value: VT | None = None):
         self.key = key
         self.value = value
         self.forward = []
 
     @property
-    def level(self):
+    def level(self) -> int:
         return len(self.forward)
 
+    def __repr__(self) -> str:
+        return f"Node({self.key}: {self.value})"
 
-class SkipList:
-    def __init__(self, max_level=16):
-        self.head = Node(None, None)
+
+class SkipList[KT, VT]:
+    def __init__(self, p: float = 0.5, max_level: int = 16):
+        self.head = Node[KT, VT]()
         self.level = 0
+        self.p = p
         self.max_level = max_level
 
-    def find(self, k):
+    def __str__(self) -> str:
+        """
+        :return: Visual representation of SkipList
+
+        >>> skip_list = SkipList()
+        >>> print(skip_list)
+        SkipList(level=0)
+        >>> skip_list.insert("Key1", "Value")
+        >>> print(skip_list) # doctest: +ELLIPSIS
+        SkipList(level=...
+        [root]--...
+        [Key1]--Key1...
+        None    *...
+        >>> skip_list.insert("Key2", "OtherValue")
+        >>> print(skip_list) # doctest: +ELLIPSIS
+        SkipList(level=...
+        [root]--...
+        [Key1]--Key1...
+        [Key2]--Key2...
+        None    *...
+        """
+
+        items = list(self)
+
+        if len(items) == 0:
+            return f"SkipList(level={self.level})"
+
+        label_size = max((len(str(item)) for item in items), default=4)
+        label_size = max(label_size, 4) + 4
+
+        node = self.head
+        lines = []
+
+        forwards = node.forward.copy()
+        lines.append(f"[{node.key}]".ljust(label_size, "-") + "* " * len(forwards))
+        lines.append(" " * label_size + "| " * len(forwards))
+
+        while len(node.forward) != 0:
+            node = node.forward[0]
+
+            lines.append(
+                f"[{node.key}]".ljust(label_size, "-")
+                + " ".join(str(n.key) if n.key == node.key else "|" for n in forwards)
+            )
+            lines.append(" " * label_size + "| " * len(forwards))
+            forwards[: node.level] = node.forward
+
+        lines.append("None".ljust(label_size) + "* " * len(forwards))
+        return f"SkipList(level={self.level})\n" + "\n".join(lines)
+
+    def __iter__(self):
+        node = self.head
+
+        while len(node.forward) != 0:
+            yield node.forward[0].key
+            node = node.forward[0]
+
+
+    def find(self, k: KT) -> VT | None:
         pass
 
-    def insert(self, key, value):
-        # node = Node(k, v)
+    def insert(self, key: KT, value: VT):
+        print(f"insert {key}: {value}")
+        node = Node(key, value)
+
         update = [-1] * self.max_level
         n = self.head
         for i in range(self.level, -1, -1):
@@ -48,15 +110,17 @@ class SkipList:
             # TODO: random level
             level = 3
             if level > self.level:
+                # TODO: continue
                 for i in range(self.level, level):
                     update[i] = self.head
                 self.level = level - 1
+
             new_node = Node(key, value)
             for i in range(level):
                 new_node.forward[i] = update[i].forward[i]
                 update[i].forward[i] = new_node
 
-    def delete(self, k):
+    def delete(self, k: KT):
         pass
 
 
@@ -223,7 +287,7 @@ def test_insert():
 
 
 def pytests():
-    for i in range(1):
+    for _ in range(1):
         # Repeat test 100 times due to the probabilistic nature of skip list
         # random values == random bugs
         test_insert()
@@ -241,4 +305,4 @@ def pytests():
 
 
 if __name__ == "__main__":
-    pass
+    pytests()
