@@ -8,6 +8,9 @@ https://github.com/TheAlgorithms/Python/blob/master/data_structures/linked_list/
 """
 
 
+from random import random
+
+
 class Node[KT, VT]:
     def __init__(self, key: KT | str = "root", value: VT | None = None):
         self.key = key
@@ -86,6 +89,12 @@ class SkipList[KT, VT]:
             yield node.forward[0].key
             node = node.forward[0]
 
+    def random_level(self) -> int:
+        level = 1
+        while random() < self.p and level < self.max_level:  # noqa: S311
+            level += 1
+        return level
+
     def _locate_node(self, key: KT) -> tuple[Node[KT, VT] | None, list[Node[KT, VT]]]:
         """
         :param key: Searched key
@@ -113,34 +122,27 @@ class SkipList[KT, VT]:
         return node.value if node else None
 
     def insert(self, key: KT, value: VT):
-        print(f"insert {key}: {value}")
-        node = Node(key, value)
-
-        update = [-1] * self.max_level
-        n = self.head
-        for i in range(self.level, -1, -1):
-            if not node.forward:
-                break
-
-            while n.forward[i].key <= key:
-                n = n.forward[i]
-            update[i] = n
-
-        if n.key == key:
-            n.value = value
+        node, update_vector = self._locate_node(key)
+        if node is not None:
+            node.value = value
         else:
-            # TODO: random level
-            level = 3
+            level = self.random_level()
+
             if level > self.level:
-                # TODO: continue
-                for i in range(self.level, level):
-                    update[i] = self.head
-                self.level = level - 1
+                for _ in range(self.level - 1, level):
+                    update_vector.append(self.head)
+                self.level = level
 
             new_node = Node(key, value)
-            for i in range(level):
-                new_node.forward[i] = update[i].forward[i]
-                update[i].forward[i] = new_node
+
+            for i, update_node in enumerate(update_vector[:level]):
+                if update_node.level > i:
+                    new_node.forward.append(update_node.forward[i])
+
+                if update_node.level < i + 1:
+                    update_node.forward.append(new_node)
+                else:
+                    update_node.forward[i] = new_node
 
     def delete(self, k: KT):
         pass
