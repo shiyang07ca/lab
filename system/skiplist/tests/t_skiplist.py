@@ -86,9 +86,31 @@ class SkipList[KT, VT]:
             yield node.forward[0].key
             node = node.forward[0]
 
+    def _locate_node(self, key: KT) -> tuple[Node[KT, VT] | None, list[Node[KT, VT]]]:
+        """
+        :param key: Searched key
+        :return: Tuple with searched node (or None if given key is not present)
+                 and list of nodes that refer (if key is present) of should refer to
+                 given node.
+        """
+
+        update_vector = []
+        n = self.head
+        for i in reversed(range(self.level)):
+            while i < n.level and n.forward[i].key < key:
+                n = n.forward[i]
+            update_vector.append(n)
+
+        update_vector.reverse()
+
+        if len(n.forward) != 0 and n.forward[0].key == key:
+            return n.forward[0], update_vector
+        else:
+            return None, update_vector
 
     def find(self, k: KT) -> VT | None:
-        pass
+        node, _ = self._locate_node(k)
+        return node.value if node else None
 
     def insert(self, key: KT, value: VT):
         print(f"insert {key}: {value}")
