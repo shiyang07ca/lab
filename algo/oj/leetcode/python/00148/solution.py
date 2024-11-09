@@ -20,15 +20,15 @@ class Solution:
     # 链接：https://leetcode.cn/problems/sort-list/solutions/13728/sort-list-gui-bing-pai-xu-lian-biao-by-jyd/
     def sortList(self, head: ListNode) -> ListNode:
         if not head or not head.next:
-            return head  # termination.
+            return head
         # cut the LinkedList at the mid index.
         slow, fast = head, head.next
         while fast and fast.next:
             fast, slow = fast.next.next, slow.next
         mid, slow.next = slow.next, None  # save and cut.
-        # recursive for cutting.
+
         left, right = self.sortList(head), self.sortList(mid)
-        # merge `left` and `right` linked list and return it.
+
         h = res = ListNode(0)
         while left and right:
             if left.val < right.val:
@@ -37,6 +37,7 @@ class Solution:
                 h.next, right = right, right.next
             h = h.next
         h.next = left if left else right
+
         return res.next
 
 
