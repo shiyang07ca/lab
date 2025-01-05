@@ -3,6 +3,7 @@
 # https://leetcode.cn/problems/jump-game-ii/
 
 from typing import *
+
 from leetgo_py import *
 
 # @lc code=begin
@@ -12,6 +13,10 @@ from leetgo_py import *
 
 class Solution:
     # 链接：https://leetcode.cn/problems/jump-game-ii/solutions/2926993/tu-jie-yi-zhang-tu-miao-dong-tiao-yue-yo-h2d4/
+
+    # 中文英文，aabbccdd
+    # aabbccdd,a英文中文
+
     def jump(self, nums: List[int]) -> int:
         ans = 0
         cur_right = 0  # 已建造的桥的右端点
