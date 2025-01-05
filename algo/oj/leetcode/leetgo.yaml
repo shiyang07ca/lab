@@ -4,13 +4,14 @@ author: shiyang07ca
 language: zh
 code:
   lang: go
-  filename_template: '{{ .Id | padWithZero 5 }}'
+  filename_template: "{{ .Id | padWithZero 5 }}"
   python3:
     out_dir: python
     # Overrides the default code.filename_template
     filename_template: ""
     # Python executable to run the generated code
-    executable: python3
+    executable: python2
+    # executable: ../../../../.venv/bin/python
 leetcode:
   site: https://leetcode.cn
   # credentials:
