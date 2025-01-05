@@ -18,8 +18,12 @@ leetcode:
   credentials:
     from: browser
 editor:
-  use: custom
+  # use: custom
   # command: emacs
   # args: [-nw, -l, ~/.emacs.d/init-mini.el]
-  command: emacsclient
-  args: "-nw {{.CodeFile}}"
+  # command: emacsclient
+  # args: "-nw {{.CodeFile}}"
+
+  use: custom
+  command: /usr/local/bin/cursor
+  args: "{{.Folder}}../../../.. {{.Files}}"
