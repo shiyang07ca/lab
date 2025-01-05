@@ -26,4 +26,4 @@ editor:
 
   use: custom
   command: /usr/local/bin/cursor
-  args: "{{.Folder}}../../../.. {{.Files}}"
+  args: "{{.Folder}}../../../../.. {{.Files}}"
