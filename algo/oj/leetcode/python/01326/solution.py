@@ -17,14 +17,21 @@ class Solution:
     def minTaps(self, n: int, ranges: List[int]) -> int:
         # 链接：https://leetcode.cn/problems/minimum-number-of-taps-to-open-to-water-a-garden/solutions/2123855/yi-zhang-tu-miao-dong-pythonjavacgo-by-e-wqry/
 
-        right_most = [0] * (n + 1)
+        """
+        这个算法的本质是:
+        1. 先将每个水龙头的覆盖范围转化为从左端点出发能到达的最远位置
+        2. 然后用贪心策略, 在当前覆盖范围内选择能到达最远位置的水龙头
+        3. 不断重复这个过程, 直到覆盖整个花园或发现无法完全覆盖
+        """
+
+        right_most = [0] * (n + 1)  # 记录从每个位置出发能到达的最远右端点
         for i, r in enumerate(ranges):
             left = max(i - r, 0)
             right_most[left] = max(right_most[left], i + r)
 
         ans = 0
-        cur_right = 0  # 已建造的桥的右端点
-        next_right = 0  # 下一座桥的右端点的最大值
+        cur_right = 0  # 表示当前已经覆盖到的最右位置
+        next_right = 0  # 表示从当前位置可以到达的最远位置
         for i in range(n):  # 如果走到 n-1 时没有返回 -1，那么必然可以到达 n
             next_right = max(next_right, right_most[i])
             if i == cur_right:  # 到达已建造的桥的右端点
