@@ -8,6 +8,8 @@ from leetgo_py import *
 
 # @lc code=begin
 
+# tag: greedy, dynamic-programming
+
 # TODO:
 
 
