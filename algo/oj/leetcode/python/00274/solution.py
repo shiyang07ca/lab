@@ -18,7 +18,7 @@ class Solution:
         return len(citations)
 
     # 链接：https://leetcode.cn/problems/h-index/solutions/2502896/gong-shui-san-xie-cong-po-ti-dao-zhu-bu-7sug6/
-    def hIndex(self, cs: List[int]) -> int:
+    def hIndex2(self, cs: List[int]) -> int:
         n = len(cs)
         l, r = 0, n
         while l < r:
@@ -28,6 +28,19 @@ class Solution:
             else:
                 r = mid - 1
         return r
+
+    # 链接：https://leetcode.cn/problems/h-index/solutions/2502896/gong-shui-san-xie-cong-po-ti-dao-zhu-bu-7sug6/
+    def hIndex(self, cs: List[int]) -> int:
+        n = len(cs)
+        cnt = [0] * (n + 10)
+        for c in cs:
+            cnt[min(c, n)] += 1
+        tot = 0
+        for i in range(n, -1, -1):
+            tot += cnt[i]
+            if tot >= i:
+                return i
+        return -1  # never
 
 
 # @lc code=end
